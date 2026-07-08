@@ -7,6 +7,8 @@ import { InvestigationTable } from "@/features/investigations/components/Investi
 import { CreateInvestigationModal } from "@/features/investigations/components/CreateInvestigationModal";
 import { Button } from "@/components/ui/Button";
 
+import { AIRuntimePanel } from "@/components/ui/AIRuntimePanel";
+
 export const DashboardPage: React.FC = () => {
   const { data: investigationsRes, isLoading } = useInvestigations();
   const createMutation = useCreateInvestigation();
@@ -60,7 +62,7 @@ export const DashboardPage: React.FC = () => {
           </div>
           <div>
             <span className="text-[10px] uppercase font-bold text-slate-400 block tracking-wide">AI Inference Status</span>
-            <span className="text-xs font-semibold text-slate-200">Gemma 3 27B on AMD MI300X</span>
+            <span className="text-xs font-semibold text-slate-200">Gemma 4 on AMD MI300X</span>
           </div>
         </div>
       </div>
@@ -140,6 +142,9 @@ export const DashboardPage: React.FC = () => {
           <InvestigationTable investigations={investigations.slice(0, 5)} />
         )}
       </div>
+
+      {/* AI Telemetry Panel */}
+      <AIRuntimePanel />
 
       <CreateInvestigationModal
         isOpen={isModalOpen}

@@ -28,6 +28,7 @@ import { EvidenceUploadZone } from "@/features/evidence/components/EvidenceUploa
 import { HypothesisCard } from "@/features/hypotheses/components/HypothesisCard";
 import { GenerateHypothesesButton } from "@/features/hypotheses/components/GenerateHypothesesButton";
 import { CapaEditor } from "@/features/capa/components/CapaEditor";
+import { AIRuntimePanel } from "@/components/ui/AIRuntimePanel";
 
 import {
   FileText,
@@ -519,6 +520,11 @@ export const InvestigationDetailPage: React.FC = () => {
             )}
           </div>
         )}
+      </div>
+
+      {/* AI Diagnostic Telemetry Panel */}
+      <div className="mt-8">
+        <AIRuntimePanel />
       </div>
     </div>
   );

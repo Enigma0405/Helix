@@ -127,9 +127,9 @@ export const auditApi = {
     apiClient.get(`/investigations/${investigationId}/audit`),
 }
 
-// AI Provider info
+// AI Provider info & telemetry
 export const runtimeApi = {
-  info: () => apiClient.get('/runtime/info'),
+  getTelemetry: () => apiClient.get('/ai-runtime/telemetry'),
 }
 
 export default apiClient

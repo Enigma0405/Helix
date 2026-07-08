@@ -203,3 +203,36 @@ async def summarize_investigation(
         user_role=current_user.role,
     )
     return InvestigationSummaryOut.model_validate(res)
+
+
+@router.get(
+    "/api/ai-runtime/telemetry",
+    summary="Get active AI runtime configuration and telemetry metrics",
+)
+async def get_ai_runtime_telemetry():
+    from src.core.config import settings
+    from src.ai_runtime.observability import tracker
+    from src.ai_runtime.adapters.inference_adapter import get_inference_adapter
+    
+    # Resolve the active adapter to query current configurations
+    adapter = get_inference_adapter()
+    active_model = adapter.get_model_name() if hasattr(adapter, "get_model_name") else getattr(adapter, "_model", "N/A")
+    
+    summary = tracker.get_summary()
+    
+    # Check fallback status: if the active model name is different from the preferred model config
+    fallback_active = False
+    preferred_model = settings.FIREWORKS_MODEL
+    if settings.INFERENCE_PROVIDER == "fireworks" and active_model != preferred_model:
+        fallback_active = True
+
+    return {
+        "provider": settings.INFERENCE_PROVIDER,
+        "model": active_model,
+        "preferred_model": preferred_model,
+        "fallback_triggered": fallback_active,
+        "architecture": "Provider-Independent Adapter Chain (FastAPI -> AsyncOpenAI)",
+        "total_calls": summary.get("total_calls", 0),
+        "average_latency_ms": round(summary.get("average_latency_ms", 0.0), 2),
+        "total_cost_usd": round(summary.get("total_cost_usd", 0.0), 5),
+    }
