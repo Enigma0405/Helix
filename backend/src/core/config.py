@@ -36,6 +36,12 @@ class Settings(BaseSettings):
     @field_validator("DATABASE_URL")
     @classmethod
     def validate_db_url(cls, v: str) -> str:
+        # Programmatically map postgresql:// or postgres:// to postgresql+psycopg:// for async compatibility
+        if v.startswith("postgresql://"):
+            v = v.replace("postgresql://", "postgresql+psycopg://", 1)
+        elif v.startswith("postgres://"):
+            v = v.replace("postgres://", "postgresql+psycopg://", 1)
+            
         if not (v.startswith("postgresql+psycopg://") or v.startswith("sqlite+aiosqlite://")):
             raise ValueError(
                 "DATABASE_URL must start with 'postgresql+psycopg://' (psycopg v3 driver) or 'sqlite+aiosqlite://' for local testing"
