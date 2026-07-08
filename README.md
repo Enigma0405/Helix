@@ -101,7 +101,7 @@ ALGORITHM=HS256
 
 # AI Runtime
 INFERENCE_PROVIDER=fireworks
-FIREWORKS_API_KEY=fw_7Fr3pTjAE9Zwp1qE8rXbZN
+FIREWORKS_API_KEY=fw_your_api_key_here
 FIREWORKS_MODEL=accounts/fireworks/models/gemma-4-31b-it
 FIREWORKS_BASE_URL=https://api.fireworks.ai/inference/v1
 

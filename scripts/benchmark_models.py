@@ -23,7 +23,18 @@ MODELS = [
     {"name": "GLM 5p1", "id": "accounts/fireworks/models/glm-5p1"},
 ]
 
-API_KEY = "fw_7Fr3pTjAE9Zwp1qE8rXbZN"
+# Helper to load values from .env file
+def get_env_value(key: str, default: str = "") -> str:
+    if os.path.exists(".env"):
+        with open(".env", "r") as f:
+            for line in f:
+                if "=" in line and not line.strip().startswith("#"):
+                    k, v = line.split("=", 1)
+                    if k.strip() == key:
+                        return v.strip().strip("'").strip('"')
+    return os.environ.get(key, default)
+
+API_KEY = get_env_value("FIREWORKS_API_KEY")
 ENDPOINT = "https://api.fireworks.ai/inference/v1/chat/completions"
 
 TEST_PROMPT = """

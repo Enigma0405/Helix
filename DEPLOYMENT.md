@@ -18,7 +18,7 @@ The following table documents all environment variables required to run Project 
 | **SECRET_KEY** | JWT signing key (32-char hex minimum) | `89547d25e0b04a43...` | **Yes** |
 | **ALGORITHM** | JWT signature algorithm | `HS256` | No (defaults to HS256) |
 | **INFERENCE_PROVIDER** | AI Inference driver (`mock` \| `fireworks`) | `fireworks` | **Yes** |
-| **FIREWORKS_API_KEY** | Fireworks AI API key | `fw_7Fr3pTjAE9Zwp1qE8rXbZN` | **Yes** (when using fireworks) |
+| **FIREWORKS_API_KEY** | Fireworks AI API key | `fw_your_api_key_here` | **Yes** (when using fireworks) |
 | **FIREWORKS_MODEL** | Target model (Gemma 4 default fallback) | `accounts/fireworks/models/gemma-4-31b-it` | No (defaults to Gemma 4) |
 | **EMBEDDING_PROVIDER** | Vector embedding driver (`local` \| `fireworks`) | `local` | No (defaults to local) |
 | **EMBEDDING_MODEL_LOCAL** | Local SentenceTransformer model | `all-MiniLM-L6-v2` | No (defaults to MiniLM) |
