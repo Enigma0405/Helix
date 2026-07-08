@@ -87,10 +87,14 @@ class FireworksAdapter:
         """Call Fireworks AI for inference with model fallback sequence."""
         import openai  # noqa: PLC0415
         
-        models_to_try = []
-        for m in [self._model, "accounts/fireworks/models/gemma-4-31b-it", "accounts/fireworks/models/gemma-3-27b-it", "accounts/fireworks/models/deepseek-v4-pro"]:
-            if m and m not in models_to_try:
-                models_to_try.append(m)
+        # Strictly prioritize the allowlisted hackathon models
+        models_to_try = [
+            "accounts/fireworks/models/gemma-4-31b-it",
+            "accounts/fireworks/models/gemma-3-27b-it",
+            "accounts/fireworks/models/deepseek-v4-pro"
+        ]
+        if self._model and self._model not in models_to_try:
+            models_to_try.insert(0, self._model)
 
         last_error = None
         for model in models_to_try:

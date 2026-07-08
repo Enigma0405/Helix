@@ -173,6 +173,13 @@ def _generate_fallback_pdf(
         bottomMargin=40,
     )
 
+    import html
+    def safe_format(text: str | None) -> str:
+        if not text:
+            return ""
+        escaped = html.escape(text)
+        return escaped.replace("\n", "<br/>")
+
     styles = getSampleStyleSheet()
     story = []
 
@@ -185,13 +192,14 @@ def _generate_fallback_pdf(
         spaceAfter=15,
     )
     story.append(Paragraph(f"Project Helix Investigation Report", title_style))
-    story.append(Paragraph(f"<b>Title:</b> {investigation.title}", styles["Normal"]))
+    story.append(Paragraph(f"<b>Title:</b> {html.escape(investigation.title)}", styles["Normal"]))
     story.append(Paragraph(f"<b>Status:</b> {investigation.status.upper()} | <b>Severity:</b> {investigation.severity.upper()}", styles["Normal"]))
     story.append(Spacer(1, 15))
 
     # Description
     story.append(Paragraph("<b>Description:</b>", styles["Heading3"]))
-    story.append(Paragraph(investigation.description or "No description provided.", styles["BodyText"]))
+    desc_text = safe_format(investigation.description)
+    story.append(Paragraph(desc_text or "No description provided.", styles["BodyText"]))
     story.append(Spacer(1, 15))
 
     # Evidence Inventory
@@ -215,15 +223,15 @@ def _generate_fallback_pdf(
     # Root Cause Hypotheses
     story.append(Paragraph("<b>Root Cause Hypotheses:</b>", styles["Heading3"]))
     for hyp in hypotheses:
-        story.append(Paragraph(f"<b>{hyp.title}</b> (Confidence: {hyp.confidence_score or 'N/A'}, Grounding: {hyp.grounding_score or 'N/A'})", styles["Normal"]))
-        story.append(Paragraph(hyp.content, styles["BodyText"]))
+        story.append(Paragraph(f"<b>{html.escape(hyp.title)}</b> (Confidence: {hyp.confidence_score or 'N/A'}, Grounding: {hyp.grounding_score or 'N/A'})", styles["Normal"]))
+        story.append(Paragraph(safe_format(hyp.content), styles["BodyText"]))
         story.append(Spacer(1, 10))
 
     # CAPA Section
     story.append(Paragraph("<b>Corrective and Preventive Action (CAPA) Plan:</b>", styles["Heading3"]))
     if capa:
         story.append(Paragraph(f"<b>Status:</b> {capa.status.upper()}", styles["Normal"]))
-        story.append(Paragraph(capa.content, styles["BodyText"]))
+        story.append(Paragraph(safe_format(capa.content), styles["BodyText"]))
     else:
         story.append(Paragraph("No CAPA draft generated yet.", styles["BodyText"]))
 
