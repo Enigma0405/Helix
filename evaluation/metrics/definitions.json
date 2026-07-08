@@ -1,0 +1,119 @@
+{
+  "version": "1.0.0",
+  "last_updated": "2024-11-15",
+  "metrics": [
+    {
+      "name": "retrieval_recall_at_5",
+      "display_name": "Retrieval Recall@5",
+      "unit": "ratio",
+      "target": 0.8,
+      "target_direction": "higher_is_better",
+      "description": "Proportion of relevant document chunks appearing in top-5 retrieval results",
+      "formula": "|relevant ∩ top_5| / |relevant|",
+      "category": "retrieval"
+    },
+    {
+      "name": "retrieval_precision_at_5",
+      "display_name": "Retrieval Precision@5",
+      "unit": "ratio",
+      "target": 0.6,
+      "target_direction": "higher_is_better",
+      "description": "Proportion of top-5 retrieved chunks that are actually relevant",
+      "formula": "|relevant ∩ top_5| / 5",
+      "category": "retrieval"
+    },
+    {
+      "name": "citation_precision",
+      "display_name": "Citation Precision",
+      "unit": "ratio",
+      "target": 0.9,
+      "target_direction": "higher_is_better",
+      "description": "Proportion of AI citations that are verifiable against the evidence corpus",
+      "formula": "valid_citations / total_citations",
+      "category": "grounding"
+    },
+    {
+      "name": "grounding_score",
+      "display_name": "Grounding Score",
+      "unit": "ratio",
+      "target": 0.8,
+      "target_direction": "higher_is_better",
+      "description": "Ratio of grounded claims (with valid citations) to total claims in a response",
+      "formula": "grounded_claims / total_claims",
+      "category": "grounding"
+    },
+    {
+      "name": "hallucination_rate",
+      "display_name": "Hallucination Rate",
+      "unit": "ratio",
+      "target_max": 0.1,
+      "target_direction": "lower_is_better",
+      "description": "Proportion of responses containing at least one fabricated or unverifiable citation",
+      "formula": "responses_with_invalid_citations / total_responses",
+      "category": "grounding"
+    },
+    {
+      "name": "hypothesis_latency_p50_ms",
+      "display_name": "Hypothesis Latency (p50)",
+      "unit": "milliseconds",
+      "target_max": 5000,
+      "target_direction": "lower_is_better",
+      "description": "Median end-to-end latency for hypothesis generation",
+      "category": "performance"
+    },
+    {
+      "name": "hypothesis_latency_p95_ms",
+      "display_name": "Hypothesis Latency (p95)",
+      "unit": "milliseconds",
+      "target_max": 10000,
+      "target_direction": "lower_is_better",
+      "description": "95th percentile end-to-end latency for hypothesis generation",
+      "category": "performance"
+    },
+    {
+      "name": "hypothesis_latency_p99_ms",
+      "display_name": "Hypothesis Latency (p99)",
+      "unit": "milliseconds",
+      "target_max": 30000,
+      "target_direction": "lower_is_better",
+      "description": "99th percentile end-to-end latency for hypothesis generation",
+      "category": "performance"
+    },
+    {
+      "name": "cost_per_investigation_usd",
+      "display_name": "Cost Per Investigation",
+      "unit": "usd",
+      "target_max": 0.5,
+      "target_direction": "lower_is_better",
+      "description": "Total estimated USD cost of AI API calls for one complete investigation",
+      "category": "cost"
+    },
+    {
+      "name": "time_to_initial_hypothesis_minutes",
+      "display_name": "Time to Initial Hypothesis (TTIH)",
+      "unit": "minutes",
+      "target_max": 5,
+      "target_direction": "lower_is_better",
+      "description": "Wall-clock time from evidence upload to first hypothesis displayed to user",
+      "category": "end_to_end"
+    },
+    {
+      "name": "hypothesis_rank_accuracy",
+      "display_name": "Hypothesis Rank Accuracy",
+      "unit": "ratio",
+      "target": 0.7,
+      "target_direction": "higher_is_better",
+      "description": "Proportion of hypotheses where actual rank matches expected rank (±1 position)",
+      "category": "quality"
+    },
+    {
+      "name": "root_cause_recall",
+      "display_name": "Root Cause Recall",
+      "unit": "ratio",
+      "target": 0.8,
+      "target_direction": "higher_is_better",
+      "description": "Proportion of expected root causes identified by the AI",
+      "category": "quality"
+    }
+  ]
+}

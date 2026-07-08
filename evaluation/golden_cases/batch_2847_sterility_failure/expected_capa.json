@@ -1,0 +1,60 @@
+{
+  "case_id": "batch_2847_sterility_failure",
+  "capa_actions": [
+    {
+      "category": "immediate_containment",
+      "title": "Batch Quarantine and Hold",
+      "must_include_keywords": ["quarantine", "hold", "batch", "quarantine"],
+      "priority": "critical",
+      "expected_timeframe_hours": 4
+    },
+    {
+      "category": "immediate_containment",
+      "title": "Customer Notification Assessment",
+      "must_include_keywords": ["customer", "notification", "recall", "regulatory"],
+      "priority": "critical",
+      "expected_timeframe_hours": 24
+    },
+    {
+      "category": "root_cause",
+      "title": "Filter Integrity Retesting",
+      "must_include_keywords": ["filter", "integrity", "bubble point", "diffusion"],
+      "priority": "high",
+      "expected_timeframe_hours": 48
+    },
+    {
+      "category": "root_cause",
+      "title": "Environmental Monitoring Data Review",
+      "must_include_keywords": ["environmental monitoring", "EM data", "settle plate", "air sample"],
+      "priority": "high",
+      "expected_timeframe_hours": 48
+    },
+    {
+      "category": "corrective",
+      "title": "Enhanced Environmental Monitoring Program",
+      "must_include_keywords": ["monitoring", "frequency", "Grade A", "alert limit"],
+      "priority": "high",
+      "expected_timeframe_days": 30
+    },
+    {
+      "category": "corrective",
+      "title": "Revised Filter Integrity Testing Protocol",
+      "must_include_keywords": ["filter", "protocol", "pre-use", "post-use"],
+      "priority": "high",
+      "expected_timeframe_days": 30
+    },
+    {
+      "category": "preventive",
+      "title": "Sterile Technique Refresher Training",
+      "must_include_keywords": ["training", "gowning", "sterile technique", "Grade A"],
+      "priority": "medium",
+      "expected_timeframe_days": 14
+    }
+  ],
+  "minimum_capa_count": 4,
+  "must_include_categories": [
+    "immediate_containment",
+    "root_cause",
+    "corrective"
+  ]
+}

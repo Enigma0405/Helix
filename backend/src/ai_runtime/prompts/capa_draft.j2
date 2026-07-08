@@ -1,0 +1,29 @@
+# CORRECTIVE AND PREVENTIVE ACTION (CAPA) DRAFTING TASK
+
+You are a senior Quality Assurance Manager. Draft a comprehensive Corrective and Preventive Action (CAPA) plan based on the approved root cause hypotheses for the following investigation:
+
+## Investigation Details
+- **Title**: {{ investigation_title }}
+- **Evidence Summary**: {{ evidence_summary }}
+
+## Approved Root Cause Hypotheses
+These root cause hypotheses have been reviewed and approved by quality engineers:
+
+{% for hypothesis in hypotheses %}
+### Root Cause: {{ hypothesis.title }}
+{{ hypothesis.content }}
+{% endfor %}
+
+{% if org_context %}
+## Organisation Guidelines / Context
+{{ org_context }}
+{% endif %}
+
+## Action Plan Requirements
+Generate a detailed CAPA plan with clear categories:
+1. **Immediate Containment Actions**: Immediate steps taken to isolate/quarantine affected batches, products, or materials to prevent release.
+2. **Corrective Actions**: Steps to fix the root cause of the current defect/incident.
+3. **Preventive Actions**: Systems-level modifications (SOP revisions, design changes, equipment calibration, environmental control upgrades) to prevent recurrence of this defect.
+4. **Effectiveness Check Plan**: How and when the effectiveness of these actions will be verified (e.g., re-testing, monitoring periods).
+
+Write the CAPA plan in clean Markdown format with professional tone suitable for FDA/regulatory audits. Focus on actionable, precise engineering controls rather than general training reminders.

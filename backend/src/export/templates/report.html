@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Investigation Report: {{ investigation.title }}</title>
+  <style>
+    body {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      color: #0F172A;
+      line-height: 1.5;
+      font-size: 10pt;
+    }
+    
+    @page {
+      size: letter;
+      margin: 2cm;
+      @bottom-right {
+        content: "Page " counter(page) " of " counter(pages);
+        font-size: 8pt;
+        color: #64748B;
+      }
+      @bottom-left {
+        content: "Project Helix — Grounded RCA Report";
+        font-size: 8pt;
+        color: #64748B;
+      }
+    }
+    
+    .header {
+      border-bottom: 2px solid #E2E8F0;
+      padding-bottom: 15px;
+      margin-bottom: 25px;
+    }
+    
+    .brand {
+      color: #3B82F6;
+      font-weight: bold;
+      font-size: 14pt;
+      letter-spacing: 0.05em;
+      margin-bottom: 5px;
+    }
+    
+    .title {
+      font-size: 20pt;
+      font-weight: 800;
+      color: #0F172A;
+      margin: 5px 0 10px 0;
+    }
+    
+    .metadata-grid {
+      display: table;
+      width: 100%;
+      margin-top: 15px;
+      font-size: 9pt;
+      color: #475569;
+    }
+    
+    .metadata-row {
+      display: table-row;
+    }
+    
+    .metadata-cell {
+      display: table-cell;
+      padding: 4px 10px;
+    }
+    
+    .metadata-label {
+      font-weight: bold;
+      color: #64748B;
+      width: 120px;
+    }
+    
+    .section-title {
+      font-size: 12pt;
+      font-weight: bold;
+      color: #1E293B;
+      border-bottom: 1px solid #E2E8F0;
+      padding-bottom: 5px;
+      margin-top: 25px;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      page-break-after: avoid;
+    }
+    
+    .evidence-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+    
+    .evidence-table th {
+      background-color: #F8FAFC;
+      color: #475569;
+      font-weight: bold;
+      text-align: left;
+      border-bottom: 1px solid #CBD5E1;
+      font-size: 8pt;
+      text-transform: uppercase;
+    }
+    
+    .evidence-table td, .evidence-table th {
+      padding: 8px 10px;
+      border-bottom: 1px solid #F1F5F9;
+      font-size: 9pt;
+    }
+    
+    .hypothesis-card {
+      margin-bottom: 15px;
+      padding: 12px;
+      background-color: #F8FAFC;
+      border-left: 4px solid #8B5CF6;
+      page-break-inside: avoid;
+    }
+    
+    .hypothesis-title {
+      font-weight: bold;
+      font-size: 10pt;
+      color: #0F172A;
+      margin-bottom: 5px;
+    }
+    
+    .hypothesis-meta {
+      font-size: 8pt;
+      color: #64748B;
+      margin-bottom: 8px;
+    }
+    
+    .citations-list {
+      margin-top: 8px;
+      padding-left: 15px;
+      font-size: 8.5pt;
+      color: #475569;
+      border-top: 1px dashed #E2E8F0;
+      padding-top: 6px;
+    }
+    
+    .capa-content {
+      background-color: #F8FAFC;
+      border-left: 4px solid #10B981;
+      padding: 15px;
+      white-space: pre-wrap;
+      font-family: monospace;
+      font-size: 9pt;
+      color: #334155;
+    }
+    
+    .timeline-item {
+      margin-bottom: 8px;
+      font-size: 8.5pt;
+      color: #475569;
+    }
+    
+    .timeline-date {
+      color: #64748B;
+      font-weight: bold;
+      margin-right: 8px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <div class="brand">PROJECT HELIX // EvidenceOps Report</div>
+    <h1 class="title">{{ investigation.title }}</h1>
+    
+    <div class="metadata-grid">
+      <div class="metadata-row">
+        <div class="metadata-cell metadata-label">Investigation ID:</div>
+        <div class="metadata-cell">{{ investigation.id }}</div>
+        <div class="metadata-cell metadata-label">Severity:</div>
+        <div class="metadata-cell"><strong>{{ investigation.severity|upper }}</strong></div>
+      </div>
+      <div class="metadata-row">
+        <div class="metadata-cell metadata-label">Status:</div>
+        <div class="metadata-cell"><strong>{{ investigation.status|upper }}</strong></div>
+        <div class="metadata-cell metadata-label">Report Generated:</div>
+        <div class="metadata-cell">{{ generated_at }}</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title">Initial Incident Description</div>
+  <p>{{ investigation.description or "No description provided." }}</p>
+
+  <div class="section-title">Evidence Inventory</div>
+  <table class="evidence-table">
+    <thead>
+      <tr>
+        <th>Filename</th>
+        <th>MIME Type</th>
+        <th>Status</th>
+        <th>Date Ingested</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in evidence_items %}
+      <tr>
+        <td>{{ item.original_filename }}</td>
+        <td>{{ item.mime_type }}</td>
+        <td>{{ item.status|upper }}</td>
+        <td>{{ item.created_at.strftime("%Y-%m-%d %H:%M") if item.created_at else "N/A" }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <div class="section-title">AI Root Cause Analysis & Hypotheses</div>
+  {% if hypotheses %}
+    {% for hyp in hypotheses %}
+    <div class="hypothesis-card">
+      <div class="hypothesis-title">{{ loop.index }}. {{ hyp.title }}</div>
+      <div class="hypothesis-meta">
+        Confidence: {{ hyp.confidence_score }} | Grounding Score: {{ hyp.grounding_score }} | Status: {{ hyp.status|upper }}
+      </div>
+      <p style="margin: 5px 0;">{{ hyp.content }}</p>
+      
+      {% if hyp.evidence_citations %}
+      <div class="citations-list">
+        <strong>Verified Grounding Citations:</strong>
+        <ul style="margin: 4px 0; padding-left: 15px;">
+          {% for cit in hyp.evidence_citations %}
+            {% if cit.is_valid %}
+            <li>"{{ cit.text }}" — <em>from {{ cit.source }} (sim: {{ cit.score }})</em></li>
+            {% endif %}
+          {% endfor %}
+        </ul>
+      </div>
+      {% endif %}
+    </div>
+    {% endfor %}
+  {% else %}
+    <p>No AI hypotheses generated yet for this investigation.</p>
+  {% endif %}
+
+  <div class="section-title">Corrective and Preventive Action (CAPA) Plan</div>
+  {% if capa %}
+    <div class="capa-content">{{ capa.content }}</div>
+    <div style="font-size: 8.5pt; color: #64748B; margin-top: 8px;">
+      CAPA Status: {{ capa.status|upper }}
+      {% if capa.approved_by %}
+        | Approved by user [{{ capa.approved_by }}] on {{ capa.approved_at.strftime("%Y-%m-%d %H:%M") }}
+      {% endif %}
+    </div>
+  {% else %}
+    <p>CAPA plan has not yet been drafted or approved.</p>
+  {% endif %}
+
+  <div class="section-title">Investigation Timeline & Audit Trail</div>
+  <div style="margin-top: 10px;">
+    {% for log in audit_logs %}
+    <div class="timeline-item">
+      <span class="timeline-date">{{ log.timestamp.strftime("%Y-%m-%d %H:%M") }}</span>
+      Action: <strong>{{ log.action|upper }}</strong> on Entity: {{ log.entity_type }} (By User: {{ log.actor_id }})
+    </div>
+    {% endfor %}
+  </div>
+
+</body>
+</html>

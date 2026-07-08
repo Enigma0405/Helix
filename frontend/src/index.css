@@ -1,0 +1,286 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================================
+   Project Helix — Global CSS Variables & Design Tokens
+   ============================================================ */
+:root {
+  /* Primary */
+  --helix-primary: #0F172A;
+  --helix-primary-light: #1E293B;
+
+  /* Accent: Electric Blue */
+  --helix-accent: #3B82F6;
+  --helix-accent-glow: rgba(59, 130, 246, 0.15);
+  --helix-accent-bright: rgba(59, 130, 246, 0.6);
+
+  /* AI Purple */
+  --helix-ai: #8B5CF6;
+  --helix-ai-glow: rgba(139, 92, 246, 0.15);
+
+  /* Evidence Green */
+  --helix-evidence: #10B981;
+  --helix-evidence-glow: rgba(16, 185, 129, 0.15);
+
+  /* Status */
+  --helix-warning: #F59E0B;
+  --helix-danger: #EF4444;
+  --helix-success: #10B981;
+
+  /* Surfaces */
+  --helix-surface: #1E293B;
+  --helix-surface-elevated: #334155;
+  --helix-border: rgba(148, 163, 184, 0.1);
+  --helix-border-strong: rgba(148, 163, 184, 0.2);
+
+  /* Text */
+  --helix-text-primary: #F8FAFC;
+  --helix-text-secondary: #94A3B8;
+  --helix-text-muted: #64748B;
+
+  /* Sidebar */
+  --sidebar-width: 256px;
+}
+
+/* ============================================================
+   Base Layer Overrides
+   ============================================================ */
+@layer base {
+  * {
+    border-color: var(--helix-border);
+  }
+
+  body {
+    @apply bg-[#0F172A] text-slate-100 font-sans;
+    background-image:
+      radial-gradient(ellipse at 20% 50%, rgba(59, 130, 246, 0.03) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 20%, rgba(139, 92, 246, 0.03) 0%, transparent 50%);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-semibold tracking-tight;
+  }
+}
+
+/* ============================================================
+   Component Layer
+   ============================================================ */
+@layer components {
+  /* Glass Card */
+  .glass-card {
+    @apply bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl;
+  }
+
+  .glass-card-elevated {
+    @apply bg-white/8 backdrop-blur-md border border-white/15 rounded-xl shadow-glass;
+  }
+
+  /* Gradient text */
+  .gradient-text-blue {
+    @apply bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent;
+  }
+
+  .gradient-text-ai {
+    @apply bg-gradient-to-r from-blue-400 via-violet-400 to-purple-500 bg-clip-text text-transparent;
+  }
+
+  .gradient-text-helix {
+    @apply bg-gradient-to-r from-blue-400 to-violet-400 bg-clip-text text-transparent;
+  }
+
+  /* Glow effects */
+  .glow-blue {
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.3), 0 0 40px rgba(59, 130, 246, 0.1);
+  }
+
+  .glow-ai {
+    box-shadow: 0 0 20px rgba(139, 92, 246, 0.3), 0 0 40px rgba(139, 92, 246, 0.1);
+  }
+
+  /* Status indicator dot */
+  .status-dot {
+    @apply w-2 h-2 rounded-full inline-block;
+  }
+
+  .status-dot-pulse {
+    @apply animate-pulse;
+  }
+
+  /* Sidebar nav item */
+  .nav-item {
+    @apply flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-400 hover:text-slate-100
+           hover:bg-white/5 transition-all duration-200 cursor-pointer text-sm font-medium;
+  }
+
+  .nav-item-active {
+    @apply bg-blue-500/10 text-blue-400 border border-blue-500/20;
+  }
+
+  /* Shimmer loading */
+  .shimmer {
+    background: linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.03) 0%,
+      rgba(255, 255, 255, 0.08) 50%,
+      rgba(255, 255, 255, 0.03) 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.8s infinite;
+  }
+
+  /* Helix gradient border */
+  .gradient-border {
+    position: relative;
+  }
+  .gradient-border::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.4), rgba(139, 92, 246, 0.4));
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+
+  /* Input base */
+  .input-base {
+    @apply w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2.5
+           text-slate-100 placeholder-slate-500 text-sm
+           focus:outline-none focus:ring-2 focus:ring-blue-500/40 focus:border-blue-500/40
+           transition-all duration-200;
+  }
+
+  /* Select base */
+  .select-base {
+    @apply input-base appearance-none cursor-pointer;
+  }
+
+  /* KPI Card */
+  .kpi-card {
+    @apply glass-card p-6 hover:bg-white/8 transition-all duration-300 cursor-default;
+  }
+
+  /* Table */
+  .helix-table {
+    @apply w-full text-sm;
+  }
+  .helix-table thead tr {
+    @apply border-b border-white/10;
+  }
+  .helix-table thead th {
+    @apply px-4 py-3 text-left text-xs font-semibold text-slate-400 uppercase tracking-wider;
+  }
+  .helix-table tbody tr {
+    @apply border-b border-white/5 hover:bg-white/3 transition-colors duration-150;
+  }
+  .helix-table tbody td {
+    @apply px-4 py-3.5 text-slate-300;
+  }
+
+  /* Page header */
+  .page-header {
+    @apply mb-8;
+  }
+  .page-title {
+    @apply text-2xl font-bold text-slate-100;
+  }
+  .page-subtitle {
+    @apply text-slate-400 text-sm mt-1;
+  }
+
+  /* Tabs */
+  .tab-bar {
+    @apply flex gap-1 p-1 bg-white/5 rounded-lg border border-white/10;
+  }
+  .tab-item {
+    @apply px-4 py-2 rounded-md text-sm font-medium text-slate-400
+           hover:text-slate-200 transition-all duration-200 cursor-pointer;
+  }
+  .tab-item-active {
+    @apply bg-white/10 text-slate-100;
+  }
+}
+
+/* ============================================================
+   Utility Layer
+   ============================================================ */
+@layer utilities {
+  .bg-white\/3 {
+    background-color: rgba(255, 255, 255, 0.03);
+  }
+  .bg-white\/8 {
+    background-color: rgba(255, 255, 255, 0.08);
+  }
+  .bg-white\/15 {
+    background-color: rgba(255, 255, 255, 0.15);
+  }
+  .border-white\/15 {
+    border-color: rgba(255, 255, 255, 0.15);
+  }
+
+  /* Text balance */
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+/* ============================================================
+   Custom Animations (not Tailwind)
+   ============================================================ */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(12px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes slideDown {
+  from { transform: translateY(-8px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes scaleIn {
+  from { transform: scale(0.95); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+@keyframes spin-slow {
+  to { transform: rotate(360deg); }
+}
+
+/* ============================================================
+   Prose overrides for CAPA content
+   ============================================================ */
+.helix-prose {
+  @apply text-slate-300 leading-relaxed;
+}
+.helix-prose h1, .helix-prose h2, .helix-prose h3 {
+  @apply text-slate-100 font-semibold mt-6 mb-3;
+}
+.helix-prose p {
+  @apply mb-4;
+}
+.helix-prose ul, .helix-prose ol {
+  @apply pl-6 mb-4 space-y-1;
+}
+.helix-prose li {
+  @apply text-slate-300;
+}
+.helix-prose strong {
+  @apply text-slate-100 font-semibold;
+}
+.helix-prose code {
+  @apply text-blue-400 bg-blue-500/10 px-1.5 py-0.5 rounded text-sm font-mono;
+}

@@ -1,0 +1,129 @@
+{
+  "id": "inv-2847-sterility-2024",
+  "title": "Batch #2847 — Sterility Failure",
+  "investigation_number": "DEV-2024-0892",
+  "status": "open",
+  "severity": "critical",
+  "product": "Injectable Product X (50mL vials)",
+  "batch_lot": "2847",
+  "batch_size": 5000,
+  "units_tested": 14,
+  "units_positive": 2,
+  "manufacturing_date": "2024-11-08",
+  "release_date_planned": "2024-11-22",
+  "test_date": "2024-11-15",
+  "detection_date": "2024-11-15",
+  "reported_by": "Dr. Amir Patel, QC Microbiology Supervisor",
+  "assigned_to": "Jennifer Martinez, QA Lead",
+  "description": "Sterility test failure detected during final quality control testing. Batch #2847 of Injectable Product X (50mL vials, lot size 5,000 units) failed USP <71> sterility testing conducted on 2024-11-15 by the QC Microbiology team. Two of fourteen units tested showed positive results (turbidity in thioglycollate medium at Day 7). The organism was tentatively identified as a Gram-negative rod, with confirmation testing (16S rRNA sequencing) pending. Preliminary morphology is consistent with Burkholderia cepacia complex. The batch has been quarantined pending investigation. No product from this batch has been distributed. A multidisciplinary investigation team has been assembled.",
+  "immediate_actions_taken": [
+    {
+      "action": "Batch quarantine — physical segregation and label application",
+      "completed_by": "Jennifer Martinez",
+      "completed_at": "2024-11-15T15:00:00Z"
+    },
+    {
+      "action": "Grade A fill suite taken offline pending investigation",
+      "completed_by": "Michael O'Brien",
+      "completed_at": "2024-11-15T16:30:00Z"
+    },
+    {
+      "action": "Regulatory notification assessment initiated (21 CFR 314.81)",
+      "completed_by": "Dr. Sarah Chen",
+      "completed_at": "2024-11-15T17:00:00Z"
+    },
+    {
+      "action": "Retain samples from batch 2847 secured for confirmatory testing",
+      "completed_by": "Dr. Amir Patel",
+      "completed_at": "2024-11-15T14:45:00Z"
+    }
+  ],
+  "potential_root_causes": [],
+  "evidence_documents": [
+    {
+      "id": "doc-001",
+      "filename": "SOP-MFG-042-Rev-C-Sterile-Filtration.pdf",
+      "type": "sop",
+      "title": "SOP-MFG-042 Rev C — Sterile Filtration of Injectable Products",
+      "version": "Rev C",
+      "effective_date": "2024-03-01",
+      "description": "Standard Operating Procedure covering 0.22 micron sterile filtration, filter integrity testing (pre-use bubble point, post-use diffusion flow), and sterile hold times for injectable product manufacturing.",
+      "upload_status": "pending"
+    },
+    {
+      "id": "doc-002",
+      "filename": "Batch-Record-2847-Complete.pdf",
+      "type": "batch_record",
+      "title": "Batch Manufacturing Record — Lot 2847",
+      "description": "Complete batch manufacturing record including all process steps, in-process controls, environmental monitoring results, personnel entries, equipment IDs, and operator signatures for batch 2847.",
+      "upload_status": "pending"
+    },
+    {
+      "id": "doc-003",
+      "filename": "EM-Report-Q3-2024-Grade-A-B.pdf",
+      "type": "environmental_monitoring_report",
+      "title": "Environmental Monitoring Report — Q3 2024 (Grade A/B Zones)",
+      "description": "Quarterly environmental monitoring summary report covering settle plates, active air sampling, surface sampling, and personnel monitoring results for all Grade A and B classified areas.",
+      "upload_status": "pending"
+    },
+    {
+      "id": "doc-004",
+      "filename": "CAPA-2023-087-EM-Deviation-Closeout.pdf",
+      "type": "capa",
+      "title": "CAPA-2023-087 — Environmental Monitoring Grade B Deviation (Closed)",
+      "description": "Closed CAPA from 2023 addressing an environmental monitoring exceedance in the Grade B ante-room. Includes root cause analysis, corrective actions implemented, and effectiveness verification data.",
+      "upload_status": "pending"
+    },
+    {
+      "id": "doc-005",
+      "filename": "Filter-Integrity-Logs-Nov-2024.pdf",
+      "type": "test_data",
+      "title": "Filter Integrity Test Logs — November 2024",
+      "description": "Pre-use and post-use filter integrity test results for all sterile filtration operations performed in November 2024, including batch 2847.",
+      "upload_status": "pending"
+    }
+  ],
+  "investigation_team": [
+    {
+      "name": "Jennifer Martinez",
+      "role": "Investigation Lead",
+      "department": "Quality Assurance"
+    },
+    {
+      "name": "Dr. Amir Patel",
+      "role": "Microbiologist",
+      "department": "Quality Control"
+    },
+    {
+      "name": "Robert Kim",
+      "role": "Manufacturing Representative",
+      "department": "Manufacturing"
+    },
+    {
+      "name": "Dr. Lisa Nakamura",
+      "role": "Process Engineer",
+      "department": "Engineering"
+    }
+  ],
+  "regulatory_refs": [
+    "USP <71> Sterility Tests",
+    "21 CFR 211.113 — Control of Microbiological Contamination",
+    "21 CFR 211.68 — Automatic, Mechanical, and Electronic Equipment",
+    "EU GMP Annex 1 — Manufacture of Sterile Medicinal Products (2022 revision)",
+    "PDA TR13 — Fundamentals of an Environmental Monitoring Program",
+    "PDA TR26 — Sterilizing Filtration of Liquids",
+    "ICH Q9 — Quality Risk Management"
+  ],
+  "target_completion_date": "2024-12-15",
+  "created_at": "2024-11-15T14:30:00Z",
+  "updated_at": "2024-11-15T17:00:00Z",
+  "tags": [
+    "sterility",
+    "injectable",
+    "gram-negative",
+    "critical",
+    "grade-a",
+    "filtration",
+    "environmental-monitoring"
+  ]
+}

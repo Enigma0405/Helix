@@ -1,0 +1,70 @@
+{
+  "case_id": "batch_2847_sterility_failure",
+  "title": "Batch #2847 — Sterility Failure",
+  "description": "Sterility test failure detected during final QC. Batch #2847 of Injectable Product X (50mL vials) failed USP <71> sterility testing conducted on 2024-11-15. Positive result for Gram-negative rod identified in 2 of 14 units tested. Organism tentatively identified as Burkholderia cepacia complex pending confirmation. Batch quarantined pending investigation. This is a critical GMP deviation with potential patient safety impact.",
+  "severity": "critical",
+  "product": "Injectable Product X (50mL vials)",
+  "batch_lot": "2847",
+  "facility": "Building A — Sterile Manufacturing, Grade A Fill Zone",
+  "manufacturing_date": "2024-11-08",
+  "test_date": "2024-11-15",
+  "units_tested": 14,
+  "units_positive": 2,
+  "organism_identified": "Gram-negative rod (tentative: Burkholderia cepacia complex)",
+  "regulatory_refs": [
+    "USP <71> Sterility Tests",
+    "21 CFR 211.113 — Control of Microbiological Contamination",
+    "21 CFR 211.68 — Automatic, Mechanical, and Electronic Equipment",
+    "EU GMP Annex 1 — Manufacture of Sterile Medicinal Products",
+    "PDA TR13 — Fundamentals of an Environmental Monitoring Program"
+  ],
+  "expected_root_causes": [
+    "Filter integrity failure during sterile filtration",
+    "Environmental monitoring breach in Grade A zone",
+    "Personnel gowning protocol deviation",
+    "Equipment sterilization failure (autoclave cycle deviation)",
+    "Container closure integrity failure"
+  ],
+  "expected_capa_categories": [
+    "Immediate containment — batch quarantine and customer notification assessment",
+    "Root cause investigation — filter integrity testing (bubble point, diffusion flow)",
+    "Root cause investigation — environmental monitoring data review (settle plates, air samples)",
+    "Root cause investigation — personnel gowning records and training logs",
+    "CAPA — enhanced environmental monitoring program with increased frequency",
+    "CAPA — revised filter integrity testing protocol with 100% pre-use and post-use testing",
+    "Training — sterile technique refresher for all Grade A zone operators"
+  ],
+  "evidence_documents": [
+    {
+      "filename": "SOP-MFG-042-sterile-filtration.pdf",
+      "type": "SOP",
+      "description": "Standard Operating Procedure for sterile filtration of injectable products"
+    },
+    {
+      "filename": "batch-record-2847.pdf",
+      "type": "batch_record",
+      "description": "Complete batch manufacturing record for lot 2847"
+    },
+    {
+      "filename": "em-report-q3-2024.pdf",
+      "type": "environmental_monitoring",
+      "description": "Environmental monitoring report for Q3 2024 covering Grade A/B zones"
+    },
+    {
+      "filename": "CAPA-2023-087-prior-em-deviation.pdf",
+      "type": "capa",
+      "description": "Prior CAPA for environmental monitoring deviation in Grade B zone (2023)"
+    }
+  ],
+  "tags": [
+    "sterility",
+    "filtration",
+    "environmental-monitoring",
+    "gram-negative",
+    "critical",
+    "injectable",
+    "grade-a"
+  ],
+  "created_at": "2024-11-15T14:30:00Z",
+  "created_by": "QA Lead — Jennifer Martinez"
+}

@@ -1,0 +1,29 @@
+# INVESTIGATION SUMMARY REPORT
+
+Summarize the state of the following quality investigation:
+
+## Investigation Details
+- **Title**: {{ investigation_title }}
+- **Initial Description**: {{ investigation_description }}
+
+## Evidence File Inventory
+{% if evidence_items %}
+The following evidence items have been uploaded and analyzed:
+{% for item in evidence_items %}
+- {{ item.filename }} (Type: {{ item.mime_type }}, Uploaded: {{ item.created_at }})
+{% endfor %}
+{% else %}
+No evidence files uploaded yet.
+{% endif %}
+
+## Current Hypotheses State
+{% if hypotheses %}
+The following root cause hypotheses have been generated:
+{% for hyp in hypotheses %}
+- **{{ hyp.title }}**: {{ hyp.content }}
+{% endfor %}
+{% else %}
+No root-cause hypotheses generated yet.
+{% endif %}
+
+Provide a clear, brief executive summary of this investigation's findings so far. Keep it under 250 words. Focus on what is known, what is suspected, and what next steps are required.
