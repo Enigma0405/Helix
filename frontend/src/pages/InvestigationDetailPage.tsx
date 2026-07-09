@@ -54,7 +54,7 @@ export const InvestigationDetailPage: React.FC = () => {
   const { data: investigationsRes, isLoading: isInvLoading } = useQuery({
     queryKey: ["investigations", id],
     queryFn: async () => {
-      const res = await apiClient.get(`/api/investigations/${id}`);
+      const res = await apiClient.get(`/investigations/${id}`);
       return res.data;
     },
     enabled: !!id,
@@ -66,7 +66,7 @@ export const InvestigationDetailPage: React.FC = () => {
   const { data: timelineRes, isLoading: isTimelineLoading } = useQuery({
     queryKey: ["timeline", id],
     queryFn: async () => {
-      const res = await apiClient.get(`/api/investigations/${id}/timeline`);
+      const res = await apiClient.get(`/investigations/${id}/timeline`);
       return res.data;
     },
     enabled: !!id && activeTab === "audit",
