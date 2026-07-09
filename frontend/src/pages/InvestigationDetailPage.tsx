@@ -7,7 +7,7 @@ import {
   useInvestigations,
   useUpdateInvestigation,
 } from "@/features/investigations/api/useInvestigations";
-import { useEvidence, useUploadEvidence } from "@/features/evidence/api/useEvidence";
+import { useEvidenceList, useUploadEvidence } from "@/features/evidence/api/useEvidence";
 import {
   useHypotheses,
   useGenerateHypotheses,
@@ -21,7 +21,7 @@ import {
   useExportInvestigation,
 } from "@/features/capa/api/useCapa";
 
-import { useToast } from "@/hooks/useToast";
+import { toast } from "@/hooks/useToast";
 import { Spinner } from "@/components/ui/Spinner";
 import { Badge } from "@/components/ui/Badge";
 import { EvidenceUploadZone } from "@/features/evidence/components/EvidenceUploadZone";
@@ -48,13 +48,12 @@ type TabType = "overview" | "evidence" | "hypotheses" | "capa" | "audit";
 export const InvestigationDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const queryClient = useQueryClient();
-  const { toast } = useToast();
   const currentUser = useAuthStore((s) => s.user);
 
   const [activeTab, setActiveTab] = useState<TabType>("overview");
 
-  // Fetch Investigation details
-  const { data: investigation, isLoading: isInvLoading } = useQuery({
+  // Fetch investigation details
+  const { data: investigationsRes, isLoading: isInvLoading } = useQuery({
     queryKey: ["investigations", id],
     queryFn: async () => {
       const res = await apiClient.get(`/api/investigations/${id}`);
@@ -62,6 +61,8 @@ export const InvestigationDetailPage: React.FC = () => {
     },
     enabled: !!id,
   });
+
+  const investigation = investigationsRes;
 
   // Fetch audit timeline
   const { data: timelineRes, isLoading: isTimelineLoading } = useQuery({
@@ -73,9 +74,9 @@ export const InvestigationDetailPage: React.FC = () => {
     enabled: !!id && activeTab === "audit",
   });
 
-  const updateInvMutation = useUpdateInvestigation();
-  const { data: evidenceItems = [], isLoading: isEvidenceLoading } = useEvidence(id || "");
-  const uploadEvidenceMutation = useUploadEvidence();
+  const updateInvMutation = useUpdateInvestigation(id || "");
+  const { data: evidenceItems = [], isLoading: isEvidenceLoading } = useEvidenceList(id || "");
+  const uploadEvidenceMutation = useUploadEvidence(id || "");
 
   const { data: hypotheses = [], isLoading: isHypothesesLoading } = useHypotheses(id || "");
   const generateHypothesesMutation = useGenerateHypotheses();
@@ -90,11 +91,11 @@ export const InvestigationDetailPage: React.FC = () => {
   const handleStatusChange = (newStatus: string) => {
     if (!id) return;
     updateInvMutation.mutate(
-      { id, data: { status: newStatus as any } },
+      { status: newStatus as any },
       {
         onSuccess: () => {
           queryClient.invalidateQueries({ queryKey: ["investigations", id] });
-          toast({ title: "Status Updated", description: `Investigation is now ${newStatus}.` });
+          toast.success("Status Updated", `Investigation is now ${newStatus}.`);
         },
       }
     );
@@ -104,11 +105,11 @@ export const InvestigationDetailPage: React.FC = () => {
     if (!id) return;
     files.forEach((file) => {
       uploadEvidenceMutation.mutate(
-        { file, investigationId: id },
+        { file },
         {
           onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["evidence", id] });
-            toast({ title: "Upload Success", description: `${file.name} uploaded as evidence.` });
+            toast.success("Upload Success", `${file.name} uploaded as evidence.`);
           },
         }
       );
@@ -121,7 +122,7 @@ export const InvestigationDetailPage: React.FC = () => {
       { investigationId: id, num_hypotheses: num },
       {
         onSuccess: () => {
-          toast({ title: "Analysis Complete", description: "AI Hypotheses generated successfully." });
+          toast.success("Analysis Complete", "AI Hypotheses generated successfully.");
         },
       }
     );
@@ -136,7 +137,7 @@ export const InvestigationDetailPage: React.FC = () => {
       { hypothesisId, data: { status, content } },
       {
         onSuccess: () => {
-          toast({ title: "Review Submitted", description: `Hypothesis marked as ${status}.` });
+          toast.success("Review Submitted", `Hypothesis marked as ${status}.`);
         },
       }
     );
@@ -148,10 +149,10 @@ export const InvestigationDetailPage: React.FC = () => {
       { investigationId: id, org_context: orgContext },
       {
         onSuccess: () => {
-          toast({ title: "Action Plan Created", description: "CAPA draft generated using AI." });
+          toast.success("Action Plan Created", "CAPA draft generated using AI.");
         },
-        onError: (err) => {
-          toast({ title: "Generation Failed", description: err.message, variant: "destructive" });
+        onError: (err: any) => {
+          toast.error("Generation Failed", err.message);
         },
       }
     );
@@ -163,7 +164,7 @@ export const InvestigationDetailPage: React.FC = () => {
       { capaId: capa.id, content },
       {
         onSuccess: () => {
-          toast({ title: "Draft Saved", description: "CAPA draft content has been modified." });
+          toast.success("Draft Saved", "CAPA draft content has been modified.");
         },
       }
     );
@@ -175,7 +176,7 @@ export const InvestigationDetailPage: React.FC = () => {
       { capaId: capa.id },
       {
         onSuccess: () => {
-          toast({ title: "CAPA Approved", description: "Investigation closed & captured to Knowledge Base." });
+          toast.success("CAPA Approved", "Investigation closed & captured to Knowledge Base.");
           queryClient.invalidateQueries({ queryKey: ["investigations", id] });
         },
       }
@@ -196,7 +197,7 @@ export const InvestigationDetailPage: React.FC = () => {
               if (res.data.download_url) window.open(res.data.download_url, "_blank");
             });
           }
-          toast({ title: "Export Initiated", description: "PDF generated. Check your downloads." });
+          toast.success("Export Initiated", "PDF generated. Check your downloads.");
         },
       }
     );
@@ -236,7 +237,7 @@ export const InvestigationDetailPage: React.FC = () => {
               <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">
                 Case ID: {investigation.id.slice(0, 8)}
               </span>
-              <Badge variant={investigation.severity === "critical" ? "destructive" : "secondary"}>
+              <Badge variant={investigation.severity === "critical" ? "red" : "slate"}>
                 {investigation.severity}
               </Badge>
             </div>
@@ -385,10 +386,7 @@ export const InvestigationDetailPage: React.FC = () => {
         {activeTab === "evidence" && (
           <div className="space-y-6">
             {/* Upload Zone */}
-            <EvidenceUploadZone
-              onUpload={handleEvidenceUpload}
-              isUploading={uploadEvidenceMutation.isPending}
-            />
+            <EvidenceUploadZone investigationId={id || ""} />
 
             {/* Evidence Inventory */}
             <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
@@ -400,7 +398,7 @@ export const InvestigationDetailPage: React.FC = () => {
                 <p className="text-xs text-slate-500">No evidence uploaded yet.</p>
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {evidenceItems.map((item) => (
+                  {evidenceItems.map((item: any) => (
                     <div
                       key={item.id}
                       className="p-4 bg-white/5 border border-white/10 rounded-xl flex items-center justify-between"
@@ -459,7 +457,7 @@ export const InvestigationDetailPage: React.FC = () => {
                 </div>
               ) : (
                 <div className="space-y-4">
-                  {hypotheses.map((hyp) => (
+                  {hypotheses.map((hyp: any) => (
                     <HypothesisCard
                       key={hyp.id}
                       hypothesis={hyp}

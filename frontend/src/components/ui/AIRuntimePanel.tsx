@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { runtimeApi } from '@/api/client'
-import Spinner from './Spinner'
+import { Spinner } from './Spinner'
 
 interface TelemetryData {
   provider: string

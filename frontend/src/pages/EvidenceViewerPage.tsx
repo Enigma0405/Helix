@@ -29,19 +29,16 @@ export const EvidenceViewerPage: React.FC = () => {
   });
 
   // Fetch chunks for this evidence item
-  const { data: chunks = [], isLoading: isChunksLoading } = useQuery<Chunk[]>({
+  const { data: chunksData, isLoading: isChunksLoading } = useQuery<Chunk[]>({
     queryKey: ["evidence", "chunks", evidenceId],
     queryFn: async () => {
       const res = await apiClient.get(`/api/evidence/${evidenceId}/chunks`);
       return res.data;
     },
     enabled: !!evidenceId,
-    onSuccess: (data) => {
-      if (data && data.length > 0) {
-        setSelectedChunk(data[0]);
-      }
-    },
   });
+
+  const chunks: Chunk[] = chunksData || [];
 
   // Fallback to select first chunk when loaded if not already selected
   React.useEffect(() => {

@@ -114,6 +114,7 @@ export interface Citation {
   score: number;
   source: string;
   page?: number | null;
+  is_valid?: boolean;
 }
 
 export interface Hypothesis {

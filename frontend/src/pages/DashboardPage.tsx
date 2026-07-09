@@ -11,7 +11,6 @@ import { AIRuntimePanel } from "@/components/ui/AIRuntimePanel";
 
 export const DashboardPage: React.FC = () => {
   const { data: investigationsRes, isLoading } = useInvestigations();
-  const createMutation = useCreateInvestigation();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const investigations = investigationsRes?.items || [];
@@ -21,14 +20,6 @@ export const DashboardPage: React.FC = () => {
     in_progress: investigations.filter((i) => i.status === "in_progress").length,
     pending_review: investigations.filter((i) => i.status === "pending_review").length,
     closed: investigations.filter((i) => i.status === "closed").length,
-  };
-
-  const handleCreate = (data: { title: string; description: string; severity: "critical" | "high" | "medium" | "low" }) => {
-    createMutation.mutate(data, {
-      onSuccess: () => {
-        setIsModalOpen(false);
-      },
-    });
   };
 
   if (isLoading) {
@@ -147,10 +138,8 @@ export const DashboardPage: React.FC = () => {
       <AIRuntimePanel />
 
       <CreateInvestigationModal
-        isOpen={isModalOpen}
+        open={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        onSubmit={handleCreate}
-        isLoading={createMutation.isPending}
       />
     </div>
   );

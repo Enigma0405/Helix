@@ -76,7 +76,7 @@ export const LoginPage: React.FC = () => {
             <Button
               type="submit"
               className="w-full py-2.5 bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-500 hover:to-violet-500 text-white rounded-xl font-semibold transition-all mt-6 shadow-md shadow-violet-950/20"
-              isLoading={loginMutation.isPending}
+              loading={loginMutation.isPending}
             >
               Log In to Workspace
             </Button>
@@ -84,7 +84,7 @@ export const LoginPage: React.FC = () => {
 
           {loginMutation.isError && (
             <div className="mt-4 p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-xs text-center">
-              {loginMutation.error?.message || "Invalid email or password."}
+              {(loginMutation.error as any)?.message || "Invalid email or password."}
             </div>
           )}
 

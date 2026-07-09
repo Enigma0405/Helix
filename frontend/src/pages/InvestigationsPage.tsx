@@ -8,22 +8,13 @@ import { StatusFilter } from "@/features/investigations/components/StatusFilter"
 import { Button } from "@/components/ui/Button";
 
 export const InvestigationsPage: React.FC = () => {
-  const [status, setStatus] = useState<string>("");
-  const [severity, setSeverity] = useState<string>("");
+  const [status, setStatus] = useState<any>("");
+  const [severity, setSeverity] = useState<any>("");
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const { data: res, isLoading } = useInvestigations({ status, severity });
-  const createMutation = useCreateInvestigation();
 
   const investigations = res?.items || [];
-
-  const handleCreate = (data: { title: string; description: string; severity: "critical" | "high" | "medium" | "low" }) => {
-    createMutation.mutate(data, {
-      onSuccess: () => {
-        setIsModalOpen(false);
-      },
-    });
-  };
 
   return (
     <div className="space-y-6">
@@ -88,10 +79,8 @@ export const InvestigationsPage: React.FC = () => {
       </div>
 
       <CreateInvestigationModal
-        isOpen={isModalOpen}
+        open={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        onSubmit={handleCreate}
-        isLoading={createMutation.isPending}
       />
     </div>
   );
