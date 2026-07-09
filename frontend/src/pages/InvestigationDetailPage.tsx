@@ -4,7 +4,6 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiClient } from "@/api/client";
 import { useAuthStore } from "@/store/auth";
 import {
-  useInvestigations,
   useUpdateInvestigation,
 } from "@/features/investigations/api/useInvestigations";
 import { useEvidenceList, useUploadEvidence } from "@/features/evidence/api/useEvidence";
@@ -39,7 +38,6 @@ import {
   Calendar,
   User,
   ArrowRight,
-  TrendingRight,
   Download,
 } from "lucide-react";
 
