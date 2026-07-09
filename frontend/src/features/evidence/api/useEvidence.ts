@@ -24,7 +24,7 @@ export function useEvidenceList(investigationId: string) {
     queryKey: EVIDENCE_KEYS.list(investigationId),
     queryFn: async () => {
       const response = await evidenceApi.list(investigationId)
-      return response.data as EvidenceItem[]
+      return (response.data as { items: EvidenceItem[] }).items
     },
     enabled: Boolean(investigationId),
     staleTime: 15_000,
