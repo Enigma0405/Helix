@@ -52,15 +52,10 @@ apiClient.interceptors.response.use(
 
 // Auth
 export const authApi = {
-  login: (email: string, password: string) => {
-    const formData = new URLSearchParams()
-    formData.append('username', email)
-    formData.append('password', password)
-    return apiClient.post('/auth/token', formData, {
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    })
-  },
-  me: () => apiClient.get('/auth/me'),
+  login: (email: string, password: string) =>
+    apiClient.post('/auth/login', { email, password }),
+  me: (token?: string) =>
+    apiClient.get('/auth/me', token ? { headers: { Authorization: `Bearer ${token}` } } : undefined),
 }
 
 // Investigations

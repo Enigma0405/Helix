@@ -2,7 +2,6 @@ import { useMutation } from '@tanstack/react-query'
 import { authApi } from '@/api/client'
 import { useAuthStore } from '@/store/auth'
 import { toast } from '@/hooks/useToast'
-import type { AuthResponse } from '@/types'
 
 // ============================================================
 // Auth query keys
@@ -19,8 +18,15 @@ export function useLogin() {
 
   return useMutation({
     mutationFn: async ({ email, password }: { email: string; password: string }) => {
-      const response = await authApi.login(email, password)
-      return response.data as AuthResponse
+      // Step 1: get tokens
+      const tokenRes = await authApi.login(email, password)
+      const { access_token } = tokenRes.data
+
+      // Step 2: fetch user profile using the token
+      const meRes = await authApi.me(access_token)
+      const { user } = meRes.data
+
+      return { access_token, user }
     },
     onSuccess: (data) => {
       setAuth(data.access_token, data.user)
