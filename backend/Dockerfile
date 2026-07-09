@@ -24,9 +24,10 @@ RUN pip install --no-cache-dir -e .
 # Copy application source
 COPY src/ ./src/
 
-# Copy Alembic migrations (if present)
-COPY alembic/ ./alembic/ 2>/dev/null || true
-COPY alembic.ini . 2>/dev/null || true
+# Copy Alembic migrations if present (commented out to avoid build failures since they are not present)
+# Project Helix automatically initializes the database schema on startup.
+# COPY alembi[c]/ ./alembic/
+# COPY alembic.in[i] ./
 
 EXPOSE 8000
 
