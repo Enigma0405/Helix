@@ -29,7 +29,7 @@ export const LoginPage: React.FC = () => {
       { email: data.email, password: data.password },
       {
         onSuccess: () => {
-          navigate("/");
+          navigate("/app");
         },
       }
     );

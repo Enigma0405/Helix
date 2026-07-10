@@ -13,6 +13,7 @@ import { InvestigationsPage } from "@/pages/InvestigationsPage";
 import { InvestigationDetailPage } from "@/pages/InvestigationDetailPage";
 import { EvidenceViewerPage } from "@/pages/EvidenceViewerPage";
 import { SettingsPage } from "@/pages/SettingsPage";
+import { LandingPage } from "@/pages/LandingPage";
 
 import { ToastContainer } from "@/components/ui/ToastContainer";
 
@@ -38,8 +39,10 @@ const ProtectedViewerLayout: React.FC = () => {
 };
 
 const router = createBrowserRouter([
+  { path: "/", element: <LandingPage /> },
+  { path: "/login", element: <LoginPage /> },
   {
-    path: "/",
+    path: "/app",
     element: <ProtectedLayout />,
     children: [
       { index: true, element: <DashboardPage /> },
@@ -49,12 +52,12 @@ const router = createBrowserRouter([
     ],
   },
   {
+    path: "/app",
     element: <ProtectedViewerLayout />,
     children: [
       { path: "investigations/:id/evidence/:evidenceId", element: <EvidenceViewerPage /> },
     ],
   },
-  { path: "/login", element: <LoginPage /> },
   { path: "*", element: <Navigate to="/" replace /> },
 ]);
 

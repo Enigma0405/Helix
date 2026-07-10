@@ -19,31 +19,31 @@ import { useCurrentUser } from '@/store/auth'
 const navItems = [
   {
     label: 'Command Center',
-    to: '/',
+    to: '/app',
     icon: LayoutDashboard,
     exact: true,
   },
   {
     label: 'My Work',
-    to: '/my-work',
+    to: '/app/my-work',
     icon: Zap,
     exact: false,
   },
   {
     label: 'Investigations',
-    to: '/investigations',
+    to: '/app/investigations',
     icon: Search,
     exact: false,
   },
   {
     label: 'Knowledge',
-    to: '/knowledge',
+    to: '/app/knowledge',
     icon: Layers,
     exact: false,
   },
   {
     label: 'Analytics',
-    to: '/analytics',
+    to: '/app/analytics',
     icon: FlaskConical,
     exact: false,
   },
@@ -52,7 +52,7 @@ const navItems = [
 const bottomNavItems = [
   {
     label: 'Administration',
-    to: '/settings',
+    to: '/app/settings',
     icon: Settings,
   },
 ]

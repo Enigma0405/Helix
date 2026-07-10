@@ -53,7 +53,7 @@ export function Header({ title, subtitle, actions }: HeaderProps) {
           size="sm"
           variant="primary"
           icon={<Plus className="w-3.5 h-3.5" />}
-          onClick={() => navigate('/investigations/new')}
+          onClick={() => navigate('/app/investigations/new')}
         >
           New Investigation
         </Button>
