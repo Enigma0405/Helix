@@ -32,14 +32,14 @@ export function Header({ title, subtitle, actions }: HeaderProps) {
 
   return (
     <header className="sticky top-0 z-30 flex items-center justify-between
-                        px-6 py-4 border-b border-white/5 bg-[#0F172A]/80 backdrop-blur-md">
+                        px-5 py-3 border-b border-white/5 bg-[#0F172A]/80 backdrop-blur-md">
       {/* Left: Page title */}
       <div>
         {title && (
-          <h1 className="text-lg font-semibold text-slate-100">{title}</h1>
+          <h1 className="text-base font-semibold text-slate-100 tracking-tight">{title}</h1>
         )}
         {subtitle && (
-          <p className="text-xs text-slate-500 mt-0.5">{subtitle}</p>
+          <p className="text-[11px] text-slate-500 mt-0.5 uppercase tracking-wide font-medium">{subtitle}</p>
         )}
       </div>
 

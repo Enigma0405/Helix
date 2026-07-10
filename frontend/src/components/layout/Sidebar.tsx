@@ -18,10 +18,16 @@ import { useCurrentUser } from '@/store/auth'
 // ============================================================
 const navItems = [
   {
-    label: 'Dashboard',
+    label: 'Command Center',
     to: '/',
     icon: LayoutDashboard,
     exact: true,
+  },
+  {
+    label: 'My Work',
+    to: '/my-work',
+    icon: Zap,
+    exact: false,
   },
   {
     label: 'Investigations',
@@ -30,14 +36,14 @@ const navItems = [
     exact: false,
   },
   {
-    label: 'Evidence',
-    to: '/evidence',
+    label: 'Knowledge',
+    to: '/knowledge',
     icon: Layers,
     exact: false,
   },
   {
-    label: 'Hypotheses',
-    to: '/hypotheses',
+    label: 'Analytics',
+    to: '/analytics',
     icon: FlaskConical,
     exact: false,
   },
@@ -45,7 +51,7 @@ const navItems = [
 
 const bottomNavItems = [
   {
-    label: 'Settings',
+    label: 'Administration',
     to: '/settings',
     icon: Settings,
   },
@@ -106,8 +112,8 @@ export function Sidebar({ collapsed = false }: SidebarProps) {
               key={item.to}
               to={item.to}
               className={cn(
-                'flex items-center gap-3 px-3 py-2.5 rounded-lg',
-                'text-sm font-medium transition-all duration-200',
+                'flex items-center gap-3 px-3 py-2 rounded-lg',
+                'text-[13px] font-medium transition-all duration-200',
                 'focus:outline-none focus:ring-2 focus:ring-blue-500/30',
                 collapsed && 'justify-center',
                 isActive
