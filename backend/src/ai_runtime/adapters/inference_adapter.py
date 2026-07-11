@@ -69,7 +69,7 @@ class FireworksAdapter:
 
     def __init__(self) -> None:
         from openai import AsyncOpenAI  # noqa: PLC0415
-        from src.core.config import settings  # noqa: PLC0415
+        from src.shared.config import settings  # noqa: PLC0415
 
         self._model = settings.FIREWORKS_MODEL
         self._client = AsyncOpenAI(
@@ -140,7 +140,7 @@ class OpenAIAdapter:
 
     def __init__(self) -> None:
         from openai import AsyncOpenAI  # noqa: PLC0415
-        from src.core.config import settings  # noqa: PLC0415
+        from src.shared.config import settings  # noqa: PLC0415
 
         self._model = settings.OPENAI_MODEL
         self._client = AsyncOpenAI(api_key=settings.OPENAI_API_KEY)
@@ -174,7 +174,7 @@ class LocalAdapter:
 
     def __init__(self) -> None:
         from openai import AsyncOpenAI  # noqa: PLC0415
-        from src.core.config import settings  # noqa: PLC0415
+        from src.shared.config import settings  # noqa: PLC0415
 
         self._model = settings.LOCAL_MODEL
         self._client = AsyncOpenAI(
@@ -299,7 +299,7 @@ def get_inference_adapter(provider: str | None = None) -> InferenceAdapter:
         ValueError: Unknown provider.
     """
     global _adapter_cache
-    from src.core.config import settings  # noqa: PLC0415
+    from src.shared.config import settings  # noqa: PLC0415
 
     if provider is None:
         provider = settings.INFERENCE_PROVIDER

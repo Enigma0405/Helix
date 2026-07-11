@@ -12,7 +12,7 @@ from minio import Minio
 from minio.commonconfig import ENABLED, Filter
 from minio.lifecycleconfig import LifecycleConfig, Rule, Expiration
 
-from src.core.config import settings
+from src.shared.config import settings
 
 logger = logging.getLogger(__name__)
 

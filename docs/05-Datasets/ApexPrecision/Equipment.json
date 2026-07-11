@@ -1,0 +1,41 @@
+[
+  {
+    "equipment_id": "EQ-BIO-014",
+    "name": "2000L Single-Use Bioreactor",
+    "manufacturer": "Sartorius",
+    "model": "Biostat STR 2000",
+    "facility_id": "FAC-BOS-01",
+    "department_id": "DEPT-USP",
+    "installation_date": "2022-03-15",
+    "calibration_frequency_days": 180,
+    "status": "Active",
+    "criticality": "High",
+    "governing_sops": ["SOP-MFG-042", "SOP-CAL-011"]
+  },
+  {
+    "equipment_id": "EQ-FIL-008",
+    "name": "Sterile Filtration Skid",
+    "manufacturer": "MilliporeSigma",
+    "model": "Mobius FlexReady",
+    "facility_id": "FAC-BOS-01",
+    "department_id": "DEPT-DSP",
+    "installation_date": "2023-01-10",
+    "calibration_frequency_days": 90,
+    "status": "Quarantined",
+    "criticality": "High",
+    "governing_sops": ["SOP-STER-014"]
+  },
+  {
+    "equipment_id": "EQ-VIL-022",
+    "name": "Automated Vial Filling Line",
+    "manufacturer": "Bausch+Ströbel",
+    "model": "FSM",
+    "facility_id": "FAC-DUB-02",
+    "department_id": "DEPT-MFG",
+    "installation_date": "2024-06-01",
+    "calibration_frequency_days": 90,
+    "status": "Active",
+    "criticality": "Critical",
+    "governing_sops": ["SOP-FILL-105"]
+  }
+]

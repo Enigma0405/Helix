@@ -82,7 +82,7 @@ class InvestigationWorkflow:
             prompt = self._policy_engine.enforce_prompt_limits(prompt)
 
             # 4. Invoke LLM via Inference Adapter
-            from src.core.config import settings  # noqa: PLC0415
+            from src.shared.config import settings  # noqa: PLC0415
 
             provider = settings.INFERENCE_PROVIDER
             model = settings.FIREWORKS_MODEL if provider == "fireworks" else settings.OPENAI_MODEL

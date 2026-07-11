@@ -23,9 +23,9 @@ from datetime import datetime, timezone
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.core.config import settings
-from src.core.database import AsyncSessionLocal
-from src.core.storage import download_file
+from src.shared.config import settings
+from src.database.core import AsyncSessionLocal
+from src.storage.minio_provider import download_file
 from src.evidence.document_adapter import get_adapter
 from src.evidence.models import EvidenceItem
 from src.knowledge.models import Chunk, Embedding

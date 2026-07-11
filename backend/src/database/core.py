@@ -10,7 +10,7 @@ from sqlalchemy.ext.asyncio import (
 )
 from sqlalchemy.orm import DeclarativeBase
 
-from src.core.config import settings
+from src.shared.config import settings
 
 
 class Base(DeclarativeBase):
@@ -25,6 +25,7 @@ kwargs = {
 if not settings.DATABASE_URL.startswith("sqlite"):
     kwargs["pool_size"] = settings.DB_POOL_SIZE
     kwargs["max_overflow"] = settings.DB_MAX_OVERFLOW
+    kwargs["pool_pre_ping"] = True
 
 engine = create_async_engine(settings.DATABASE_URL, **kwargs)
 

@@ -27,12 +27,12 @@ export function InvestigationCard({ investigation, index = 0 }: InvestigationCar
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, delay: index * 0.05, ease: 'easeOut' }}
-      onClick={() => navigate(`/investigations/${investigation.id}`)}
+      onClick={() => navigate(`/app/investigations/${investigation.id}`)}
       className="glass-card p-5 hover:bg-white/8 cursor-pointer transition-all duration-300
                  hover:border-white/20 hover:shadow-helix group"
       role="button"
       tabIndex={0}
-      onKeyDown={(e) => e.key === 'Enter' && navigate(`/investigations/${investigation.id}`)}
+      onKeyDown={(e) => e.key === 'Enter' && navigate(`/app/investigations/${investigation.id}`)}
     >
       <div className="flex items-start justify-between gap-3">
         {/* Icon + Title */}

@@ -98,7 +98,7 @@ export function CreateInvestigationModal({ open, onClose }: CreateInvestigationM
 
   const handleFinish = () => {
     if (createdId) {
-      navigate(`/investigations/${createdId}`)
+      navigate(`/app/investigations/${createdId}`)
     }
     handleClose()
   }

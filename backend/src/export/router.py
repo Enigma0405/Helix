@@ -7,7 +7,7 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.core.dependencies import CurrentUser, RoleChecker, get_db
+from src.api.dependencies import CurrentUser, RoleChecker, get_db
 from src.export import service
 from src.export.schemas import ExportCreate, ExportOut
 

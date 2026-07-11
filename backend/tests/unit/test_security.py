@@ -4,8 +4,8 @@ from __future__ import annotations
 import jwt
 import pytest
 
-from src.core.config import settings
-from src.core.security import create_access_token, create_refresh_token, decode_token, hash_password, verify_password
+from src.shared.config import settings
+from src.shared.security import create_access_token, create_refresh_token, decode_token, hash_password, verify_password
 
 
 def test_password_hashing():
@@ -35,7 +35,7 @@ def test_jwt_token_flow():
 def test_expired_token():
     # Set expiration time to negative to force expiry
     from datetime import timedelta
-    from src.core.security import _build_payload
+    from src.shared.security import _build_payload
     
     payload = _build_payload(
         subject="test_user",

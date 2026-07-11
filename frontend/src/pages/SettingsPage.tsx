@@ -1,10 +1,19 @@
 import React from "react";
 import { useAuthStore } from "@/store/auth";
+import { useQuery } from "@tanstack/react-query";
+import { apiClient } from "@/api/client";
 import { Card, CardHeader, CardContent } from "@/components/ui/Card";
-import { Settings, User, Cpu, ShieldAlert, Award } from "lucide-react";
+import { Settings, User, Cpu, ShieldAlert, Award, Loader2 } from "lucide-react";
 
 export const SettingsPage: React.FC = () => {
   const currentUser = useAuthStore((s) => s.user);
+
+  const { data: telemetry, isLoading: isTelemetryLoading } = useQuery({
+    queryKey: ["ai-telemetry"],
+    queryFn: () => apiClient.get("/ai-runtime/telemetry").then(r => r.data),
+    staleTime: 30000,
+    retry: false,
+  });
 
   return (
     <div className="space-y-6">
@@ -67,30 +76,42 @@ export const SettingsPage: React.FC = () => {
                 <div className="flex justify-between items-center border-b border-white/5 pb-3">
                   <div>
                     <span className="font-semibold text-slate-200 block">Inference Provider</span>
-                    <span className="text-xs text-slate-400">Model execution engine selected for RCA generation</span>
+                    <span className="text-xs text-slate-400">Model execution engine for RCA generation</span>
                   </div>
-                  <span className="px-3 py-1 bg-white/5 border border-white/10 rounded-lg text-xs font-bold text-slate-200 uppercase">
-                    Gemma 3 / Fireworks AI
-                  </span>
+                  {isTelemetryLoading ? (
+                    <Loader2 size={14} className="animate-spin text-slate-400" />
+                  ) : (
+                    <span className="px-3 py-1 bg-white/5 border border-white/10 rounded-lg text-xs font-bold text-slate-200 uppercase">
+                      {telemetry?.provider || "Fireworks AI"}
+                    </span>
+                  )}
                 </div>
 
                 <div className="flex justify-between items-center border-b border-white/5 pb-3">
                   <div>
-                    <span className="font-semibold text-slate-200 block">Hardware Compute Adapter</span>
-                    <span className="text-xs text-slate-400">Accelerator backing the inference calls</span>
+                    <span className="font-semibold text-slate-200 block">Active Model</span>
+                    <span className="text-xs text-slate-400">LLM backing hypothesis and CAPA generation</span>
                   </div>
-                  <span className="px-3 py-1 bg-violet-500/10 border border-violet-500/20 text-violet-400 rounded-lg text-xs font-bold uppercase">
-                    AMD MI300X Accelerator
-                  </span>
+                  {isTelemetryLoading ? (
+                    <Loader2 size={14} className="animate-spin text-slate-400" />
+                  ) : (
+                    <span className="px-3 py-1 bg-violet-500/10 border border-violet-500/20 text-violet-400 rounded-lg text-xs font-bold uppercase">
+                      {telemetry?.model || "Gemma 3 27B"}
+                    </span>
+                  )}
                 </div>
 
                 <div className="flex justify-between items-center">
                   <div>
-                    <span className="font-semibold text-slate-200 block">Local Embedding Model</span>
-                    <span className="text-xs text-slate-400">Local text splitter and vectorizer</span>
+                    <span className="font-semibold text-slate-200 block">Health Status</span>
+                    <span className="text-xs text-slate-400">AI runtime connectivity check</span>
                   </div>
-                  <span className="px-3 py-1 bg-white/5 border border-white/10 rounded-lg text-xs font-bold text-slate-200">
-                    all-MiniLM-L6-v2 (384-dims)
+                  <span className={`px-3 py-1 rounded-lg text-xs font-bold uppercase ${
+                    telemetry?.health_status === 'ok'
+                      ? 'bg-emerald-500/10 border border-emerald-500/20 text-emerald-400'
+                      : 'bg-slate-800 border border-white/10 text-slate-400'
+                  }`}>
+                    {isTelemetryLoading ? "Checking..." : (telemetry?.health_status === 'ok' ? "Online" : "Offline")}
                   </span>
                 </div>
               </div>

@@ -111,10 +111,22 @@ export function EvidenceCard({ title, type, timestamp, source, verified = false,
 // ============================================================================
 // Runtime Agent Card
 // ============================================================================
-export function RuntimeAgentCard({ name, status, confidence }: { name: string; status: AgentState; confidence?: number }) {
+export function RuntimeAgentCard({ 
+  name, 
+  status, 
+  actionText,
+  resultText,
+  confidence 
+}: { 
+  name: string; 
+  status: AgentState; 
+  actionText?: string;
+  resultText?: string;
+  confidence?: number 
+}) {
   const isActive = status === 'PROCESSING'
-  const isError = status === 'FAILED'
   const isComplete = status === 'COMPLETE'
+  const isError = status === 'FAILED'
   
   let dotColor = "bg-slate-600"
   if (isActive) dotColor = "bg-violet-400 animate-pulse shadow-ai"
@@ -123,18 +135,39 @@ export function RuntimeAgentCard({ name, status, confidence }: { name: string; s
   else if (status === 'WAITING' || status === 'BLOCKED') dotColor = "bg-amber-400"
 
   return (
-    <Card padding="sm" className="bg-white/5">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className={cn("h-2 w-2 rounded-full shrink-0", dotColor)} />
-          <span className="text-sm font-medium text-slate-300">{name}</span>
+    <Card padding="sm" className="bg-white/5 flex flex-col h-full border border-white/5 hover:border-white/10 transition-colors">
+      <div className="flex items-center justify-between mb-3 pb-2 border-b border-white/5">
+        <div className="flex items-center gap-2">
+          <div className={cn("h-1.5 w-1.5 rounded-full shrink-0", dotColor)} />
+          <span className="text-xs font-bold text-slate-200 tracking-wide uppercase">{name}</span>
         </div>
-        <div className="flex items-center gap-3">
-          <span className="text-[10px] uppercase tracking-wider text-slate-500 font-bold">{status}</span>
-          {confidence !== undefined && (
-            <span className="text-xs font-mono text-slate-400">{confidence}%</span>
-          )}
+        <div className="flex items-center gap-2">
+          <span className={cn("text-[9px] uppercase tracking-widest font-bold", 
+            isActive ? "text-violet-400" : isComplete ? "text-emerald-400" : "text-slate-500"
+          )}>{status}</span>
         </div>
+      </div>
+      
+      <div className="flex-1 flex flex-col justify-end space-y-2">
+        {actionText ? (
+          <p className="text-[11px] text-slate-400 font-medium line-clamp-2 leading-relaxed">{actionText}</p>
+        ) : (
+          <p className="text-[11px] text-slate-600 italic">Waiting in queue...</p>
+        )}
+        
+        {resultText && (
+          <div className="flex items-start gap-1.5 text-emerald-400 bg-emerald-500/5 px-2 py-1.5 rounded-md border border-emerald-500/10">
+            <CheckCircle2 className="w-3.5 h-3.5 shrink-0 mt-0.5" />
+            <span className="text-[10px] font-semibold leading-tight">{resultText}</span>
+          </div>
+        )}
+
+        {confidence !== undefined && (
+           <div className="mt-1 pt-2 border-t border-white/5 flex justify-between items-center text-[10px] text-slate-500">
+             <span>Current confidence</span>
+             <span className="font-mono text-slate-300 font-bold">{confidence}%</span>
+           </div>
+        )}
       </div>
     </Card>
   )
@@ -178,28 +211,52 @@ export function MetricTile({ label, value, icon: Icon, color = 'blue', trend, de
 // ============================================================================
 // Next Best Action Card
 // ============================================================================
-export function NextBestActionCard({ title, missingEvidence, expectedConfidence, estimatedTime, actionLabel, onAction }: { title: string; missingEvidence?: string; expectedConfidence?: number; estimatedTime?: string; actionLabel: string; onAction?: () => void }) {
+export function NextBestActionCard({ 
+  title, 
+  missingEvidence, 
+  currentConfidence,
+  expectedConfidence, 
+  estimatedTime, 
+  priority = "High",
+  actionLabel, 
+  onAction 
+}: { 
+  title: string; 
+  missingEvidence?: string; 
+  currentConfidence?: number;
+  expectedConfidence?: number; 
+  estimatedTime?: string; 
+  priority?: "High" | "Medium" | "Low";
+  actionLabel: string; 
+  onAction?: () => void 
+}) {
   return (
-    <Card padding="md" elevated className="border-violet-500/30 bg-gradient-to-r from-violet-500/10 to-transparent">
-      <div className="flex flex-col md:flex-row items-start justify-between gap-4">
-        <div className="space-y-3 flex-1">
-          <div className="flex items-center gap-2">
-            <Activity className="w-4 h-4 text-violet-400" />
-            <span className="text-[10px] font-bold uppercase tracking-widest text-violet-400">Next Best Action</span>
+    <Card padding="md" elevated className="border-violet-500/30 bg-gradient-to-r from-violet-500/10 to-transparent relative overflow-hidden">
+      <div className="absolute top-0 right-0 w-32 h-32 bg-violet-500/5 rounded-full blur-[40px] pointer-events-none" />
+      <div className="flex flex-col md:flex-row items-start justify-between gap-4 relative z-10">
+        <div className="space-y-3 flex-1 w-full">
+          <div className="flex items-center justify-between w-full">
+            <div className="flex items-center gap-2">
+              <Activity className="w-4 h-4 text-violet-400" />
+              <span className="text-[10px] font-bold uppercase tracking-widest text-violet-400">Next Best Action</span>
+            </div>
+            <div className="flex items-center gap-1 text-[10px] uppercase font-bold tracking-wider text-rose-400 bg-rose-500/10 px-2 py-0.5 rounded">
+              Priority: {priority}
+            </div>
           </div>
           
           <div>
-            <h3 className="text-base font-semibold text-slate-100">{title}</h3>
+            <h3 className="text-base font-bold text-slate-100">{title}</h3>
             {missingEvidence && (
               <p className="text-sm text-slate-400 mt-1">Missing Evidence: <span className="text-slate-200">{missingEvidence}</span></p>
             )}
           </div>
           
-          <div className="flex items-center gap-4 text-xs font-medium">
-            {expectedConfidence !== undefined && (
-              <div className="flex items-center gap-1.5 text-emerald-400 bg-emerald-500/10 px-2 py-1 rounded">
+          <div className="flex items-center gap-4 text-xs font-medium pt-1">
+            {currentConfidence !== undefined && expectedConfidence !== undefined && (
+              <div className="flex items-center gap-1.5 text-emerald-400 bg-emerald-500/10 px-2 py-1 rounded border border-emerald-500/20">
                 <TrendingUp className="w-3 h-3" />
-                Expected Confidence: {expectedConfidence}%
+                Impact: <span className="text-slate-300 line-through decoration-slate-500">{currentConfidence}%</span> <ArrowRight className="w-3 h-3" /> <span className="font-bold">{expectedConfidence}%</span>
               </div>
             )}
             {estimatedTime && (
@@ -211,7 +268,7 @@ export function NextBestActionCard({ title, missingEvidence, expectedConfidence,
           </div>
         </div>
 
-        <Button variant="primary" size="sm" icon={<ArrowRight className="w-4 h-4" />} onClick={onAction} className="shrink-0 md:mt-2">
+        <Button variant="primary" size="sm" icon={<ArrowRight className="w-4 h-4" />} onClick={onAction} className="shrink-0 md:mt-2 w-full md:w-auto">
           {actionLabel}
         </Button>
       </div>

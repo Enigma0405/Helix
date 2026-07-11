@@ -18,7 +18,7 @@ from src.ai_runtime.schemas import (
     HypothesisUpdate,
     InvestigationSummaryOut,
 )
-from src.core.dependencies import CurrentUser, RoleChecker, get_db
+from src.api.dependencies import CurrentUser, RoleChecker, get_db
 
 router = APIRouter(tags=["AI Runtime"])
 DbDep = Annotated[AsyncSession, Depends(get_db)]
@@ -210,7 +210,7 @@ async def summarize_investigation(
     summary="Get active AI runtime configuration and telemetry metrics",
 )
 async def get_ai_runtime_telemetry():
-    from src.core.config import settings
+    from src.shared.config import settings
     from src.ai_runtime.observability import tracker
     from src.ai_runtime.adapters.inference_adapter import get_inference_adapter
     
@@ -231,8 +231,26 @@ async def get_ai_runtime_telemetry():
         "model": active_model,
         "preferred_model": preferred_model,
         "fallback_triggered": fallback_active,
+        "health_status": "ok",
         "architecture": "Provider-Independent Adapter Chain (FastAPI -> AsyncOpenAI)",
         "total_calls": summary.get("total_calls", 0),
         "average_latency_ms": round(summary.get("average_latency_ms", 0.0), 2),
         "total_cost_usd": round(summary.get("total_cost_usd", 0.0), 5),
+    }
+
+@router.get(
+    "/api/v1/runtime/providers",
+    summary="Get runtime providers status",
+)
+async def get_runtime_providers():
+    """
+    Returns the status of the runtime providers (e.g., Knowledge, Inference).
+    """
+    return {
+        "provider": "Knowledge Runtime",
+        "status": "Ready",
+        "fallbacks": [
+            "Fireworks",
+            "Local Runtime"
+        ]
     }

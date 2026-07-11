@@ -9,7 +9,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.assets import service
 from src.assets.schemas import AssetCreate, AssetListOut, AssetOut, AssetUpdate
-from src.core.dependencies import CurrentUser, get_db
+from src.api.dependencies import CurrentUser, get_db
 
 router = APIRouter(prefix="/api/assets", tags=["Assets"])
 DbDep = Annotated[AsyncSession, Depends(get_db)]

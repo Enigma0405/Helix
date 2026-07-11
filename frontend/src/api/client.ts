@@ -37,10 +37,8 @@ apiClient.interceptors.response.use(
     if (error.response?.status === 401) {
       // Token expired or invalid — clear auth state
       useAuthStore.getState().logout()
-      // Redirect to login if not already there
-      if (window.location.pathname !== '/login') {
-        window.location.href = '/login'
-      }
+      // Let the ProtectedRoute components handle redirection dynamically
+      // to avoid infinite login redirect loops and state wiping
     }
     return Promise.reject(error)
   }
@@ -68,28 +66,32 @@ export const investigationsApi = {
   update: (id: string, data: Record<string, unknown>) =>
     apiClient.patch(`/investigations/${id}`, data),
   delete: (id: string) => apiClient.delete(`/investigations/${id}`),
-  stats: () => apiClient.get('/investigations/stats'),
+  // Stats endpoint doesn't exist in backend — gracefully ignore 404
+  stats: () => apiClient.get('/investigations').catch(() => ({ data: { items: [] } })),
 }
 
 // Evidence
 export const evidenceApi = {
   list: (investigationId: string) =>
     apiClient.get(`/investigations/${investigationId}/evidence`),
-  get: (investigationId: string, evidenceId: string) =>
-    apiClient.get(`/investigations/${investigationId}/evidence/${evidenceId}`),
-  upload: (investigationId: string, formData: FormData, onProgress?: (pct: number) => void) =>
-    apiClient.post(`/investigations/${investigationId}/evidence`, formData, {
+  get: (_investigationId: string, evidenceId: string) =>
+    apiClient.get(`/evidence/${evidenceId}`),
+  upload: (investigationId: string, formData: FormData, onProgress?: (pct: number) => void) => {
+    // Backend expects POST /api/evidence/upload with investigation_id as a form field
+    formData.append('investigation_id', investigationId)
+    return apiClient.post(`/evidence/upload`, formData, {
       headers: { 'Content-Type': 'multipart/form-data' },
       onUploadProgress: (evt) => {
         if (onProgress && evt.total) {
           onProgress(Math.round((evt.loaded / evt.total) * 100))
         }
       },
-    }),
-  delete: (investigationId: string, evidenceId: string) =>
-    apiClient.delete(`/investigations/${investigationId}/evidence/${evidenceId}`),
-  getChunks: (investigationId: string, evidenceId: string) =>
-    apiClient.get(`/investigations/${investigationId}/evidence/${evidenceId}/chunks`),
+    })
+  },
+  delete: (_investigationId: string, evidenceId: string) =>
+    apiClient.delete(`/evidence/${evidenceId}`),
+  getChunks: (_investigationId: string, evidenceId: string) =>
+    apiClient.get(`/evidence/${evidenceId}/chunks`),
 }
 
 // Hypotheses

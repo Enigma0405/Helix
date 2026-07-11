@@ -7,7 +7,7 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, File, Form, Query, UploadFile, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.core.dependencies import CurrentUser, get_db
+from src.api.dependencies import CurrentUser, get_db
 from src.knowledge import service
 from src.knowledge.schemas import (
     DocumentCreate,

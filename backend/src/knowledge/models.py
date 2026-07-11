@@ -10,8 +10,8 @@ from sqlalchemy.dialects.postgresql import UUID as PG_UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.ext.compiler import compiles
 
-from src.core.config import settings
-from src.core.database import Base
+from src.shared.config import settings
+from src.database.core import Base
 
 
 @compiles(Vector, "sqlite")

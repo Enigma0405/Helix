@@ -11,9 +11,9 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.ai_runtime.models import CAPA, Hypothesis
-from src.core.audit import write_audit_log
-from src.core.config import settings
-from src.core.storage import get_presigned_url, upload_file
+from src.shared.audit import write_audit_log
+from src.shared.config import settings
+from src.storage.minio_provider import get_presigned_url, upload_file
 from src.evidence.models import EvidenceItem
 from src.export.models import Export
 from src.investigation.models import Investigation
@@ -81,7 +81,7 @@ async def generate_pdf_report(
     capa = res_capa.scalar_one_or_none()
 
     # 5. Get Audit Logs for timeline
-    from src.core.audit import AuditLog  # noqa: PLC0415
+    from src.shared.audit import AuditLog  # noqa: PLC0415
     stmt_audit = select(AuditLog).where(
         AuditLog.org_id == org_id,
         AuditLog.entity_id == investigation_id,

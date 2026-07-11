@@ -9,8 +9,8 @@ from fastapi import HTTPException, UploadFile, status
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.core.config import settings
-from src.core.storage import delete_file, generate_storage_key, upload_file
+from src.shared.config import settings
+from src.storage.minio_provider import delete_file, generate_storage_key, upload_file
 from src.knowledge.models import Chunk, Document, Embedding
 from src.knowledge.schemas import (
     DocumentCreate,
@@ -84,7 +84,7 @@ async def _process_document(
     file_bytes: bytes,
 ) -> None:
     """Background task: extract, chunk, embed, and store a knowledge document."""
-    from src.core.database import AsyncSessionLocal  # noqa: PLC0415
+    from src.database.core import AsyncSessionLocal  # noqa: PLC0415
     from src.evidence.document_adapter import get_adapter  # noqa: PLC0415
     from src.evidence.processor import chunk_text, clean_text, generate_embeddings  # noqa: PLC0415
 

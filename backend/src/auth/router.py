@@ -16,7 +16,7 @@ from src.auth.schemas import (
     TokenResponse,
     UserOut,
 )
-from src.core.dependencies import CurrentUser, RoleChecker, get_db
+from src.api.dependencies import CurrentUser, RoleChecker, get_db
 
 router = APIRouter(prefix="/api/auth", tags=["Authentication"])
 

@@ -1,37 +1,65 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Badge } from "@/components/ui/Badge";
-import { User, Calendar, Clock, AlertTriangle, ShieldAlert } from "lucide-react";
+import { User, Calendar, Clock, AlertTriangle, ShieldAlert, Activity } from "lucide-react";
 
 interface InvestigationHeaderProps {
   investigation: any;
   hypotheses: any[];
+  simulation?: any;
 }
 
-export const InvestigationHeader: React.FC<InvestigationHeaderProps> = ({ investigation, hypotheses }) => {
+export const InvestigationHeader: React.FC<InvestigationHeaderProps> = ({ investigation, hypotheses, simulation }) => {
+  const [timeAgo, setTimeAgo] = useState(0);
+
+  // Reset timeAgo when simulation phase changes
+  useEffect(() => {
+    if (simulation) {
+      setTimeAgo(0);
+      const interval = setInterval(() => {
+        setTimeAgo(prev => prev + 1);
+      }, 1000);
+      return () => clearInterval(interval);
+    }
+  }, [simulation?.phase]);
+
   // Synthesize some metadata
-  const bestConfidence = hypotheses.length > 0 
+  const bestConfidence = simulation?.confidence || (hypotheses.length > 0 
     ? Math.max(...hypotheses.map(h => h.confidence_score)) * 100 
-    : 0;
+    : 0);
     
   const isCritical = investigation.severity === "critical";
 
-  // Synthesize "Why still open"
+  // Synthesize "Why still open" based on simulation
   let whyStillOpen = "Awaiting initial evidence review.";
   let momentumProgress = 20;
   let blocker = "Evidence Upload";
   
-  if (investigation.status === "in_progress") {
-    whyStillOpen = hypotheses.length > 0 ? "Reviewing AI generated root causes." : "Waiting for Timeline Agent to complete parsing.";
-    momentumProgress = hypotheses.length > 0 ? 60 : 40;
-    blocker = hypotheses.length > 0 ? "QA Review" : "Timeline Processing";
-  } else if (investigation.status === "pending_review") {
-    whyStillOpen = "Awaiting final sign-off from QA Reviewer.";
-    momentumProgress = 90;
-    blocker = "QA Approval";
-  } else if (investigation.status === "closed") {
+  if (investigation.status === "closed") {
     whyStillOpen = "Investigation is successfully closed.";
     momentumProgress = 100;
     blocker = "None";
+  } else if (simulation) {
+    if (simulation.phase === 'INITIALIZING') {
+      whyStillOpen = "AI Workforce is initializing workspace.";
+      momentumProgress = 20;
+      blocker = "AI Initialization";
+    } else if (simulation.phase === 'SEARCHING') {
+      whyStillOpen = "Knowledge Agent is correlating historical cases.";
+      momentumProgress = 40;
+      blocker = "Knowledge Search";
+    } else if (simulation.phase === 'REASONING') {
+      whyStillOpen = "Root Cause Agent is validating hypotheses.";
+      momentumProgress = 60;
+      blocker = "Hypothesis Validation";
+    } else if (simulation.phase === 'DRAFTING') {
+      whyStillOpen = "CAPA Drafter is generating corrective actions.";
+      momentumProgress = 80;
+      blocker = "CAPA Generation";
+    } else if (simulation.phase === 'READY') {
+      whyStillOpen = "Awaiting final sign-off from QA Reviewer.";
+      momentumProgress = 90;
+      blocker = "QA Approval";
+    }
   }
 
   return (
@@ -57,6 +85,16 @@ export const InvestigationHeader: React.FC<InvestigationHeaderProps> = ({ invest
               </span>
             </div>
           )}
+          
+          {simulation && !simulation.isComplete && (
+            <div className="flex items-center gap-1.5 ml-2 px-2 py-1 border border-violet-500/30 bg-violet-500/10 rounded-md text-violet-400 shadow-ai">
+              <Activity size={10} className="animate-pulse" />
+              <span className="text-[9px] font-black tracking-widest uppercase">Live</span>
+              <span className="text-[9px] font-semibold text-violet-300 ml-1 opacity-80">
+                Update {timeAgo}s ago
+              </span>
+            </div>
+          )}
         </div>
         
         <h2 className="text-2xl font-bold text-slate-100 tracking-tight">{investigation.title}</h2>
@@ -68,7 +106,12 @@ export const InvestigationHeader: React.FC<InvestigationHeaderProps> = ({ invest
           </span>
           <span className="flex items-center gap-1">
             <Clock size={13} />
-            Time Open: {investigation.status === "closed" ? "Closed" : "14 hours"}
+            Time Open: {investigation.status === "closed" ? "Closed" : (() => {
+              const diffMs = Date.now() - new Date(investigation.created_at).getTime();
+              const hours = Math.floor(diffMs / 3600000);
+              const mins = Math.floor((diffMs % 3600000) / 60000);
+              return hours > 0 ? `${hours}h ${mins}m` : `${mins} min`;
+            })()}
           </span>
           <span className="flex items-center gap-1">
             <User size={13} />

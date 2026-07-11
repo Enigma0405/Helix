@@ -18,7 +18,7 @@ from src.ai_runtime.schemas import (
     GenerateHypothesesRequest,
     HypothesisUpdate,
 )
-from src.core.audit import write_audit_log
+from src.shared.audit import write_audit_log
 from src.investigation.models import Investigation
 
 logger = logging.getLogger("helix.ai_runtime.service")

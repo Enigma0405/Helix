@@ -8,7 +8,7 @@ from sqlalchemy import Boolean, ForeignKey, String, func
 from sqlalchemy.dialects.postgresql import UUID as PG_UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from src.core.database import Base
+from src.database.core import Base
 
 
 class Organization(Base):

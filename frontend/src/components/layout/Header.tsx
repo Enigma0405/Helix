@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Bell, Plus, LogOut, User, Settings, ChevronDown, Cpu } from 'lucide-react'
 import { useAuthStore, useCurrentUser } from '@/store/auth'
+import { useQuery } from '@tanstack/react-query'
+import { apiClient } from '@/api/client'
 import { Button } from '@/components/ui/Button'
 import { cn } from '@/lib/utils'
 
@@ -20,6 +22,15 @@ export function Header({ title, subtitle, actions }: HeaderProps) {
   const { logout } = useAuthStore()
   const navigate = useNavigate()
   const [dropdownOpen, setDropdownOpen] = useState(false)
+
+  // Live AI telemetry
+  const { data: telemetry } = useQuery({
+    queryKey: ['ai-telemetry'],
+    queryFn: () => apiClient.get('/ai-runtime/telemetry').then(r => r.data),
+    refetchInterval: 30000,
+    staleTime: 20000,
+    retry: false,
+  })
 
   const handleLogout = () => {
     logout()
@@ -43,6 +54,18 @@ export function Header({ title, subtitle, actions }: HeaderProps) {
         )}
       </div>
 
+      {/* Center: Global AI Heartbeat — live from telemetry */}
+      <div className="absolute left-1/2 -translate-x-1/2 hidden md:flex items-center gap-2 bg-slate-900/50 border border-violet-500/20 rounded-full px-3 py-1 shadow-inner">
+        <Cpu size={12} className="text-violet-400 animate-pulse" />
+        <span className="text-[11px] font-semibold text-slate-200">AI Workforce</span>
+        <span className="text-[10px] text-slate-400 uppercase tracking-wider pl-2 border-l border-white/10">
+          {telemetry ? `${telemetry.provider || 'Helix AI'} · Active` : 'Connecting...'}
+        </span>
+        <span className="text-[10px] text-slate-500 pl-2">
+          {telemetry ? `Model: ${telemetry.model || 'Gemma 3'}` : ''}
+        </span>
+      </div>
+
       {/* Right: Actions + user menu */}
       <div className="flex items-center gap-3">
         {/* Custom actions slot */}
@@ -53,7 +76,7 @@ export function Header({ title, subtitle, actions }: HeaderProps) {
           size="sm"
           variant="primary"
           icon={<Plus className="w-3.5 h-3.5" />}
-          onClick={() => navigate('/app/investigations/new')}
+          onClick={() => navigate('/app/investigations')}
         >
           New Investigation
         </Button>
@@ -126,7 +149,7 @@ export function Header({ title, subtitle, actions }: HeaderProps) {
                   {/* Menu items */}
                   <div className="p-1.5 space-y-0.5">
                     <button
-                      onClick={() => { navigate('/settings'); setDropdownOpen(false) }}
+                      onClick={() => { navigate('/app/settings'); setDropdownOpen(false) }}
                       className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg
                                  text-sm text-slate-300 hover:text-slate-100
                                  hover:bg-white/5 transition-colors text-left"
@@ -135,7 +158,7 @@ export function Header({ title, subtitle, actions }: HeaderProps) {
                       Profile
                     </button>
                     <button
-                      onClick={() => { navigate('/settings'); setDropdownOpen(false) }}
+                      onClick={() => { navigate('/app/settings'); setDropdownOpen(false) }}
                       className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg
                                  text-sm text-slate-300 hover:text-slate-100
                                  hover:bg-white/5 transition-colors text-left"
@@ -144,7 +167,7 @@ export function Header({ title, subtitle, actions }: HeaderProps) {
                       Settings
                     </button>
                     <button
-                      onClick={() => { navigate('/settings#ai'); setDropdownOpen(false) }}
+                      onClick={() => { navigate('/app/settings'); setDropdownOpen(false) }}
                       className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg
                                  text-sm text-slate-300 hover:text-slate-100
                                  hover:bg-white/5 transition-colors text-left"

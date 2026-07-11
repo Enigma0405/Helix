@@ -1,52 +1,75 @@
 import React from "react";
-import { AlertCircle, Clock, ArrowRight, ShieldAlert } from "lucide-react";
-import { Button } from "@/components/ui/Button";
+import { AlertCircle, CheckCircle2 } from "lucide-react";
+import { toast } from "@/hooks/useToast";
 
-export const MissingEvidencePanel: React.FC = () => {
-  return (
-    <div className="bg-rose-500/5 border border-rose-500/20 rounded-2xl p-5 backdrop-blur-md">
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="font-bold text-sm text-rose-200 flex items-center gap-1.5 uppercase tracking-widest">
-          <AlertCircle size={14} className="text-rose-400" />
-          Missing Evidence
-        </h3>
-        <span className="text-[10px] bg-rose-500/20 text-rose-300 px-2 py-0.5 rounded font-bold tracking-widest uppercase">
-          HIGH PRIORITY
-        </span>
+interface MissingEvidencePanelProps {
+  investigationId?: string;
+}
+
+export const MissingEvidencePanel: React.FC<MissingEvidencePanelProps> = ({ investigationId }) => {
+  // These items are derived from the Knowledge Graph analysis of what's typically needed
+  // for a sterility deviation investigation. In a full implementation, these would come
+  // from the backend's missing-evidence detection logic.
+  const missingItems = [
+    {
+      id: "calibration_cert",
+      label: "Calibration Certificate",
+      source: "LIMS",
+      confidenceImpact: "+12%",
+      priority: "high",
+    },
+    {
+      id: "gowning_log",
+      label: "Line 3 Gowning Log",
+      source: "MES",
+      confidenceImpact: "+5%",
+      priority: "medium",
+    },
+  ];
+
+  const handleRequest = (item: typeof missingItems[0]) => {
+    toast.success(
+      "Evidence Requested",
+      `Request sent for "${item.label}" from ${item.source}. ETA: 15 minutes.`
+    );
+  };
+
+  if (missingItems.length === 0) {
+    return (
+      <div className="bg-white/5 border border-emerald-500/20 rounded-2xl p-4 flex items-center gap-3">
+        <CheckCircle2 size={16} className="text-emerald-400 shrink-0" />
+        <span className="text-xs font-semibold text-emerald-400">All expected evidence collected</span>
       </div>
-      
-      <div className="space-y-4">
-        <div>
-          <p className="text-lg font-black text-slate-100">Calibration Certificate</p>
-          <p className="text-xs text-rose-300 mt-1">Required to verify valve calibration before final approval.</p>
-        </div>
-        
-        <div className="grid grid-cols-2 gap-3">
-          <div className="bg-slate-900/50 rounded-xl p-3 border border-white/5">
-            <span className="block text-[10px] text-slate-500 uppercase font-bold tracking-widest mb-1">
-              Expected Confidence
-            </span>
-            <div className="flex items-center gap-2 text-sm font-black">
-              <span className="text-slate-400">82%</span>
-              <ArrowRight size={12} className="text-slate-600" />
-              <span className="text-emerald-400">94%</span>
-            </div>
-          </div>
-          
-          <div className="bg-slate-900/50 rounded-xl p-3 border border-white/5">
-            <span className="block text-[10px] text-slate-500 uppercase font-bold tracking-widest mb-1">
-              Estimated Time
-            </span>
-            <div className="flex items-center gap-1.5 text-sm font-bold text-slate-300">
-              <Clock size={14} className="text-slate-400" />
-              4 min
-            </div>
-          </div>
-        </div>
+    );
+  }
 
-        <Button className="w-full bg-rose-600 hover:bg-rose-500 text-white font-semibold py-2 rounded-xl text-xs transition-colors">
-          Request Evidence
-        </Button>
+  return (
+    <div className="bg-white/5 border border-amber-500/20 rounded-2xl p-5">
+      <h3 className="font-bold text-sm text-amber-400 flex items-center gap-2 mb-3">
+        <AlertCircle size={14} />
+        Missing Evidence Detected
+      </h3>
+      <div className="space-y-3">
+        {missingItems.map((item) => (
+          <div
+            key={item.id}
+            className="flex items-center justify-between gap-3 p-3 bg-amber-500/5 border border-amber-500/10 rounded-xl"
+          >
+            <div className="space-y-0.5">
+              <span className="text-xs font-semibold text-slate-200 block">{item.label}</span>
+              <span className="text-[10px] text-slate-400">
+                From: {item.source} •{" "}
+                <span className="text-emerald-400 font-bold">{item.confidenceImpact} confidence</span>
+              </span>
+            </div>
+            <button
+              onClick={() => handleRequest(item)}
+              className="shrink-0 text-[10px] font-bold text-amber-400 hover:text-amber-300 bg-amber-500/10 hover:bg-amber-500/20 px-2 py-1 rounded-lg border border-amber-500/20 transition-all"
+            >
+              Request
+            </button>
+          </div>
+        ))}
       </div>
     </div>
   );

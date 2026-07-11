@@ -1,0 +1,64 @@
+[
+  {
+    "investigation_id": "INV-2025-0032",
+    "title": "Sterile Filter Integrity Test Failure (Post-Use)",
+    "date_opened": "2025-06-15",
+    "status": "Closed",
+    "severity": "Critical",
+    "batch_id": "B-2025-089",
+    "equipment_id": "EQ-FIL-008",
+    "operator_id": "EMP-3188",
+    "description": "Post-use bubble point test on sterilizing grade filter (EQ-FIL-008) failed. Recorded bubble point was 3.0 bar (Acceptance criteria >= 3.2 bar per SOP-STER-014).",
+    "timeline": [
+      {"time": "08:00", "event": "Batch B-2025-089 sterile filtration commenced."},
+      {"time": "14:30", "event": "Filtration completed."},
+      {"time": "15:15", "event": "Post-use integrity test initiated by EMP-3188."},
+      {"time": "15:20", "event": "Palltronic tester printed FAIL result (3.0 bar)."}
+    ],
+    "root_cause": "Inadequate wetting of the filter membrane prior to testing. The filter was wetted for only 2 minutes instead of the required 5 minutes per SOP-STER-014.",
+    "capa_id": "CAPA-2025-015",
+    "outcome": "Batch quarantined during investigation. Re-test after proper 5-minute wetting passed (3.4 bar). Root cause confirmed as false failure due to operator error. Batch released.",
+    "lessons_learned": "Wetting time is critical for accurate integrity testing. Automation controls should be implemented to prevent testing if wetting time is < 5 mins.",
+    "regulations_involved": ["FDA 21 CFR Part 211.113", "ALCOA+"]
+  },
+  {
+    "investigation_id": "INV-2026-011",
+    "title": "Bioreactor Temperature Excursion",
+    "date_opened": "2026-02-19",
+    "status": "Closed",
+    "severity": "Major",
+    "batch_id": "B-2026-012",
+    "equipment_id": "EQ-BIO-014",
+    "operator_id": "EMP-1002",
+    "description": "SCADA alarm triggered for high temperature (38.5C) in Bioreactor EQ-BIO-014 during exponential growth phase. Setpoint is 37.0C +/- 0.5C.",
+    "timeline": [
+      {"time": "02:15", "event": "SCADA alarm 'TEMP_HI_HI'."},
+      {"time": "02:30", "event": "Chilled water valve opened to 100% manually by operator."},
+      {"time": "03:00", "event": "Temperature returned to 37.2C."}
+    ],
+    "root_cause": "Calibration drift on temperature probe T-402, confirmed by CAL-2026-042.",
+    "capa_id": "CAPA-2026-004",
+    "outcome": "Batch B-2026-012 cell viability dropped by 15%, but final titer was within specification. Batch released.",
+    "lessons_learned": "Increase calibration frequency for T-402 probes from 180 days to 90 days.",
+    "regulations_involved": ["FDA 21 CFR Part 211.68"]
+  },
+  {
+    "investigation_id": "INV-2024-088",
+    "title": "Missing Operator Signature on Batch Record",
+    "date_opened": "2024-11-05",
+    "status": "Closed",
+    "severity": "Minor",
+    "batch_id": "B-2024-155",
+    "equipment_id": "EQ-VIL-022",
+    "operator_id": "EMP-4012",
+    "description": "During QA review of EBR, the signature for 'Verify Fill Weight' was found missing.",
+    "timeline": [
+      {"time": "11:00", "event": "QA reviewer flagged missing signature."}
+    ],
+    "root_cause": "MES system timeout occurred right as the operator was applying their biometric signature.",
+    "capa_id": "CAPA-2024-032",
+    "outcome": "System audit logs confirmed the operator was logged in and performed the check. Signature applied retrospectively with justification.",
+    "lessons_learned": "MES timeout logic adjusted to save signature state before session expiration.",
+    "regulations_involved": ["FDA 21 CFR Part 11"]
+  }
+]

@@ -11,7 +11,7 @@ export function useHypotheses(investigationId: string) {
   return useQuery<Hypothesis[]>({
     queryKey: hypothesisKeys.list(investigationId),
     queryFn: async () => {
-      const response = await apiClient.get(`/api/investigations/${investigationId}/hypotheses`);
+      const response = await apiClient.get(`/investigations/${investigationId}/hypotheses`);
       return response.data;
     },
     enabled: !!investigationId,
@@ -23,7 +23,7 @@ export function useGenerateHypotheses() {
   return useMutation<Hypothesis[], Error, { investigationId: string; num_hypotheses: number }>({
     mutationFn: async ({ investigationId, num_hypotheses }) => {
       const response = await apiClient.post(
-        `/api/investigations/${investigationId}/hypotheses`,
+        `/investigations/${investigationId}/hypotheses`,
         { num_hypotheses }
       );
       return response.data;
@@ -42,7 +42,7 @@ export function useUpdateHypothesis(investigationId: string) {
     { hypothesisId: string; data: { status?: string; title?: string; content?: string } }
   >({
     mutationFn: async ({ hypothesisId, data }) => {
-      const response = await apiClient.patch(`/api/hypotheses/${hypothesisId}`, data);
+      const response = await apiClient.patch(`/hypotheses/${hypothesisId}`, data);
       return response.data;
     },
     onSuccess: () => {

@@ -152,7 +152,7 @@ export function InvestigationTable({
                 animate={{ opacity: 1 }}
                 transition={{ delay: idx * 0.03 }}
                 className="border-b border-white/5 hover:bg-white/3 cursor-pointer transition-colors"
-                onClick={() => navigate(`/investigations/${inv.id}`)}
+                onClick={() => navigate(`/app/investigations/${inv.id}`)}
               >
                 <td className="px-4 py-3.5">
                   <div className="flex items-center gap-2.5">

@@ -11,7 +11,7 @@ export function useCapa(investigationId: string) {
   return useQuery<CAPA>({
     queryKey: capaKeys.detail(investigationId),
     queryFn: async () => {
-      const response = await apiClient.get(`/api/investigations/${investigationId}/capa`);
+      const response = await apiClient.get(`/investigations/${investigationId}/capa`);
       return response.data;
     },
     enabled: !!investigationId,
@@ -23,7 +23,7 @@ export function useGenerateCapa() {
   const queryClient = useQueryClient();
   return useMutation<CAPA, Error, { investigationId: string; org_context?: string }>({
     mutationFn: async ({ investigationId, org_context = "" }) => {
-      const response = await apiClient.post(`/api/investigations/${investigationId}/capa`, {
+      const response = await apiClient.post(`/investigations/${investigationId}/capa`, {
         org_context,
       });
       return response.data;
@@ -39,7 +39,7 @@ export function useUpdateCapa(investigationId: string) {
   const queryClient = useQueryClient();
   return useMutation<CAPA, Error, { capaId: string; content: string }>({
     mutationFn: async ({ capaId, content }) => {
-      const response = await apiClient.patch(`/api/capa/${capaId}`, { content });
+      const response = await apiClient.patch(`/capa/${capaId}`, { content });
       return response.data;
     },
     onSuccess: () => {
@@ -52,7 +52,7 @@ export function useApproveCapa(investigationId: string) {
   const queryClient = useQueryClient();
   return useMutation<CAPA, Error, { capaId: string }>({
     mutationFn: async ({ capaId }) => {
-      const response = await apiClient.post(`/api/capa/${capaId}/approve`, { approved: true });
+      const response = await apiClient.post(`/capa/${capaId}/approve`, { approved: true });
       return response.data;
     },
     onSuccess: () => {

@@ -10,8 +10,8 @@ from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.core.database import get_db
-from src.core.security import decode_token
+from src.database.core import get_db
+from src.shared.security import decode_token
 
 # Re-export for convenience
 __all__ = ["get_db", "get_current_user", "RoleChecker", "CurrentUser"]

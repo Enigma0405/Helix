@@ -9,9 +9,9 @@ from fastapi import HTTPException, UploadFile, status
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.core.audit import write_audit
-from src.core.config import settings
-from src.core.storage import delete_file, generate_storage_key, upload_file
+from src.shared.audit import write_audit
+from src.shared.config import settings
+from src.storage.minio_provider import delete_file, generate_storage_key, upload_file
 from src.evidence.models import EvidenceItem
 from src.evidence.schemas import EvidenceListOut, EvidenceUploadOut
 

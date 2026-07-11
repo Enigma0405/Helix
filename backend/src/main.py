@@ -10,9 +10,9 @@ from fastapi.middleware.cors import CORSMiddleware
 from src.ai_runtime.router import router as ai_router
 from src.assets.router import router as assets_router
 from src.auth.router import router as auth_router
-from src.core.config import settings
-from src.core.database import create_all_tables
-from src.core.storage import ensure_buckets
+from src.shared.config import settings
+from src.database.core import create_all_tables
+from src.storage.minio_provider import ensure_buckets
 from src.evidence.router import inv_evidence_router, router as evidence_router
 from src.export.router import router as export_router
 from src.investigation.router import (
@@ -38,7 +38,7 @@ async def lifespan(app: FastAPI):
     try:
         # Enable pgvector and create tables
         from sqlalchemy import text
-        from src.core.database import engine
+        from src.database.core import engine
         if not str(engine.url).startswith("sqlite"):
             async with engine.begin() as conn:
                 await conn.execute(text("CREATE EXTENSION IF NOT EXISTS vector;"))

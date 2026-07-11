@@ -86,11 +86,12 @@ export function EvidenceUploadZone({
     onDrop,
     accept: {
       'application/pdf': ['.pdf'],
-      'image/*': ['.png', '.jpg', '.jpeg', '.gif', '.webp'],
-      'text/*': ['.txt', '.csv', '.log'],
-      'application/json': ['.json'],
+      'text/plain': ['.txt', '.log'],
+      'text/csv': ['.csv'],
+      'text/markdown': ['.md'],
       'application/msword': ['.doc'],
       'application/vnd.openxmlformats-officedocument.wordprocessingml.document': ['.docx'],
+      'message/rfc822': ['.eml'],
     },
     maxSize: 100 * 1024 * 1024, // 100MB
   })
@@ -144,7 +145,7 @@ export function EvidenceUploadZone({
           )}
         </p>
         <p className="text-xs text-slate-500 mt-1">
-          PDF, Word, images, CSV, JSON up to 100MB
+          PDF, Word (.doc/.docx), CSV, TXT, Log, Email (.eml) up to 100MB
         </p>
         {!compact && (
           <div className="mt-3 px-4 py-1.5 rounded-lg bg-white/5 border border-white/10 text-xs text-slate-400">

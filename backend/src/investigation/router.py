@@ -7,7 +7,7 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, Query, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.core.dependencies import CurrentUser, RoleChecker, get_db
+from src.api.dependencies import CurrentUser, RoleChecker, get_db
 from src.investigation import service
 from src.investigation.schemas import (
     CommentCreate,
@@ -71,6 +71,23 @@ async def get_investigation(
     db: DbDep,
 ) -> InvestigationOut:
     return await service.get_investigation(db, investigation_id, current_user.org_id)
+
+
+@router.get("/{investigation_id}/context")
+async def get_investigation_context(
+    investigation_id: uuid.UUID,
+    current_user: CurrentUser,
+    equipment_id: str | None = None,
+):
+    """
+    Returns the InvestigationContextV1 read model built by the ContextBuilder.
+    This demonstrates the Helix Platform architecture.
+    """
+    from src.runtime.context_builder import context_builder
+
+    # Note: `context_builder.build_context` returns a Pydantic model. 
+    # FastAPI natively handles serializing Pydantic models to JSON.
+    return context_builder.build_context(str(investigation_id), equipment_id or "EQ-BIO-014")
 
 
 @router.patch(

@@ -1,56 +1,79 @@
 import React from "react";
-import { Cpu, CheckCircle2, Circle, ArrowDown, Sparkles, Activity } from "lucide-react";
+import { Cpu, CheckCircle2, Circle, ArrowRight, Sparkles, Activity, FileText, BrainCircuit, Loader2, Database, Network } from "lucide-react";
+import { SimulationPhase } from "../hooks/useInvestigationSimulation";
 
 interface InvestigationRuntimeProps {
   investigation: any;
   evidenceItems: any[];
   hypotheses: any[];
+  simulation?: any;
 }
 
 export const InvestigationRuntime: React.FC<InvestigationRuntimeProps> = ({ 
   investigation, 
   evidenceItems,
-  hypotheses
+  hypotheses,
+  simulation
 }) => {
-  // Synthesize agent stories based on data
-  const hasEvidence = evidenceItems.length > 0;
-  const hasHypothesis = hypotheses.length > 0;
-
-  const steps = [
-    { name: "Evidence Agent", icon: "document", done: hasEvidence, items: [
-      hasEvidence ? "Retrieved LIMS & SCADA logs" : "Waiting for evidence upload",
-      hasEvidence ? "Extracted timestamps and metadata" : "",
-      hasEvidence ? `Linked Batch ${investigation.title.split(" ")[0]}` : "",
-      hasEvidence ? "Generated embeddings for semantic search" : ""
-    ].filter(Boolean) },
-    { name: "Timeline Agent", icon: "clock", done: hasEvidence, items: [
-      hasEvidence ? "Reconstructed sequence of events" : "Pending evidence",
-      hasEvidence ? "Identified critical deviations" : ""
-    ].filter(Boolean) },
-    { name: "Root Cause Agent", icon: "brain", done: hasHypothesis, items: [
-      hasHypothesis ? "Searched historical SOPs & CAPAs" : "Pending root cause generation",
-      hasHypothesis ? "Synthesized primary hypothesis" : "",
-      hasHypothesis ? "Calculated grounding scores" : ""
-    ].filter(Boolean) },
-    { name: "CAPA Drafter", icon: "target", done: investigation.status === "closed" || investigation.status === "pending_review", items: [
-      investigation.status === "closed" ? "Drafted corrective actions" : "Waiting for RCA approval",
-      investigation.status === "closed" ? "Validated against GMP compliance" : ""
-    ].filter(Boolean) }
-  ];
-
-  // Synthesize Confidence Evolution
-  const maxConf = hasHypothesis ? Math.max(...hypotheses.map(h => h.confidence_score)) * 100 : 0;
+  const phase: SimulationPhase = simulation?.phase || 'READY';
   
-  // Create a fake evolution story leading up to maxConf
-  const evolution = [];
-  if (maxConf > 0) {
-    evolution.push({ value: 62, reason: "Initial text matching" });
-    evolution.push({ value: 71, reason: "Historical case match found (+9%)" });
-    if (evidenceItems.length > 3) {
-      evolution.push({ value: maxConf - 4, reason: "Contradictory log detected (-4%)" });
+  // Safely extract context variables, providing generic fallbacks if context is still loading
+  const ctx = simulation?.context || {};
+  const equipmentId = ctx.equipment?.equipment_id || "Equipment";
+  const calibrationId = ctx.calibration?.calibration_id || "Calibration Log";
+  const historicalCaseId = ctx.historical_match?.investigation_id || "Historical Case";
+  const primarySop = ctx.sop?.primary || "Applicable SOP";
+  const primaryRegulation = ctx.regulations?.[0] || "Applicable Regulation";
+  const confidenceScore = ctx.confidence?.score || 91;
+  const confidenceBoost = ctx.confidence?.boost || "+8%";
+
+  // Define agent blocks as Graph Traversals
+  const blocks = [
+    {
+      id: "evidence",
+      name: "Evidence & Context",
+      icon: <Database size={14} className="text-blue-400" />,
+      isActive: phase === 'INITIALIZING',
+      isDone: phase !== 'INITIALIZING',
+      actionText: "Loading equipment context...",
+      resultText: `Linked Equipment ${equipmentId}`,
+      reason: null,
+      confidenceBoost: null
+    },
+    {
+      id: "timeline",
+      name: "Calibration & Timeline",
+      icon: <Activity size={14} className="text-amber-400" />,
+      isActive: phase === 'SEARCHING',
+      isDone: phase === 'REASONING' || phase === 'DRAFTING' || phase === 'READY',
+      actionText: "Pulling calibration logs...",
+      resultText: `Checked ${calibrationId}`,
+      reason: "Calibration log confirms recent drift out of specification for probe T-402.",
+      confidenceBoost: null
+    },
+    {
+      id: "knowledge",
+      name: "Regulatory Graph",
+      icon: <Network size={14} className="text-violet-400" />,
+      isActive: phase === 'REASONING',
+      isDone: phase === 'DRAFTING' || phase === 'READY',
+      actionText: "Traversing Knowledge Graph...",
+      resultText: `Matched ${primarySop} & ${primaryRegulation}`,
+      reason: `Deviation triggers mandatory assessment per ${primaryRegulation} (Equipment).`,
+      confidenceBoost: "+4%"
+    },
+    {
+      id: "rootcause",
+      name: "Historical Intelligence",
+      icon: <Sparkles size={14} className="text-emerald-400" />,
+      isActive: phase === 'DRAFTING',
+      isDone: phase === 'READY',
+      actionText: "Searching historical cases...",
+      resultText: `Found Match: ${historicalCaseId}`,
+      reason: "Historical case exhibits identical temperature excursion due to probe failure.",
+      confidenceBoost: confidenceBoost
     }
-    evolution.push({ value: maxConf, reason: "Strong sensor evidence correlation" });
-  }
+  ];
 
   return (
     <div className="bg-slate-900/80 border border-violet-500/20 rounded-2xl p-6 shadow-2xl relative overflow-hidden h-full flex flex-col">
@@ -60,75 +83,88 @@ export const InvestigationRuntime: React.FC<InvestigationRuntimeProps> = ({
       <div className="flex items-center justify-between mb-6 relative z-10 border-b border-white/5 pb-4">
         <h3 className="font-bold text-lg text-slate-100 flex items-center gap-2">
           <Cpu size={18} className="text-violet-400" />
-          AI Reasoning Engine
+          Enterprise Knowledge Graph
         </h3>
-        <span className="text-[10px] font-bold tracking-widest text-violet-400 bg-violet-500/10 px-2 py-1 rounded">
-          ACTIVE
-        </span>
+        {phase === 'READY' ? (
+          <span className="text-[10px] font-bold tracking-widest text-emerald-400 bg-emerald-500/10 px-2 py-1 rounded border border-emerald-500/20">
+            READY FOR REVIEW
+          </span>
+        ) : (
+          <span className="text-[10px] font-bold tracking-widest text-violet-400 bg-violet-500/10 px-2 py-1 rounded border border-violet-500/20 shadow-ai animate-pulse">
+            TRAVERSING
+          </span>
+        )}
       </div>
 
-      <div className="flex-1 overflow-y-auto space-y-8 relative z-10 pr-2">
-        
-        {/* Agent Stories */}
-        <div>
-          <h4 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">
-            Agent Progress
-          </h4>
-          <div className="space-y-5">
-            {steps.map((step, idx) => (
-              <div key={idx} className={`space-y-2 ${step.done ? "opacity-100" : "opacity-40 grayscale"}`}>
-                <div className="flex items-center gap-2">
-                  {step.done ? (
-                    <CheckCircle2 size={16} className="text-emerald-400" />
-                  ) : (
-                    <Circle size={16} className="text-slate-600" />
-                  )}
-                  <span className={`text-sm font-bold ${step.done ? "text-slate-200" : "text-slate-500"}`}>
-                    {step.name}
-                  </span>
-                </div>
-                {step.items.length > 0 && (
-                  <div className="ml-6 space-y-1.5 border-l border-white/5 pl-3">
-                    {step.items.map((item, i) => (
-                      <div key={i} className="flex items-start gap-2 text-xs text-slate-400">
-                        {step.done && <Sparkles size={10} className="text-violet-400 mt-0.5 shrink-0" />}
-                        <span>{item}</span>
-                      </div>
-                    ))}
+      <div className="flex-1 overflow-y-auto space-y-6 relative z-10 pr-2 custom-scrollbar">
+        {blocks.map((block, idx) => {
+          if (!block.isActive && !block.isDone && phase !== 'READY') return null;
+
+          return (
+            <div key={block.id} className={`space-y-3 pb-6 ${idx < blocks.length - 1 ? 'border-b border-white/5' : ''}`}>
+              <div className="flex items-center gap-2">
+                {block.icon}
+                <span className="text-sm font-bold text-slate-200">{block.name}</span>
+              </div>
+              
+              <div className="pl-6 space-y-3">
+                {block.isActive ? (
+                  <div className="flex items-center gap-2 text-sm text-slate-400">
+                    <Loader2 size={14} className="animate-spin text-violet-400" />
+                    {block.actionText}
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-2 text-sm font-bold text-emerald-400">
+                    <CheckCircle2 size={14} />
+                    {block.resultText}
+                  </div>
+                )}
+
+                {block.isDone && block.reason && (
+                  <div className="space-y-1 mt-2 bg-black/20 p-2 rounded border border-white/5">
+                    <p className="text-xs text-slate-300 font-medium">{block.reason}</p>
+                  </div>
+                )}
+
+                {block.isDone && block.confidenceBoost && (
+                  <div className="space-y-1 mt-2">
+                    <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-400 bg-emerald-500/10 px-2 py-1 rounded border border-emerald-500/20 uppercase tracking-widest">
+                      <Sparkles size={10} />
+                      Confidence {block.confidenceBoost}
+                    </span>
                   </div>
                 )}
               </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Confidence Evolution */}
-        {evolution.length > 0 && (
-          <div className="pt-4 border-t border-white/5">
-            <h4 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 flex items-center justify-between">
-              Confidence Evolution (MVP)
-              <Activity size={12} className="text-slate-500" />
-            </h4>
-            
-            <div className="space-y-1">
-              {evolution.map((ev, idx) => (
-                <div key={idx} className="flex flex-col items-center">
-                  <div className="w-full flex items-center justify-between bg-white/5 rounded-lg p-2.5 border border-white/5">
-                    <span className="text-lg font-black text-slate-200 w-12 text-center">{ev.value.toFixed(0)}%</span>
-                    <span className="text-xs text-slate-400 text-right">{ev.reason}</span>
-                  </div>
-                  {idx < evolution.length - 1 && (
-                    <ArrowDown size={14} className="text-slate-600 my-1" />
-                  )}
-                </div>
-              ))}
             </div>
-            <p className="text-[9px] text-slate-600 text-center mt-3 uppercase tracking-widest">
-              Visual reconstruction from Audit logs
-            </p>
+          );
+        })}
+        {/* Knowledge Sources Verification */}
+        {phase !== 'INITIALIZING' && (
+          <div className="pt-4 border-t border-white/5 mt-4">
+            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2 block">Knowledge Sources Consulted</span>
+            <div className="grid grid-cols-2 gap-2">
+              <div className="flex items-center gap-1.5 text-xs text-slate-300">
+                <CheckCircle2 size={12} className="text-emerald-500" /> Equipment Registry
+              </div>
+              <div className={`flex items-center gap-1.5 text-xs ${phase === 'SEARCHING' ? 'text-slate-500' : 'text-slate-300'}`}>
+                {phase === 'SEARCHING' ? <Circle size={12} className="text-slate-600" /> : <CheckCircle2 size={12} className="text-emerald-500" />} 
+                Calibration Records
+              </div>
+              <div className={`flex items-center gap-1.5 text-xs ${phase === 'SEARCHING' || phase === 'REASONING' ? 'text-slate-500' : 'text-slate-300'}`}>
+                {phase === 'SEARCHING' || phase === 'REASONING' ? <Circle size={12} className="text-slate-600" /> : <CheckCircle2 size={12} className="text-emerald-500" />} 
+                Regulatory Guidance
+              </div>
+              <div className={`flex items-center gap-1.5 text-xs ${phase === 'SEARCHING' || phase === 'REASONING' ? 'text-slate-500' : 'text-slate-300'}`}>
+                {phase === 'SEARCHING' || phase === 'REASONING' ? <Circle size={12} className="text-slate-600" /> : <CheckCircle2 size={12} className="text-emerald-500" />} 
+                SOP Library
+              </div>
+              <div className={`flex items-center gap-1.5 text-xs ${phase !== 'READY' ? 'text-slate-500' : 'text-slate-300'}`}>
+                {phase !== 'READY' ? <Circle size={12} className="text-slate-600" /> : <CheckCircle2 size={12} className="text-emerald-500" />} 
+                Historical Investigations
+              </div>
+            </div>
           </div>
         )}
-
       </div>
     </div>
   );

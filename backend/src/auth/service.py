@@ -19,7 +19,7 @@ from src.auth.schemas import (
     TokenResponse,
     UserOut,
 )
-from src.core.security import (
+from src.shared.security import (
     create_access_token,
     create_refresh_token,
     decode_token,

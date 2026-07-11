@@ -9,7 +9,7 @@ from fastapi import HTTPException, status
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.core.audit import AuditLog, write_audit
+from src.shared.audit import AuditLog, write_audit
 from src.investigation.models import Comment, Investigation, Task
 from src.investigation.schemas import (
     CommentCreate,

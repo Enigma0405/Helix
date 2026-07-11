@@ -6,33 +6,36 @@ interface CategorizedTimelineProps {
 }
 
 export const CategorizedTimeline: React.FC<CategorizedTimelineProps> = ({ events }) => {
-  // Categorize events based on action string
+  // Categorize events based on action string defensively
   const categorizedEvents = events.map((event) => {
-    let category = "SYSTEM";
+    let category = typeof event.category === "string" ? event.category : "SYSTEM";
     let icon = Server;
     let color = "text-slate-400";
     let border = "border-slate-500/20";
     let bg = "bg-slate-500/10";
     
-    if (event.action.includes("evidence")) {
+    const actionStr = typeof event.action === "string" ? event.action : "";
+    const actorStr = typeof event.actor_id === "string" ? event.actor_id.split("-")[0] : "SYSTEM";
+    
+    if (actionStr.includes("evidence")) {
       category = "EVIDENCE";
       icon = FileText;
       color = "text-blue-400";
       border = "border-blue-500/20";
       bg = "bg-blue-500/10";
-    } else if (event.action.includes("hypotheses") || event.action.includes("ai")) {
+    } else if (actionStr.includes("hypotheses") || actionStr.includes("ai")) {
       category = "AI";
       icon = Sparkles;
       color = "text-violet-400";
       border = "border-violet-500/20";
       bg = "bg-violet-500/10";
-    } else if (event.action.includes("approve")) {
+    } else if (actionStr.includes("approve")) {
       category = "APPROVAL";
       icon = CheckCircle;
       color = "text-emerald-400";
       border = "border-emerald-500/20";
       bg = "bg-emerald-500/10";
-    } else if (event.action === "created") {
+    } else if (actionStr === "created") {
       category = "HUMAN";
       icon = User;
       color = "text-amber-400";
@@ -40,7 +43,7 @@ export const CategorizedTimeline: React.FC<CategorizedTimelineProps> = ({ events
       bg = "bg-amber-500/10";
     }
 
-    return { ...event, category, icon, color, border, bg };
+    return { ...event, category, icon, color, border, bg, safeAction: actionStr, safeActor: actorStr };
   });
 
   return (
@@ -69,10 +72,10 @@ export const CategorizedTimeline: React.FC<CategorizedTimelineProps> = ({ events
               {/* Content */}
               <div className={`p-3 rounded-xl border ${event.border} ${event.bg} space-y-1 h-full`}>
                 <p className="text-xs font-bold text-slate-200">
-                  {event.action.replace(/_/g, " ").toUpperCase()}
+                  {event.safeAction.replace(/_/g, " ").toUpperCase()}
                 </p>
                 <p className="text-[10px] text-slate-400">
-                  By: {event.actor_id.split("-")[0]}
+                  By: {event.safeActor}
                 </p>
               </div>
             </div>

@@ -10,7 +10,7 @@ from sqlalchemy.dialects.postgresql import UUID as PG_UUID
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import Mapped, mapped_column
 
-from src.core.database import Base, AsyncSessionLocal
+from src.database.core import Base, AsyncSessionLocal
 
 logger = logging.getLogger(__name__)
 
@@ -74,7 +74,7 @@ async def write_audit(
         request_path: HTTP request path.
         db: Optional existing AsyncSession; if None, a new session is created.
     """
-    from src.core.config import settings  # noqa: PLC0415
+    from src.shared.config import settings  # noqa: PLC0415
 
     if not settings.AUDIT_ENABLED:
         return

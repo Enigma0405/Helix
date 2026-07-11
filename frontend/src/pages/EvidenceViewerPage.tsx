@@ -22,7 +22,7 @@ export const EvidenceViewerPage: React.FC = () => {
   const { data: evidence, isLoading: isEvidenceLoading } = useQuery({
     queryKey: ["evidence", "item", evidenceId],
     queryFn: async () => {
-      const res = await apiClient.get(`/api/evidence/${evidenceId}`);
+      const res = await apiClient.get(`/evidence/${evidenceId}`);
       return res.data;
     },
     enabled: !!evidenceId,
@@ -32,7 +32,7 @@ export const EvidenceViewerPage: React.FC = () => {
   const { data: chunksData, isLoading: isChunksLoading } = useQuery<Chunk[]>({
     queryKey: ["evidence", "chunks", evidenceId],
     queryFn: async () => {
-      const res = await apiClient.get(`/api/evidence/${evidenceId}/chunks`);
+      const res = await apiClient.get(`/evidence/${evidenceId}/chunks`);
       return res.data;
     },
     enabled: !!evidenceId,
@@ -62,7 +62,7 @@ export const EvidenceViewerPage: React.FC = () => {
         <div className="text-center p-8 bg-white/5 border border-white/10 rounded-2xl max-w-sm">
           <FileText size={40} className="mx-auto text-rose-500 mb-3" />
           <h3 className="font-semibold text-lg text-slate-200">Evidence Record Not Found</h3>
-          <Link to={`/investigations/${id}`} className="mt-4 inline-block text-xs font-semibold text-blue-400">
+          <Link to={`/app/investigations/${id}`} className="mt-4 inline-block text-xs font-semibold text-blue-400">
             Back to Investigation
           </Link>
         </div>
@@ -75,7 +75,7 @@ export const EvidenceViewerPage: React.FC = () => {
       {/* Header bar */}
       <header className="flex items-center gap-4 px-6 py-4 bg-slate-900/80 border-b border-white/10 backdrop-blur-md shrink-0">
         <Link
-          to={`/investigations/${id}`}
+          to={`/app/investigations/${id}`}
           className="p-2 bg-white/5 border border-white/10 rounded-lg hover:bg-white/10 text-slate-400 hover:text-slate-200 transition-all"
         >
           <ArrowLeft size={16} />

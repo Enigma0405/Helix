@@ -40,7 +40,15 @@ const GraphNode: React.FC<GraphNodeProps> = ({ label, icon: Icon, color, childre
   );
 };
 
-export const EvidenceGraphMVP: React.FC = () => {
+interface EvidenceGraphMVPProps {
+  investigation?: any;
+  evidenceItems?: any[];
+}
+
+export const EvidenceGraphMVP: React.FC<EvidenceGraphMVPProps> = ({ investigation, evidenceItems = [] }) => {
+  const invTitle = investigation?.title || "Investigation Root";
+  const equipmentId = investigation?.equipment_id || null;
+
   return (
     <div className="bg-slate-950/50 border border-white/10 rounded-2xl p-5 overflow-x-auto shadow-inner">
       <h3 className="font-bold text-sm text-slate-100 flex items-center gap-2 mb-4">
@@ -49,16 +57,33 @@ export const EvidenceGraphMVP: React.FC = () => {
       </h3>
       
       <div className="min-w-max p-2">
-        <GraphNode label="Investigation Root" icon={Target} color="text-violet-400">
-          <GraphNode label="Equipment: Filter Housing A" icon={Box} color="text-amber-400" />
-          <GraphNode label="Batch: #FIL-8274" icon={Archive} color="text-emerald-400" />
-          <GraphNode label="Operator: OP-44" icon={User} color="text-blue-400" />
-          <GraphNode label="Evidence" icon={FileText} color="text-rose-400">
-            <GraphNode label="Filter_Integrity_Cert_8274.pdf" icon={FileText} color="text-slate-400" />
-            <GraphNode label="Bioburden_Log_FIL8274.csv" icon={FileText} color="text-slate-400" />
-          </GraphNode>
-          <GraphNode label="SOP: MFG-042 Sterile Filtration" icon={BookOpen} color="text-indigo-400" />
-          <GraphNode label="Historical Case: DEV-2024-112" icon={Clock} color="text-slate-400" />
+        <GraphNode label={invTitle} icon={Target} color="text-violet-400">
+          {equipmentId && (
+            <GraphNode label={`Equipment: ${equipmentId}`} icon={Box} color="text-amber-400" />
+          )}
+          {investigation?.batch_id && (
+            <GraphNode label={`Batch: ${investigation.batch_id}`} icon={Archive} color="text-emerald-400" />
+          )}
+          {investigation?.created_by && (
+            <GraphNode label={`Investigator: ${investigation.created_by.split('-')[0]}`} icon={User} color="text-blue-400" />
+          )}
+          {evidenceItems.length > 0 && (
+            <GraphNode label="Evidence" icon={FileText} color="text-rose-400">
+              {evidenceItems.map((e: any) => (
+                <GraphNode 
+                  key={e.id} 
+                  label={e.original_filename} 
+                  icon={FileText} 
+                  color="text-slate-400" 
+                />
+              ))}
+            </GraphNode>
+          )}
+          {evidenceItems.length === 0 && (
+            <GraphNode label="No evidence uploaded yet" icon={FileText} color="text-slate-600" />
+          )}
+          <GraphNode label="SOP Library — Linked" icon={BookOpen} color="text-indigo-400" />
+          <GraphNode label="Historical Case Search" icon={Clock} color="text-slate-400" />
           <GraphNode label="CAPA Draft" icon={Target} color="text-emerald-400" />
         </GraphNode>
       </div>

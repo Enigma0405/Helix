@@ -56,7 +56,7 @@ class LocalEmbeddingAdapter:
     _model = None  # Lazy-loaded to avoid slow import at startup
 
     def __init__(self) -> None:
-        from src.core.config import settings  # noqa: PLC0415
+        from src.shared.config import settings  # noqa: PLC0415
         self._model_name = settings.EMBEDDING_MODEL_LOCAL
 
     def _load_model(self):
@@ -110,7 +110,7 @@ class FireworksEmbeddingAdapter:
 
     def __init__(self) -> None:
         from openai import AsyncOpenAI  # noqa: PLC0415
-        from src.core.config import settings  # noqa: PLC0415
+        from src.shared.config import settings  # noqa: PLC0415
 
         self._model_name = settings.EMBEDDING_MODEL_FIREWORKS
         self._client = AsyncOpenAI(
@@ -166,7 +166,7 @@ class MockEmbeddingAdapter:
     """
 
     def __init__(self) -> None:
-        from src.core.config import settings  # noqa: PLC0415
+        from src.shared.config import settings  # noqa: PLC0415
         self._dims = settings.EMBEDDING_DIM
 
     async def embed_batch(self, texts: list[str]) -> list[list[float]]:
@@ -189,7 +189,7 @@ class MockEmbeddingAdapter:
         return "mock-embed-v1"
 
     def get_dimensions(self) -> int:
-        from src.core.config import settings  # noqa: PLC0415
+        from src.shared.config import settings  # noqa: PLC0415
         return settings.EMBEDDING_DIM
 
 
@@ -212,7 +212,7 @@ def get_embedding_adapter() -> EmbeddingAdapter:
     if _embedding_adapter_cache is not None:
         return _embedding_adapter_cache
 
-    from src.core.config import settings  # noqa: PLC0415
+    from src.shared.config import settings  # noqa: PLC0415
 
     provider = settings.EMBEDDING_PROVIDER
     logger.info("Initializing embedding adapter: provider=%s", provider)

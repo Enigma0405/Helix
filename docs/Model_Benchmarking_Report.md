@@ -8,8 +8,8 @@ This report evaluates and compares candidate Fireworks AI models for Project Hel
 |---|---|---|---|---|
 | **Gemma 4 31B IT** | Inaccessible (404) | N/A | N/A | N/A |
 | **Gemma 3 27B IT** | Inaccessible (404) | N/A | N/A | N/A |
-| **DeepSeek v4 Pro** | **Available (200)** | 7716.12 ms | $0.000116 | **Yes** |
-| **GLM 5p1** | **Available (200)** | 14496.49 ms | $0.000232 | **Yes** |
+| **DeepSeek v4 Pro** | **Available (200)** | 6126.11 ms | $0.000115 | **Yes** |
+| **GLM 5p1** | **Available (200)** | 12650.09 ms | $0.000232 | **Yes** |
 
 ## Recommendation
 
