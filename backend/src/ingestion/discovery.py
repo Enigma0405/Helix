@@ -9,11 +9,16 @@ from src.shared.logging import ingestion_logger
 
 def get_tenant_source_data_path(tenant_id: str = "apex_precision") -> Path:
     """Returns the absolute path to the configured tenant's source_data."""
+    # __file__ is in backend/src/ingestion/discovery.py
+    # .parent.parent.parent is backend/
+    # .parent.parent.parent.parent is Project Helix/
     base_dir = Path(__file__).parent.parent.parent.parent
-    tenant_dir = Path(settings.TENANT_DATA_DIR)
     
+    tenant_dir = Path(settings.TENANT_DATA_DIR)
     if not tenant_dir.is_absolute():
-        tenant_dir = (base_dir / tenant_dir).resolve()
+        # Cleanly resolve by treating TENANT_DATA_DIR as relative to backend directory
+        backend_dir = Path(__file__).parent.parent.parent
+        tenant_dir = (backend_dir / tenant_dir).resolve()
         
     return tenant_dir / tenant_id / "source_data"
 

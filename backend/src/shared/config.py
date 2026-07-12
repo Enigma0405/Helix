@@ -119,7 +119,7 @@ class Settings(BaseSettings):
 
     # ── Ingestion / Organization Memory ───────────────────────────────────────
     TENANT_DATA_DIR: str = Field(
-        default="../../organizations",
+        default="../organizations",
         description="Path to the multi-tenant organizations directory",
     )
 
