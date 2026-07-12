@@ -1,4 +1,14 @@
 {
-  "id": "apex_precision",
-  "name": "Apex Precision"
+    "organization_id": "apex_precision",
+    "display_name": "Apex Precision",
+    "domain": "apexprecision.com",
+    "timezone": "UTC",
+    "default_language": "en",
+    "schema_version": "1.0",
+    "created_at": "2026-07-12T00:00:00Z",
+    "knowledge_version": "1.0",
+    "ingestion_version": "1.0",
+    "memory_schema_version": "1.0",
+    "embedding_version": "1.0",
+    "graph_version": "1.0"
 }

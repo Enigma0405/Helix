@@ -118,9 +118,9 @@ class Settings(BaseSettings):
     AUDIT_ENABLED: bool = True
 
     # ── Ingestion / Organization Memory ───────────────────────────────────────
-    ORGANIZATION_MEMORY_DIR: str = Field(
-        default="../../organization_memory",
-        description="Path to the root of the organization memory repository",
+    TENANT_DATA_DIR: str = Field(
+        default="../../organizations",
+        description="Path to the multi-tenant organizations directory",
     )
 
 

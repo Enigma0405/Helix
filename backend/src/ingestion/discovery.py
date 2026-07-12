@@ -7,24 +7,23 @@ from typing import List, Dict, Any
 from src.shared.config import settings
 from src.shared.logging import ingestion_logger
 
-def get_organization_memory_path() -> Path:
-    """Returns the absolute path to the configured organization memory repository."""
-    # Resolve relative to the backend/src directory if it's a relative path
+def get_tenant_manifest_path(tenant_id: str = "apex_precision") -> Path:
+    """Returns the absolute path to the configured tenant's ingestion manifest."""
     base_dir = Path(__file__).parent.parent.parent.parent
-    configured_path = Path(settings.ORGANIZATION_MEMORY_DIR)
+    tenant_dir = Path(settings.TENANT_DATA_DIR)
     
-    if configured_path.is_absolute():
-        return configured_path
-    return (base_dir / configured_path).resolve()
+    if not tenant_dir.is_absolute():
+        tenant_dir = (base_dir / tenant_dir).resolve()
+        
+    return tenant_dir / tenant_id / "organization_memory" / "metadata" / "ingestion_manifest.json"
 
-def discover_ingestable_documents() -> List[Dict[str, Any]]:
+def discover_ingestable_documents(tenant_id: str = "apex_precision") -> List[Dict[str, Any]]:
     """
-    Reads the manifest.json from the organization memory repository
+    Reads the ingestion_manifest.json from the tenant's organization memory
     and returns an ordered list of documents pending ingestion (Type A),
     sorted by ingestion_priority.
     """
-    repo_path = get_organization_memory_path()
-    manifest_path = repo_path / "manifest.json"
+    manifest_path = get_tenant_manifest_path(tenant_id)
     
     if not manifest_path.exists():
         ingestion_logger.error(f"Manifest not found at {manifest_path}")
