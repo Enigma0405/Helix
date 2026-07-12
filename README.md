@@ -50,6 +50,22 @@ We achieved this using:
 
 ---
 
+## Product Walkthrough
+
+### 1. EvidenceOps Architecture
+![Architecture](./docs/assets/architecture.png)
+
+### 2. Mission Control
+![Mission Control Dashboard](./docs/assets/dashboard.png)
+
+### 3. Investigation Workspace (Evidence Mapping)
+![Investigation Workspace](./docs/assets/investigation_blank.png)
+
+### 4. Deterministic AI Reasoning & CAPA Generation
+![AI Assessment](./docs/assets/investigation.png)
+
+---
+
 ## Architecture Overview
 
 Helix is divided into three core layers:
