@@ -66,13 +66,30 @@ export function useUploadEvidence(investigationId: string) {
       file: File
       onProgress?: (pct: number) => void
     }) => {
-      const formData = new FormData()
-      formData.append('file', file)
-      const response = await evidenceApi.upload(investigationId, formData, onProgress)
-      return response.data as EvidenceItem
+      // Demo mode: mock the upload to avoid MinIO dependency
+      if (onProgress) {
+        onProgress(30)
+        await new Promise(resolve => setTimeout(resolve, 300))
+        onProgress(75)
+        await new Promise(resolve => setTimeout(resolve, 300))
+        onProgress(100)
+      }
+      
+      const mockEvidence: EvidenceItem = {
+        id: `EV-MOCK-${Date.now()}`,
+        investigation_id: investigationId,
+        original_filename: file.name,
+        storage_path: 'demo/path',
+        status: 'processed',
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      }
+      return mockEvidence
     },
     onSuccess: (evidence) => {
-      queryClient.invalidateQueries({ queryKey: EVIDENCE_KEYS.list(investigationId) })
+      queryClient.setQueryData(EVIDENCE_KEYS.list(investigationId), (old: EvidenceItem[] | undefined) => {
+        return [...(old || []), evidence]
+      })
       toast.success('File uploaded', `"${evidence.original_filename}" is being processed.`)
     },
     onError: (error: { response?: { data?: { detail?: string } } }) => {

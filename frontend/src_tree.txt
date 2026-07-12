@@ -1,0 +1,106 @@
+Folder PATH listing for volume OS
+Volume serial number is 00000287 BCC4:FCC5
+C:\USERS\AS598\DESKTOP\PROJECT ARYAN\PROJECT HELIX\FRONTEND\SRC
+¦   App.tsx
+¦   index.css
+¦   main.tsx
+¦   vite-env.d.ts
+¦   
++---api
+¦       client.ts
+¦       
++---components
+¦   ¦   ErrorBoundary.tsx
+¦   ¦   
+¦   +---layout
+¦   ¦       AppShell.tsx
+¦   ¦       Header.tsx
+¦   ¦       Sidebar.tsx
+¦   ¦       
+¦   +---ui
+¦           AIRuntimePanel.tsx
+¦           Badge.tsx
+¦           Button.tsx
+¦           Card.tsx
+¦           Enterprise.tsx
+¦           Input.tsx
+¦           Modal.tsx
+¦           ProgressBar.tsx
+¦           SeverityBadge.tsx
+¦           Spinner.tsx
+¦           StatusBadge.tsx
+¦           ToastContainer.tsx
+¦           
++---features
+¦   +---auth
+¦   ¦   +---api
+¦   ¦           useAuth.ts
+¦   ¦           
+¦   +---capa
+¦   ¦   +---api
+¦   ¦   ¦       useCapa.ts
+¦   ¦   ¦       
+¦   ¦   +---components
+¦   ¦           CapaEditor.tsx
+¦   ¦           
+¦   +---evidence
+¦   ¦   +---api
+¦   ¦   ¦       useEvidence.ts
+¦   ¦   ¦       
+¦   ¦   +---components
+¦   ¦           EvidenceGraphMVP.tsx
+¦   ¦           EvidenceUploadZone.tsx
+¦   ¦           MissingEvidencePanel.tsx
+¦   ¦           
+¦   +---hypotheses
+¦   ¦   +---api
+¦   ¦   ¦       useHypotheses.ts
+¦   ¦   ¦       
+¦   ¦   +---components
+¦   ¦           CitationChip.tsx
+¦   ¦           GenerateHypothesesButton.tsx
+¦   ¦           HypothesisCard.tsx
+¦   ¦           
+¦   +---investigations
+¦       +---api
+¦       ¦       useAssess.ts
+¦       ¦       useInvestigations.ts
+¦       ¦       
+¦       +---components
+¦       ¦       CategorizedTimeline.tsx
+¦       ¦       CreateInvestigationModal.tsx
+¦       ¦       EvidenceDrawer.tsx
+¦       ¦       InvestigationCard.tsx
+¦       ¦       InvestigationHeader.tsx
+¦       ¦       InvestigationNarrative.tsx
+¦       ¦       InvestigationRuntime.tsx
+¦       ¦       InvestigationTable.tsx
+¦       ¦       StatusFilter.tsx
+¦       ¦       
+¦       +---hooks
+¦               useInvestigationSimulation.ts
+¦               
++---hooks
+¦       useToast.ts
+¦       
++---lib
+¦       utils.ts
+¦       
++---pages
+¦       AnalyticsPage.tsx
+¦       DashboardPage.tsx
+¦       EvidenceViewerPage.tsx
+¦       InvestigationDetailPage.tsx
+¦       InvestigationsPage.tsx
+¦       KnowledgePage.tsx
+¦       LandingPage.tsx
+¦       LoginPage.tsx
+¦       MyWorkPage.tsx
+¦       SettingsPage.tsx
+¦       
++---store
+¦       auth.ts
+¦       
++---types
+        index.ts
+        

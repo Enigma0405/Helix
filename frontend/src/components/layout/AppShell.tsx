@@ -21,7 +21,14 @@ export function AppShell({ headerTitle, headerSubtitle, headerActions }: AppShel
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false)
 
   return (
-    <div className="flex h-screen bg-[#0F172A] overflow-hidden">
+    <div className="flex h-screen bg-[#0F172A] overflow-hidden relative">
+      
+      {/* Demo Build Banner */}
+      <div className="absolute top-0 right-0 z-[100] bg-violet-600/90 text-white text-[10px] font-bold uppercase tracking-widest px-4 py-1.5 rounded-bl-xl shadow-lg border-b border-l border-white/10 backdrop-blur-md flex items-center gap-2">
+        <span className="flex h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+        Demo Build v1.0 • EvidenceOps Preview
+      </div>
+
       {/* Desktop Sidebar */}
       <div className="hidden lg:flex">
         <Sidebar collapsed={!sidebarOpen} />

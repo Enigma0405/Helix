@@ -17,8 +17,17 @@ from src.ai_runtime.schemas import (
     HypothesisOut,
     HypothesisUpdate,
     InvestigationSummaryOut,
+    AssessRequest,
 )
 from src.api.dependencies import CurrentUser, RoleChecker, get_db
+
+from src.runtime.intelligence_service import IntelligenceService
+from src.knowledge.retriever import DocumentRetriever
+from src.knowledge.embedder import EmbeddingService
+from src.runtime.llm.fireworks_adapter import FireworksAdapter
+from src.runtime.llm.mock_adapter import MockAdapter
+import os
+from src.runtime.reasoning.models import InvestigationAssessment
 
 router = APIRouter(tags=["AI Runtime"])
 DbDep = Annotated[AsyncSession, Depends(get_db)]
@@ -51,6 +60,46 @@ async def generate_hypotheses(
         user_role=current_user.role,
     )
     return [HypothesisOut.model_validate(h) for h in res]
+
+
+@router.post(
+    "/api/investigations/{investigation_id}/assess",
+    response_model=InvestigationAssessment,
+    status_code=status.HTTP_200_OK,
+    summary="Generate a comprehensive Intelligence Layer assessment",
+)
+async def assess_investigation(
+    investigation_id: uuid.UUID,
+    req: AssessRequest,
+    current_user: CurrentUser,
+    db: DbDep,
+) -> InvestigationAssessment:
+    """Uses the deterministic Intelligence Layer to produce an evidence-backed assessment."""
+    
+    # Initialize Dependencies
+    embedder = EmbeddingService()
+    retriever = DocumentRetriever(embedder=embedder)
+    
+    if os.getenv("FIREWORKS_API_KEY"):
+        adapter = FireworksAdapter()
+        if not getattr(adapter, "client", None):
+            adapter = MockAdapter()
+    else:
+        adapter = MockAdapter()
+
+    intelligence_svc = IntelligenceService(retriever=retriever, inference_adapter=adapter)
+    
+    tenant_id = "apex_precision" # Hardcode tenant or extract from context if multi-tenant is active
+    
+    # Run pipeline
+    assessment = await intelligence_svc.run_investigation(
+        session=db,
+        tenant_id=tenant_id,
+        question=req.question
+    )
+    
+    return assessment
+
 
 
 @router.get(

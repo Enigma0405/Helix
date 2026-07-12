@@ -4,8 +4,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useAuthStore } from "@/store/auth";
 
 // Import Layouts
-import { AppShell } from "@/components/layout/AppShell";
-
+// We no longer use AppShell globally because the new Lovable layouts are page-specific.
 // Import Pages
 import { LoginPage } from "@/pages/LoginPage";
 import { DashboardPage } from "@/pages/DashboardPage";
@@ -35,7 +34,7 @@ const ProtectedLayout: React.FC = () => {
   const token = useAuthStore((s) => s.token);
   return token ? (
     <ErrorBoundary>
-      <AppShell />
+      <Outlet />
     </ErrorBoundary>
   ) : (
     <Navigate to="/login" replace />

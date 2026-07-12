@@ -1,0 +1,348 @@
+Folder PATH listing for volume OS
+Volume serial number is 0000018F BCC4:FCC5
+C:\USERS\AS598\DESKTOP\PROJECT ARYAN\PROJECT HELIX\BACKEND\SRC
+¦   main.py
+¦   __init__.py
+¦   
++---ai_runtime
+¦   ¦   citation_validator.py
+¦   ¦   cost_optimizer.py
+¦   ¦   evaluation_engine.py
+¦   ¦   models.py
+¦   ¦   observability.py
+¦   ¦   policy_engine.py
+¦   ¦   prompt_engine.py
+¦   ¦   retrieval_engine.py
+¦   ¦   router.py
+¦   ¦   runtime.py
+¦   ¦   schemas.py
+¦   ¦   service.py
+¦   ¦   __init__.py
+¦   ¦   
+¦   +---adapters
+¦   ¦   ¦   embedding_adapter.py
+¦   ¦   ¦   inference_adapter.py
+¦   ¦   ¦   __init__.py
+¦   ¦   ¦   
+¦   ¦   +---__pycache__
+¦   ¦           embedding_adapter.cpython-314.pyc
+¦   ¦           inference_adapter.cpython-314.pyc
+¦   ¦           __init__.cpython-314.pyc
+¦   ¦           
+¦   +---prompts
+¦   ¦       capa_draft.j2
+¦   ¦       hypothesis_generation.j2
+¦   ¦       investigation_summary.j2
+¦   ¦       
+¦   +---workflows
+¦   ¦   ¦   capa_workflow.py
+¦   ¦   ¦   hypothesis_workflow.py
+¦   ¦   ¦   investigation_workflow.py
+¦   ¦   ¦   knowledge_capture_workflow.py
+¦   ¦   ¦   __init__.py
+¦   ¦   ¦   
+¦   ¦   +---__pycache__
+¦   ¦           capa_workflow.cpython-314.pyc
+¦   ¦           hypothesis_workflow.cpython-314.pyc
+¦   ¦           investigation_workflow.cpython-314.pyc
+¦   ¦           knowledge_capture_workflow.cpython-314.pyc
+¦   ¦           __init__.cpython-314.pyc
+¦   ¦           
+¦   +---__pycache__
+¦           citation_validator.cpython-314.pyc
+¦           cost_optimizer.cpython-314.pyc
+¦           evaluation_engine.cpython-314.pyc
+¦           models.cpython-314.pyc
+¦           observability.cpython-314.pyc
+¦           policy_engine.cpython-314.pyc
+¦           prompt_engine.cpython-314.pyc
+¦           retrieval_engine.cpython-314.pyc
+¦           router.cpython-314.pyc
+¦           runtime.cpython-314.pyc
+¦           schemas.cpython-314.pyc
+¦           service.cpython-314.pyc
+¦           __init__.cpython-314.pyc
+¦           
++---api
+¦   ¦   dependencies.py
+¦   ¦   
+¦   +---dependencies
+¦   +---middleware
+¦   +---routers
+¦   +---__pycache__
+¦           dependencies.cpython-314.pyc
+¦           
++---assets
+¦   ¦   models.py
+¦   ¦   router.py
+¦   ¦   schemas.py
+¦   ¦   service.py
+¦   ¦   __init__.py
+¦   ¦   
+¦   +---__pycache__
+¦           models.cpython-314.pyc
+¦           router.cpython-314.pyc
+¦           schemas.cpython-314.pyc
+¦           service.cpython-314.pyc
+¦           __init__.cpython-314.pyc
+¦           
++---auth
+¦   ¦   models.py
+¦   ¦   router.py
+¦   ¦   schemas.py
+¦   ¦   service.py
+¦   ¦   __init__.py
+¦   ¦   
+¦   +---__pycache__
+¦           models.cpython-314.pyc
+¦           router.cpython-314.pyc
+¦           schemas.cpython-314.pyc
+¦           service.cpython-314.pyc
+¦           __init__.cpython-314.pyc
+¦           
++---core
+¦   ¦   __init__.py
+¦   ¦   
+¦   +---__pycache__
+¦           audit.cpython-314.pyc
+¦           config.cpython-314.pyc
+¦           database.cpython-314.pyc
+¦           dependencies.cpython-314.pyc
+¦           security.cpython-314.pyc
+¦           storage.cpython-314.pyc
+¦           __init__.cpython-314.pyc
+¦           
++---database
+¦   ¦   core.py
+¦   ¦   
+¦   +---__pycache__
+¦           core.cpython-314.pyc
+¦           
++---evidence
+¦   ¦   document_adapter.py
+¦   ¦   models.py
+¦   ¦   processor.py
+¦   ¦   router.py
+¦   ¦   schemas.py
+¦   ¦   service.py
+¦   ¦   __init__.py
+¦   ¦   
+¦   +---__pycache__
+¦           document_adapter.cpython-314.pyc
+¦           models.cpython-314.pyc
+¦           processor.cpython-314.pyc
+¦           router.cpython-314.pyc
+¦           schemas.cpython-314.pyc
+¦           service.cpython-314.pyc
+¦           __init__.cpython-314.pyc
+¦           
++---export
+¦   ¦   models.py
+¦   ¦   router.py
+¦   ¦   schemas.py
+¦   ¦   service.py
+¦   ¦   __init__.py
+¦   ¦   
+¦   +---templates
+¦   ¦       report.html
+¦   ¦       
+¦   +---__pycache__
+¦           models.cpython-314.pyc
+¦           router.cpython-314.pyc
+¦           schemas.cpython-314.pyc
+¦           service.cpython-314.pyc
+¦           __init__.cpython-314.pyc
+¦           
++---ingestion
+¦   ¦   classifier.py
+¦   ¦   discovery.py
+¦   ¦   logging.py
+¦   ¦   mapper.py
+¦   ¦   normalizer.py
+¦   ¦   orchestrator.py
+¦   ¦   parser.py
+¦   ¦   parser_registry.py
+¦   ¦   persistence.py
+¦   ¦   validator.py
+¦   ¦   verifier.py
+¦   ¦   
+¦   +---models
+¦   ¦   ¦   context.py
+¦   ¦   ¦   
+¦   ¦   +---__pycache__
+¦   ¦           context.cpython-314.pyc
+¦   ¦           
+¦   +---parsers
+¦   ¦   ¦   base.py
+¦   ¦   ¦   csv_parser.py
+¦   ¦   ¦   json_parser.py
+¦   ¦   ¦   pdf_parser.py
+¦   ¦   ¦   
+¦   ¦   +---__pycache__
+¦   ¦           base.cpython-314.pyc
+¦   ¦           csv_parser.cpython-314.pyc
+¦   ¦           json_parser.cpython-314.pyc
+¦   ¦           pdf_parser.cpython-314.pyc
+¦   ¦           
+¦   +---__pycache__
+¦           discovery.cpython-314.pyc
+¦           orchestrator.cpython-314.pyc
+¦           parser_registry.cpython-314.pyc
+¦           
++---investigation
+¦   ¦   models.py
+¦   ¦   router.py
+¦   ¦   schemas.py
+¦   ¦   service.py
+¦   ¦   __init__.py
+¦   ¦   
+¦   +---__pycache__
+¦           models.cpython-314.pyc
+¦           router.cpython-314.pyc
+¦           schemas.cpython-314.pyc
+¦           service.cpython-314.pyc
+¦           __init__.cpython-314.pyc
+¦           
++---knowledge
+¦   ¦   chunker.py
+¦   ¦   embedder.py
+¦   ¦   models.py
+¦   ¦   retriever.py
+¦   ¦   router.py
+¦   ¦   schemas.py
+¦   ¦   service.py
+¦   ¦   vector_store.py
+¦   ¦   __init__.py
+¦   ¦   
+¦   +---__pycache__
+¦           chunker.cpython-314.pyc
+¦           embedder.cpython-314.pyc
+¦           models.cpython-314.pyc
+¦           organization_memory.cpython-314.pyc
+¦           retriever.cpython-314.pyc
+¦           router.cpython-314.pyc
+¦           schemas.cpython-314.pyc
+¦           service.cpython-314.pyc
+¦           vector_store.cpython-314.pyc
+¦           __init__.cpython-314.pyc
+¦           
++---organization_memory
+¦   +---canonical
+¦   +---models
+¦   ¦   ¦   canonical_chunk.py
+¦   ¦   ¦   canonical_document.py
+¦   ¦   ¦   canonical_entity.py
+¦   ¦   ¦   canonical_evidence.py
+¦   ¦   ¦   canonical_metadata.py
+¦   ¦   ¦   canonical_relationship.py
+¦   ¦   ¦   __init__.py
+¦   ¦   ¦   
+¦   ¦   +---__pycache__
+¦   ¦           canonical_chunk.cpython-314.pyc
+¦   ¦           canonical_document.cpython-314.pyc
+¦   ¦           canonical_entity.cpython-314.pyc
+¦   ¦           canonical_evidence.cpython-314.pyc
+¦   ¦           canonical_metadata.cpython-314.pyc
+¦   ¦           canonical_relationship.cpython-314.pyc
+¦   ¦           __init__.cpython-314.pyc
+¦   ¦           
+¦   +---repositories
+¦   +---services
+¦   ¦       context_service.py
+¦   ¦       organization_memory.py
+¦   ¦       
+¦   +---storage
+¦       ¦   organization_memory_repository.py
+¦       ¦   storage_adapter.py
+¦       ¦   
+¦       +---__pycache__
+¦               organization_memory_repository.cpython-314.pyc
+¦               storage_adapter.cpython-314.pyc
+¦               
++---runtime
+¦   ¦   context_builder.py
+¦   ¦   event_bus.py
+¦   ¦   intelligence_service.py
+¦   ¦   runtime_engine.py
+¦   ¦   __init__.py
+¦   ¦   
+¦   +---context
+¦   ¦       InvestigationContext.py
+¦   ¦       
+¦   +---contracts
+¦   ¦   ¦   agent_state.py
+¦   ¦   ¦   investigation_context.py
+¦   ¦   ¦   runtime_events.py
+¦   ¦   ¦   runtime_snapshot.py
+¦   ¦   ¦   __init__.py
+¦   ¦   ¦   
+¦   ¦   +---__pycache__
+¦   ¦           agent_state.cpython-314.pyc
+¦   ¦           investigation_context.cpython-314.pyc
+¦   ¦           runtime_events.cpython-314.pyc
+¦   ¦           runtime_snapshot.cpython-314.pyc
+¦   ¦           __init__.cpython-314.pyc
+¦   ¦           
+¦   +---events
+¦   ¦       __init__.py
+¦   ¦       
+¦   +---llm
+¦   ¦   ¦   fireworks_adapter.py
+¦   ¦   ¦   inference_adapter.py
+¦   ¦   ¦   mock_adapter.py
+¦   ¦   ¦   
+¦   ¦   +---__pycache__
+¦   ¦           fireworks_adapter.cpython-314.pyc
+¦   ¦           inference_adapter.cpython-314.pyc
+¦   ¦           mock_adapter.cpython-314.pyc
+¦   ¦           
+¦   +---reasoning
+¦   ¦   ¦   models.py
+¦   ¦   ¦   prompt_builder.py
+¦   ¦   ¦   reasoning_engine.py
+¦   ¦   ¦   
+¦   ¦   +---__pycache__
+¦   ¦           models.cpython-314.pyc
+¦   ¦           prompt_builder.cpython-314.pyc
+¦   ¦           reasoning_engine.cpython-314.pyc
+¦   ¦           
+¦   +---__pycache__
+¦           context_builder.cpython-314.pyc
+¦           event_bus.cpython-314.pyc
+¦           intelligence_service.cpython-314.pyc
+¦           runtime_engine.cpython-314.pyc
+¦           __init__.cpython-314.pyc
+¦           
++---shared
+¦   ¦   audit.py
+¦   ¦   config.py
+¦   ¦   exceptions.py
+¦   ¦   security.py
+¦   ¦   
+¦   +---logging
+¦   ¦   ¦   __init__.py
+¦   ¦   ¦   
+¦   ¦   +---__pycache__
+¦   ¦           __init__.cpython-314.pyc
+¦   ¦           
+¦   +---__pycache__
+¦           audit.cpython-314.pyc
+¦           config.cpython-314.pyc
+¦           security.cpython-314.pyc
+¦           
++---storage
+¦   ¦   minio_provider.py
+¦   ¦   provider.py
+¦   ¦   
+¦   +---canonical
+¦   +---exports
+¦   +---generated
+¦   +---processed
+¦   +---raw
+¦   +---__pycache__
+¦           minio_provider.cpython-314.pyc
+¦           
++---__pycache__
+        main.cpython-314.pyc
+        __init__.cpython-314.pyc
+        

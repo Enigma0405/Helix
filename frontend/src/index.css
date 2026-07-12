@@ -6,40 +6,54 @@
    Project Helix — Global CSS Variables & Design Tokens
    ============================================================ */
 :root {
-  /* Primary */
+  /* Lovable / v0 Design Tokens (Deep Graphite Enterprise) */
+  --radius: 0.5rem;
+  --background: 0.17 0.006 260;
+  --foreground: 0.96 0.004 250;
+  --surface: 0.20 0.006 260;
+  --surface-elevated: 0.235 0.007 260;
+  --card: 0.205 0.006 260;
+  --card-foreground: 0.96 0.004 250;
+  --popover: 0.21 0.006 260;
+  --popover-foreground: 0.96 0.004 250;
+  --signal: 0.72 0.14 235;
+  --signal-foreground: 0.15 0.01 260;
+  --signal-muted: 0.55 0.09 235;
+  --primary: 0.72 0.14 235;
+  --primary-foreground: 0.15 0.01 260;
+  --secondary: 0.26 0.007 260;
+  --secondary-foreground: 0.92 0.004 250;
+  --muted: 0.24 0.006 260;
+  --muted-foreground: 0.66 0.01 255;
+  --accent: 0.28 0.01 250;
+  --accent-foreground: 0.96 0.004 250;
+  --destructive: 0.62 0.2 25;
+  --destructive-foreground: 0.98 0 0;
+  --border: 0.28 0.006 260;
+  --border-strong: 0.36 0.008 260;
+  --input: 0.26 0.006 260;
+  --ring: 0.72 0.14 235;
+
+  /* Legacy Helix Tokens (Preserved for Mission Control) */
   --helix-primary: #0F172A;
   --helix-primary-light: #1E293B;
-
-  /* Accent: Electric Blue */
   --helix-accent: #3B82F6;
   --helix-accent-glow: rgba(59, 130, 246, 0.15);
   --helix-accent-bright: rgba(59, 130, 246, 0.6);
-
-  /* AI Purple */
   --helix-ai: #8B5CF6;
   --helix-ai-glow: rgba(139, 92, 246, 0.15);
-
-  /* Evidence Green */
   --helix-evidence: #10B981;
   --helix-evidence-glow: rgba(16, 185, 129, 0.15);
-
-  /* Status */
   --helix-warning: #F59E0B;
   --helix-danger: #EF4444;
   --helix-success: #10B981;
-
-  /* Surfaces */
   --helix-surface: #1E293B;
   --helix-surface-elevated: #334155;
   --helix-border: rgba(148, 163, 184, 0.1);
   --helix-border-strong: rgba(148, 163, 184, 0.2);
-
-  /* Text */
   --helix-text-primary: #F8FAFC;
   --helix-text-secondary: #94A3B8;
   --helix-text-muted: #64748B;
-
-  /* Sidebar */
   --sidebar-width: 256px;
 }
 
@@ -48,14 +62,20 @@
    ============================================================ */
 @layer base {
   * {
-    border-color: var(--helix-border);
+    border-color: oklch(var(--border));
   }
-
-  body {
-    @apply bg-[#0F172A] text-slate-100 font-sans;
-    background-image:
-      radial-gradient(ellipse at 20% 50%, rgba(59, 130, 246, 0.03) 0%, transparent 50%),
-      radial-gradient(ellipse at 80% 20%, rgba(139, 92, 246, 0.03) 0%, transparent 50%);
+  
+  html, body {
+    @apply bg-background text-foreground font-sans;
+    background-color: oklch(var(--background));
+    color: oklch(var(--foreground));
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11", "ss01";
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  
+  ::selection {
+    background: color-mix(in oklch, oklch(var(--signal)) 35%, transparent);
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -226,6 +246,102 @@
   .text-balance {
     text-wrap: balance;
   }
+
+  /* Lovable Utilities */
+  .grid-bg {
+    background-image:
+      linear-gradient(to right, color-mix(in oklch, oklch(var(--border)) 60%, transparent) 1px, transparent 1px),
+      linear-gradient(to bottom, color-mix(in oklch, oklch(var(--border)) 60%, transparent) 1px, transparent 1px);
+    background-size: 56px 56px;
+    mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
+    -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
+  }
+
+  .hairline {
+    border: 1px solid oklch(var(--border));
+  }
+
+  .hairline-strong {
+    border: 1px solid oklch(var(--border-strong));
+  }
+
+  .text-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: oklch(var(--muted-foreground));
+  }
+
+  .signal-dot {
+    position: relative;
+  }
+  .signal-dot::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 9999px;
+    background: oklch(var(--signal));
+    opacity: 0.35;
+    animation: pulse-ring 2.2s ease-out infinite;
+  }
+
+  .animate-fade-up {
+    animation: fade-up 0.6s ease-out both;
+  }
+
+  .flow-line {
+    position: relative;
+    overflow: hidden;
+  }
+  .flow-line::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 0;
+    height: 40%;
+    width: 1px;
+    transform: translateX(-50%);
+    background: linear-gradient(to bottom, transparent, oklch(var(--signal)), transparent);
+    animation: flow-down 2.4s linear infinite;
+  }
+
+  .bg-background {
+    background-color: oklch(var(--background));
+  }
+  .text-foreground {
+    color: oklch(var(--foreground));
+  }
+  .border-border {
+    border-color: oklch(var(--border));
+  }
+  .text-muted-foreground {
+    color: oklch(var(--muted-foreground));
+  }
+  .bg-surface {
+    background-color: oklch(var(--surface));
+  }
+  .bg-surface\/60 {
+    background-color: color-mix(in oklch, oklch(var(--surface)) 60%, transparent);
+  }
+  .bg-surface\/40 {
+    background-color: color-mix(in oklch, oklch(var(--surface)) 40%, transparent);
+  }
+  .bg-surface\/50 {
+    background-color: color-mix(in oklch, oklch(var(--surface)) 50%, transparent);
+  }
+  .text-signal {
+    color: oklch(var(--signal));
+  }
+  .bg-signal {
+    background-color: oklch(var(--signal));
+  }
+  .bg-signal\/90 {
+    background-color: color-mix(in oklch, oklch(var(--signal)) 90%, transparent);
+  }
+  .text-signal-foreground {
+    color: oklch(var(--signal-foreground));
+  }
 }
 
 /* ============================================================
@@ -258,6 +374,35 @@
 
 @keyframes spin-slow {
   to { transform: rotate(360deg); }
+}
+
+/* Lovable Animations */
+@keyframes pulse-ring {
+  0% { transform: scale(1); opacity: 0.5; }
+  80% { transform: scale(2.4); opacity: 0; }
+  100% { transform: scale(2.4); opacity: 0; }
+}
+
+@keyframes flow-down {
+  0% { transform: translateY(-100%); opacity: 0; }
+  15% { opacity: 1; }
+  85% { opacity: 1; }
+  100% { transform: translateY(100%); opacity: 0; }
+}
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes stage-glow {
+  0%, 100% { box-shadow: 0 0 0 1px oklch(var(--border)); }
+  50% { box-shadow: 0 0 0 1px color-mix(in oklch, oklch(var(--signal)) 55%, transparent), 0 0 24px -6px color-mix(in oklch, oklch(var(--signal)) 45%, transparent); }
+}
+
+@keyframes bar-fill {
+  from { width: 0%; }
+  to { width: var(--to, 82%); }
 }
 
 /* ============================================================

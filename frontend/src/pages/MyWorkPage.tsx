@@ -13,7 +13,7 @@ export const MyWorkPage: React.FC = () => {
 
   // Filter to investigations assigned to or created by current user
   const myInvestigations = investigations.filter(
-    (inv: any) => inv.created_by === currentUser?.user_id || inv.assigned_to === currentUser?.user_id
+    (inv: any) => inv.created_by === currentUser?.id || inv.assigned_to === currentUser?.id
   );
 
   // All open investigations if no personal filter matches (fallback for demo)

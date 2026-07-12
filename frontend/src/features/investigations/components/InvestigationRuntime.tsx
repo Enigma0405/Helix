@@ -1,77 +1,74 @@
 import React from "react";
-import { Cpu, CheckCircle2, Circle, ArrowRight, Sparkles, Activity, FileText, BrainCircuit, Loader2, Database, Network } from "lucide-react";
+import { Cpu, CheckCircle2, Circle, ArrowRight, Sparkles, Activity, FileText, BrainCircuit, Loader2, Database, Network, AlertTriangle } from "lucide-react";
 import { SimulationPhase } from "../hooks/useInvestigationSimulation";
 
 interface InvestigationRuntimeProps {
   investigation: any;
   evidenceItems: any[];
-  hypotheses: any[];
+  assessment?: any;
   simulation?: any;
 }
 
 export const InvestigationRuntime: React.FC<InvestigationRuntimeProps> = ({ 
   investigation, 
   evidenceItems,
-  hypotheses,
+  assessment,
   simulation
 }) => {
-  const phase: SimulationPhase = simulation?.phase || 'READY';
+  const phase: SimulationPhase = simulation?.phase || 'IDLE';
+  const confidenceScore = assessment?.confidence?.score || 0;
   
-  // Safely extract context variables, providing generic fallbacks if context is still loading
-  const ctx = simulation?.context || {};
-  const equipmentId = ctx.equipment?.equipment_id || "Equipment";
-  const calibrationId = ctx.calibration?.calibration_id || "Calibration Log";
-  const historicalCaseId = ctx.historical_match?.investigation_id || "Historical Case";
-  const primarySop = ctx.sop?.primary || "Applicable SOP";
-  const primaryRegulation = ctx.regulations?.[0] || "Applicable Regulation";
-  const confidenceScore = ctx.confidence?.score || 91;
-  const confidenceBoost = ctx.confidence?.boost || "+8%";
-
-  // Define agent blocks as Graph Traversals
+  // Define agent blocks as live progress Traversals
   const blocks = [
     {
-      id: "evidence",
-      name: "Evidence & Context",
+      id: "uploading",
+      name: "Evidence Ingestion",
       icon: <Database size={14} className="text-blue-400" />,
-      isActive: phase === 'INITIALIZING',
-      isDone: phase !== 'INITIALIZING',
-      actionText: "Loading equipment context...",
-      resultText: `Linked Equipment ${equipmentId}`,
-      reason: null,
-      confidenceBoost: null
+      isActive: phase === 'UPLOADING',
+      isDone: phase === 'PARSING' || phase === 'RETRIEVING' || phase === 'RANKING' || phase === 'REASONING' || phase === 'READY',
+      actionText: "Uploading Evidence...",
+      resultText: "Evidence Uploaded",
+      reason: null
     },
     {
-      id: "timeline",
-      name: "Calibration & Timeline",
-      icon: <Activity size={14} className="text-amber-400" />,
-      isActive: phase === 'SEARCHING',
-      isDone: phase === 'REASONING' || phase === 'DRAFTING' || phase === 'READY',
-      actionText: "Pulling calibration logs...",
-      resultText: `Checked ${calibrationId}`,
-      reason: "Calibration log confirms recent drift out of specification for probe T-402.",
-      confidenceBoost: null
+      id: "parsing",
+      name: "Document Processing",
+      icon: <FileText size={14} className="text-amber-400" />,
+      isActive: phase === 'PARSING',
+      isDone: phase === 'RETRIEVING' || phase === 'RANKING' || phase === 'REASONING' || phase === 'READY',
+      actionText: "Parsing Documents...",
+      resultText: "Documents Parsed",
+      reason: null
     },
     {
-      id: "knowledge",
-      name: "Regulatory Graph",
+      id: "retrieving",
+      name: "Organization Memory",
       icon: <Network size={14} className="text-violet-400" />,
-      isActive: phase === 'REASONING',
-      isDone: phase === 'DRAFTING' || phase === 'READY',
-      actionText: "Traversing Knowledge Graph...",
-      resultText: `Matched ${primarySop} & ${primaryRegulation}`,
-      reason: `Deviation triggers mandatory assessment per ${primaryRegulation} (Equipment).`,
-      confidenceBoost: "+4%"
+      isActive: phase === 'RETRIEVING',
+      isDone: phase === 'RANKING' || phase === 'REASONING' || phase === 'READY',
+      actionText: "Retrieving Organization Knowledge...",
+      resultText: "Knowledge Retrieved",
+      reason: null
     },
     {
-      id: "rootcause",
-      name: "Historical Intelligence",
-      icon: <Sparkles size={14} className="text-emerald-400" />,
-      isActive: phase === 'DRAFTING',
+      id: "ranking",
+      name: "Evidence Ranking",
+      icon: <Activity size={14} className="text-emerald-400" />,
+      isActive: phase === 'RANKING',
+      isDone: phase === 'REASONING' || phase === 'READY',
+      actionText: "Ranking Evidence...",
+      resultText: "Evidence Ranked",
+      reason: null
+    },
+    {
+      id: "reasoning",
+      name: "Intelligence Reasoning",
+      icon: <Sparkles size={14} className="text-pink-400" />,
+      isActive: phase === 'REASONING',
       isDone: phase === 'READY',
-      actionText: "Searching historical cases...",
-      resultText: `Found Match: ${historicalCaseId}`,
-      reason: "Historical case exhibits identical temperature excursion due to probe failure.",
-      confidenceBoost: confidenceBoost
+      actionText: "Running Reasoning...",
+      resultText: "Assessment Generated",
+      reason: null
     }
   ];
 
@@ -83,15 +80,26 @@ export const InvestigationRuntime: React.FC<InvestigationRuntimeProps> = ({
       <div className="flex items-center justify-between mb-6 relative z-10 border-b border-white/5 pb-4">
         <h3 className="font-bold text-lg text-slate-100 flex items-center gap-2">
           <Cpu size={18} className="text-violet-400" />
-          Enterprise Knowledge Graph
+          Intelligence Layer
         </h3>
-        {phase === 'READY' ? (
-          <span className="text-[10px] font-bold tracking-widest text-emerald-400 bg-emerald-500/10 px-2 py-1 rounded border border-emerald-500/20">
-            READY FOR REVIEW
-          </span>
-        ) : (
+        {phase === 'READY' && assessment ? (
+          <div className="flex items-center gap-3">
+            {simulation?.processingTime > 0 && (
+              <span className="text-[10px] font-bold tracking-widest text-slate-400 uppercase">
+                Processing Time {simulation.processingTime.toFixed(1)}s
+              </span>
+            )}
+            <span className="text-[10px] font-bold tracking-widest text-emerald-400 bg-emerald-500/10 px-2 py-1 rounded border border-emerald-500/20 flex items-center gap-1">
+              <CheckCircle2 size={12} /> CONFIDENCE: {confidenceScore}%
+            </span>
+          </div>
+        ) : phase !== 'IDLE' ? (
           <span className="text-[10px] font-bold tracking-widest text-violet-400 bg-violet-500/10 px-2 py-1 rounded border border-violet-500/20 shadow-ai animate-pulse">
             TRAVERSING
+          </span>
+        ) : (
+          <span className="text-[10px] font-bold tracking-widest text-slate-400 bg-slate-500/10 px-2 py-1 rounded border border-slate-500/20">
+            IDLE
           </span>
         )}
       </div>
@@ -119,50 +127,61 @@ export const InvestigationRuntime: React.FC<InvestigationRuntimeProps> = ({
                     {block.resultText}
                   </div>
                 )}
-
-                {block.isDone && block.reason && (
-                  <div className="space-y-1 mt-2 bg-black/20 p-2 rounded border border-white/5">
-                    <p className="text-xs text-slate-300 font-medium">{block.reason}</p>
-                  </div>
-                )}
-
-                {block.isDone && block.confidenceBoost && (
-                  <div className="space-y-1 mt-2">
-                    <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-400 bg-emerald-500/10 px-2 py-1 rounded border border-emerald-500/20 uppercase tracking-widest">
-                      <Sparkles size={10} />
-                      Confidence {block.confidenceBoost}
-                    </span>
-                  </div>
-                )}
               </div>
             </div>
           );
         })}
-        {/* Knowledge Sources Verification */}
-        {phase !== 'INITIALIZING' && (
-          <div className="pt-4 border-t border-white/5 mt-4">
-            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2 block">Knowledge Sources Consulted</span>
-            <div className="grid grid-cols-2 gap-2">
-              <div className="flex items-center gap-1.5 text-xs text-slate-300">
-                <CheckCircle2 size={12} className="text-emerald-500" /> Equipment Registry
+        
+        {/* Render Real Assessment Details when Ready */}
+        {phase === 'READY' && assessment && (
+          <div className="pt-4 border-t border-white/5 mt-4 space-y-4 animate-in fade-in duration-500">
+            {/* Missing Evidence */}
+            {assessment.missing_evidence && assessment.missing_evidence.length > 0 && (
+              <div className="bg-amber-500/10 border border-amber-500/20 rounded-lg p-3">
+                <h4 className="text-xs font-bold text-amber-400 flex items-center gap-2 mb-2">
+                  <AlertTriangle size={14} /> Missing Evidence Flagged
+                </h4>
+                <ul className="list-disc pl-4 space-y-1">
+                  {assessment.missing_evidence.map((me: any, i: number) => (
+                    <li key={i} className="text-xs text-amber-200/80">{me.description} (Priority: {me.priority})</li>
+                  ))}
+                </ul>
               </div>
-              <div className={`flex items-center gap-1.5 text-xs ${phase === 'SEARCHING' ? 'text-slate-500' : 'text-slate-300'}`}>
-                {phase === 'SEARCHING' ? <Circle size={12} className="text-slate-600" /> : <CheckCircle2 size={12} className="text-emerald-500" />} 
-                Calibration Records
+            )}
+            
+            {/* Contradictions */}
+            {assessment.contradictions && assessment.contradictions.length > 0 && (
+              <div className="bg-rose-500/10 border border-rose-500/20 rounded-lg p-3">
+                <h4 className="text-xs font-bold text-rose-400 flex items-center gap-2 mb-2">
+                  <AlertTriangle size={14} /> Contradictions Detected
+                </h4>
+                <ul className="list-disc pl-4 space-y-1">
+                  {assessment.contradictions.map((c: any, i: number) => (
+                    <li key={i} className="text-xs text-rose-200/80">{c.description}</li>
+                  ))}
+                </ul>
               </div>
-              <div className={`flex items-center gap-1.5 text-xs ${phase === 'SEARCHING' || phase === 'REASONING' ? 'text-slate-500' : 'text-slate-300'}`}>
-                {phase === 'SEARCHING' || phase === 'REASONING' ? <Circle size={12} className="text-slate-600" /> : <CheckCircle2 size={12} className="text-emerald-500" />} 
-                Regulatory Guidance
+            )}
+
+            {/* Citations used */}
+            {assessment.evidence && assessment.evidence.length > 0 && (
+              <div className="bg-blue-500/5 border border-blue-500/10 rounded-lg p-3">
+                <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2 block">Citations Used</h4>
+                <div className="space-y-2">
+                  {assessment.evidence.slice(0, 3).map((ev: any, i: number) => (
+                    <div key={i} className="text-xs text-slate-300 flex items-start gap-2">
+                      <CheckCircle2 size={12} className="text-blue-400 mt-0.5 shrink-0" />
+                      <span className="truncate">{ev.source}</span>
+                    </div>
+                  ))}
+                  {assessment.evidence.length > 3 && (
+                    <div className="text-xs text-slate-500 pl-5">
+                      + {assessment.evidence.length - 3} more citations
+                    </div>
+                  )}
+                </div>
               </div>
-              <div className={`flex items-center gap-1.5 text-xs ${phase === 'SEARCHING' || phase === 'REASONING' ? 'text-slate-500' : 'text-slate-300'}`}>
-                {phase === 'SEARCHING' || phase === 'REASONING' ? <Circle size={12} className="text-slate-600" /> : <CheckCircle2 size={12} className="text-emerald-500" />} 
-                SOP Library
-              </div>
-              <div className={`flex items-center gap-1.5 text-xs ${phase !== 'READY' ? 'text-slate-500' : 'text-slate-300'}`}>
-                {phase !== 'READY' ? <Circle size={12} className="text-slate-600" /> : <CheckCircle2 size={12} className="text-emerald-500" />} 
-                Historical Investigations
-              </div>
-            </div>
+            )}
           </div>
         )}
       </div>

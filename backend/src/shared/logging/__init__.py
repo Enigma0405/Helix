@@ -20,6 +20,7 @@ def setup_logging():
         "runtime": logging.getLogger("helix.runtime"),
         "security": logging.getLogger("helix.security"),
         "ingestion": logging.getLogger("helix.ingestion"),
+        "knowledge": logging.getLogger("helix.knowledge"),
     }
     
     for name, logger in loggers.items():
@@ -33,3 +34,4 @@ audit_logger = loggers["audit"]
 runtime_logger = loggers["runtime"]
 security_logger = loggers["security"]
 ingestion_logger = loggers["ingestion"]
+knowledge_logger = loggers["knowledge"]

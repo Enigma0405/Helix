@@ -66,6 +66,8 @@ export const investigationsApi = {
   update: (id: string, data: Record<string, unknown>) =>
     apiClient.patch(`/investigations/${id}`, data),
   delete: (id: string) => apiClient.delete(`/investigations/${id}`),
+  assess: (id: string, question: string) => 
+    apiClient.post(`/investigations/${id}/assess`, { question }),
   // Stats endpoint doesn't exist in backend — gracefully ignore 404
   stats: () => apiClient.get('/investigations').catch(() => ({ data: { items: [] } })),
 }

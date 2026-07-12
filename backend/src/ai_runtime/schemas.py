@@ -78,3 +78,6 @@ class InvestigationSummaryOut(BaseModel):
     model: str
     cost_usd: float
     latency_ms: float
+
+class AssessRequest(BaseModel):
+    question: str = Field(..., description="The question or description to generate the assessment for.")

@@ -1,77 +1,59 @@
 import { useState, useEffect } from 'react';
-import { apiClient } from '@/api/client';
 
-export type SimulationPhase = 'INITIALIZING' | 'SEARCHING' | 'REASONING' | 'DRAFTING' | 'READY';
+export type SimulationPhase = 'IDLE' | 'UPLOADING' | 'PARSING' | 'RETRIEVING' | 'RANKING' | 'REASONING' | 'READY';
 
-export function useInvestigationSimulation(investigationId: string, equipmentId: string | null = null, delayMs = 2000) {
-  const [phase, setPhase] = useState<SimulationPhase>('INITIALIZING');
-  const [confidence, setConfidence] = useState(89);
-  const [confidenceReason, setConfidenceReason] = useState<string | null>(null);
-  const [context, setContext] = useState<any>(null);
+export function useInvestigationSimulation(isAssessing: boolean) {
+  const [phase, setPhase] = useState<SimulationPhase>('IDLE');
+  const [startTime, setStartTime] = useState<number | null>(null);
+  const [processingTime, setProcessingTime] = useState<number>(0);
 
   useEffect(() => {
-    // 1. Fetch Organization Memory Context
-    let isMounted = true;
-    
-    const fetchContext = async () => {
-      try {
-        const queryParams = equipmentId ? `?equipment_id=${equipmentId}` : '';
-        const response = await apiClient.get(`/investigations/${investigationId}/context${queryParams}`);
-        if (isMounted) {
-          setContext(response.data);
-        }
-      } catch (err) {
-        console.error("Failed to fetch investigation context:", err);
-      }
-    };
-    
-    fetchContext();
+    if (isAssessing && phase === 'IDLE') {
+      setPhase('UPLOADING');
+      setStartTime(Date.now());
+    }
 
-    return () => { isMounted = false; };
-  }, [investigationId, equipmentId]);
-
-  useEffect(() => {
-    if (!context) return; // Wait for context before running simulation
-
-    let t1: NodeJS.Timeout, t2: NodeJS.Timeout, t3: NodeJS.Timeout, t4: NodeJS.Timeout;
-
-    // Phase 1: Searching
-    t1 = setTimeout(() => {
-      setPhase('SEARCHING');
-    }, 1000);
-
-    // Phase 2: Reasoning
-    t2 = setTimeout(() => {
-      setPhase('REASONING');
-      setConfidence(context.confidence?.score || 93);
-      setConfidenceReason(`Checking ${context.calibration?.calibration_id || "Calibration"} and ${context.regulations?.[0] || "Regulation"}`);
-    }, 1000 + delayMs);
-
-    // Phase 3: Drafting
-    t3 = setTimeout(() => {
-      setPhase('DRAFTING');
-      setConfidence((context.confidence?.score || 93) + 6);
-      setConfidenceReason(`Matched Historical Case #${context.historical_match?.investigation_id || "INV-0000"}`);
-    }, 1000 + delayMs * 2);
-
-    // Phase 4: Ready
-    t4 = setTimeout(() => {
+    if (!isAssessing && phase !== 'IDLE' && phase !== 'READY') {
+      // Fast forward to ready when assessment completes
       setPhase('READY');
-    }, 1000 + delayMs * 3);
+      if (startTime) {
+        setProcessingTime((Date.now() - startTime) / 1000);
+      }
+    }
+  }, [isAssessing, phase, startTime]);
 
+  useEffect(() => {
+    if (!isAssessing) return;
+
+    // We only simulate the intermediate steps if we're actively assessing
+    let timeout: ReturnType<typeof setTimeout>;
+    
+    if (phase === 'UPLOADING') {
+      timeout = setTimeout(() => setPhase('PARSING'), 800);
+    } else if (phase === 'PARSING') {
+      timeout = setTimeout(() => setPhase('RETRIEVING'), 1000);
+    } else if (phase === 'RETRIEVING') {
+      timeout = setTimeout(() => setPhase('RANKING'), 1200);
+    } else if (phase === 'RANKING') {
+      timeout = setTimeout(() => setPhase('REASONING'), 1500);
+    }
+    
     return () => {
-      clearTimeout(t1);
-      clearTimeout(t2);
-      clearTimeout(t3);
-      clearTimeout(t4);
+      if (timeout) clearTimeout(timeout);
     };
-  }, [delayMs, context]);
+  }, [phase, isAssessing]);
+
+  // Reset if needed, but typically we just stay READY
+  const reset = () => {
+    setPhase('IDLE');
+    setStartTime(null);
+    setProcessingTime(0);
+  };
 
   return {
     phase,
-    confidence,
-    confidenceReason,
-    context,
-    isComplete: phase === 'READY'
+    reset,
+    isComplete: phase === 'READY',
+    processingTime
   };
 }

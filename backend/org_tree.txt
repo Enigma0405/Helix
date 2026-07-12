@@ -1,0 +1,66 @@
+Folder PATH listing for volume OS
+Volume serial number is 0000021C BCC4:FCC5
+C:\USERS\AS598\DESKTOP\PROJECT ARYAN\PROJECT HELIX\ORGANIZATIONS
++---apex_precision
+    ¦   organization.json
+    ¦   
+    +---organization_memory
+    ¦   +---canonical
+    ¦   ¦       doc_0fe7607018e1ccd5.json
+    ¦   ¦       doc_16067a4aa7639acc.json
+    ¦   ¦       doc_32be9261c4a32f72.json
+    ¦   ¦       doc_3d31da3dc0381147.json
+    ¦   ¦       doc_4183465755359b02.json
+    ¦   ¦       doc_87412adabcfd08f7.json
+    ¦   ¦       doc_9893d10a78e74979.json
+    ¦   ¦       doc_9d7adf33f31f84b8.json
+    ¦   ¦       doc_b63304e2fc771706.json
+    ¦   ¦       doc_d8c2b1d5dcfcedc9.json
+    ¦   ¦       doc_deaadc9e6441265b.json
+    ¦   ¦       doc_e885395bad3ddf6e.json
+    ¦   ¦       doc_f1bda5edbaf17a04.json
+    ¦   ¦       doc_f58f6d075f503c71.json
+    ¦   ¦       doc_fd1b2300baaf0962.json
+    ¦   ¦       
+    ¦   +---chunks
+    ¦   +---entities
+    ¦   +---manifests
+    ¦   +---metadata
+    ¦   ¦       ingestion_manifest.json
+    ¦   ¦       
+    ¦   +---relationships
+    +---source_data
+        +---historical_memory
+        ¦   +---batch_records
+        ¦   ¦       Key Batch Records (01–10).pdf
+        ¦   ¦       
+        ¦   +---investigations
+        ¦           Investigations & CAPAs (01–15).pdf
+        ¦           
+        +---live_evidence
+        ¦   +---incoming_events
+        ¦           incoming_quality_event_package_2026_07_11 (1).pdf
+        ¦           missing_evidence_followup_pack_2026_07_11 (1).pdf
+        ¦           
+        +---organization_seed
+            +---company
+            ¦       Helix (EvidenceOps) Organization Blueprint (1).pdf
+            ¦       Historical Quality Knowledge.pdf
+            ¦       QMS BLUEPRINT.pdf
+            ¦       
+            +---equipment
+            ¦       Detailed Equipment Files (01–10).pdf
+            ¦       
+            +---master_index
+            ¦       Master Index Blueprint (Part 1).pdf
+            ¦       Master Index Blueprint (Part 2).pdf
+            ¦       Master Index Blueprint (Part 3).pdf
+            ¦       
+            +---sops
+            ¦       Core SOPs (01–20).pdf
+            ¦       Core SOPs (21–40).pdf
+            ¦       Core SOPs (41–60).pdf
+            ¦       
+            +---suppliers
+                    Detailed Supplier Files (01–08).pdf
+                    
