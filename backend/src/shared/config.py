@@ -117,6 +117,12 @@ class Settings(BaseSettings):
     # ── Audit ─────────────────────────────────────────────────────────────────
     AUDIT_ENABLED: bool = True
 
+    # ── Ingestion / Organization Memory ───────────────────────────────────────
+    ORGANIZATION_MEMORY_DIR: str = Field(
+        default="../../organization_memory",
+        description="Path to the root of the organization memory repository",
+    )
+
 
 @lru_cache
 def get_settings() -> Settings:
