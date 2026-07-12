@@ -68,6 +68,21 @@ export const InvestigationDetailPage: React.FC = () => {
     }
   };
 
+  // --- Auto Sequence UX ---
+  // 1. Auto-run assessment if evidence is present
+  React.useEffect(() => {
+    if (evidenceItems.length > 0 && !assessmentData && !assessMutation.isPending && !assessMutation.isSuccess) {
+      handleRunAssessment();
+    }
+  }, [evidenceItems.length, assessmentData, assessMutation.isPending, assessMutation.isSuccess]);
+
+  // 2. Auto-run CAPA generation if assessment is complete
+  React.useEffect(() => {
+    if (assessmentData && !capa && !generateCapa.isPending && !generateCapa.isSuccess) {
+      handleGenerateCapa();
+    }
+  }, [assessmentData, capa, generateCapa.isPending, generateCapa.isSuccess]);
+
   if (isInvLoading || isEvLoading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center text-muted-foreground">

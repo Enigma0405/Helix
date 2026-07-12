@@ -5,6 +5,7 @@ import * as zod from "zod";
 import { useLogin } from "@/features/auth/api/useAuth";
 import { useNavigate, Link } from "react-router-dom";
 import { HelixMark } from "@/components/site/chrome";
+import { useAuthStore } from "@/store/auth";
 
 const loginSchema = zod.object({
   email: zod.string().email("Invalid email address"),
@@ -31,17 +32,18 @@ export const LoginPage: React.FC = () => {
   });
 
   const navigate = useNavigate();
+  const token = useAuthStore((s) => s.token);
+  
+  React.useEffect(() => {
+    if (token) {
+      navigate("/app");
+    }
+  }, [token, navigate]);
+
   const loginMutation = useLogin();
 
   const onSubmit = (data: LoginFields) => {
-    loginMutation.mutate(
-      { email: data.email, password: data.password },
-      {
-        onSuccess: () => {
-          navigate("/app");
-        },
-      }
-    );
+    loginMutation.mutate({ email: data.email, password: data.password });
   };
 
   return (
