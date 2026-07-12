@@ -79,6 +79,8 @@ export function useUploadEvidence(investigationId: string) {
         id: `EV-MOCK-${Date.now()}`,
         investigation_id: investigationId,
         original_filename: file.name,
+        filename: file.name,
+        mime_type: file.type || 'application/octet-stream',
         status: 'processed',
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString()
