@@ -204,29 +204,29 @@ Generate structured CAPA recommendations while preserving human approval and com
 
 ## Landing
 
-![Landing Page](./docs/assets/Screenshot%202026-07-13%20180446.png)
+![Landing Page](https://github.com/Enigma0405/Helix/blob/034e7b9f8557bb8e594315b310a3e54c899569eb/docs/assets/Screenshot%202026-07-13%20032420.png)
 
 ---
 
 ## Mission Control
 
-![Mission Control Dashboard](./docs/assets/Screenshot%202026-07-13%20180506.png)
+![Mission Control Dashboard](./docs/assets/Screenshot%202026-07-13%20180600.png)
 
 ---
 
 ## Investigation Workspace
 
-![Investigation Workspace](./docs/assets/Screenshot%202026-07-13%20180529.png)
+![Investigation Workspace](./docs/assets/Screenshot%202026-07-13%20180506.png)
 
 ---
 
 ## Evidence Mapping
 
-![Evidence Mapping](./docs/assets/Screenshot%202026-07-13%20180600.png)
+![Evidence Mapping]
 
 ---
 
-## AI Assessment
+## AI Assessment(./docs/assets/Screenshot%202026-07-13%20180529.png)
 
 ![AI Assessment](./docs/assets/Screenshot%202026-07-13%20180639.png)
 
