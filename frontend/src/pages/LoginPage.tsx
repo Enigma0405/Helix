@@ -5,7 +5,6 @@ import * as zod from "zod";
 import { useLogin } from "@/features/auth/api/useAuth";
 import { useNavigate, Link } from "react-router-dom";
 import { HelixMark } from "@/components/site/chrome";
-import { useAuthStore } from "@/store/auth";
 
 const loginSchema = zod.object({
   email: zod.string().email("Invalid email address"),
@@ -29,21 +28,24 @@ function Pillar({ k, d }: { k: string; d: string }) {
 export const LoginPage: React.FC = () => {
   const { register, handleSubmit, formState: { errors } } = useForm<LoginFields>({
     resolver: zodResolver(loginSchema),
+    defaultValues: {
+      email: "sarah.chen@apex.com",
+      password: "password123",
+    }
   });
 
   const navigate = useNavigate();
-  const token = useAuthStore((s) => s.token);
-  
-  React.useEffect(() => {
-    if (token) {
-      navigate("/app");
-    }
-  }, [token, navigate]);
-
   const loginMutation = useLogin();
 
   const onSubmit = (data: LoginFields) => {
-    loginMutation.mutate({ email: data.email, password: data.password });
+    loginMutation.mutate(
+      { email: data.email, password: data.password },
+      {
+        onSuccess: () => {
+          navigate("/app");
+        },
+      }
+    );
   };
 
   return (
@@ -117,7 +119,7 @@ export const LoginPage: React.FC = () => {
                 placeholder="name@company.com"
                 autoComplete="email"
                 {...register("email")}
-                className="w-full bg-input/60 hairline rounded-md px-3.5 py-2.5 text-[13.5px] text-foreground placeholder:text-muted-foreground/60 outline-none focus:border-signal/60 focus:ring-2 focus:ring-signal/20 transition"
+                className="w-full bg-input/60 hairline rounded-md px-3.5 py-2.5 text-[13.5px] text-black placeholder:text-muted-foreground/60 outline-none focus:border-signal/60 focus:ring-2 focus:ring-signal/20 transition"
               />
               {errors.email && <p className="mt-1 text-[11px] text-red-500">{errors.email.message}</p>}
             </div>
@@ -137,7 +139,7 @@ export const LoginPage: React.FC = () => {
                 placeholder="••••••••••••"
                 autoComplete="current-password"
                 {...register("password")}
-                className="w-full bg-input/60 hairline rounded-md px-3.5 py-2.5 text-[13.5px] text-foreground placeholder:text-muted-foreground/60 outline-none focus:border-signal/60 focus:ring-2 focus:ring-signal/20 transition"
+                className="w-full bg-input/60 hairline rounded-md px-3.5 py-2.5 text-[13.5px] text-black placeholder:text-muted-foreground/60 outline-none focus:border-signal/60 focus:ring-2 focus:ring-signal/20 transition"
               />
               {errors.password && <p className="mt-1 text-[11px] text-red-500">{errors.password.message}</p>}
             </div>

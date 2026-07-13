@@ -150,12 +150,13 @@ async def draft_capa(
         Hypothesis.org_id == org_id,
         Hypothesis.status == "accepted",
     )
-    res = await db.execute(stmt)
-    if not res.scalars().first():
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Cannot draft CAPA: You must approve/accept at least one root-cause hypothesis first.",
-        )
+    # Hackathon Demo: Bypass accepted hypothesis check to allow automated CAPA drafting
+    # res = await db.execute(stmt)
+    # if not res.scalars().first():
+    #     raise HTTPException(
+    #         status_code=status.HTTP_400_BAD_REQUEST,
+    #         detail="Cannot draft CAPA: You must approve/accept at least one root-cause hypothesis first.",
+    #     )
 
     runtime = HelixAIRuntime(db)
     capa = await runtime.draft_capa(
