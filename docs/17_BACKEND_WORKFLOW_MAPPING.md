@@ -1,68 +1,49 @@
-# Helix Backend Workflow & Architecture Mapping
+# Helix Runtime Architecture — EvidenceOps Execution Engine
 
-This document provides a highly detailed, strict mapping of the backend logic, sequences, and data pointers exactly as they are coded in the Project Helix backend. This map is specifically designed so that any frontend or UI framework can interpret the exact data structures and sequence requirements to build a flawless, error-free MVP interface on top of this backend.
+This document provides a highly detailed mapping of the Helix execution runtime. It defines the behavioral models, system topology, data structures, and enterprise guarantees necessary to operate an AI-native Enterprise Operating System in highly regulated industries.
 
-## 1. Core System Topology
+---
 
-The backend is built as an asynchronous REST API utilizing FastAPI, PostgreSQL, `pgvector`, MinIO, and Fireworks AI.
+## 1. Runtime Principles
+
+The Helix engine operates under a strict set of deterministic principles:
+* Everything entering Helix is treated as an **Operational Event**.
+* Every event is parsed into structured knowledge.
+* AI never reasons without evidence.
+* Every conclusion references supporting evidence.
+* Every decision is explainable.
+* Humans remain accountable for regulated decisions.
+* Every completed investigation strengthens Organization Memory.
+
+---
+
+## 2. The EvidenceOps Operating Model
+
+Unlike a standard CRUD application, the Helix architecture is designed as a continuous loop of verification, reasoning, and archival.
 
 ```mermaid
-graph TD
-    subgraph Frontend / Consumers
-        UI[Any Frontend Client]
-    end
-
-    subgraph API Routing Layer
-        AuthRouter[/auth/*]
-        InvestRouter[/api/investigations/*]
-        EvidenceRouter[/api/evidence/*]
-        KnowledgeRouter[/api/knowledge/*]
-        AIRouter[/api/ai-runtime/*]
-    end
-
-    subgraph Service & Logic Layer
-        AuthSvc[JWT Auth & RBAC]
-        OrgMemSvc[Knowledge Retrieval]
-        EvidenceSvc[Storage Manager]
-        ReasoningSvc[AI Inference Engine]
-    end
-
-    subgraph Persistence Layer
-        DB[(PostgreSQL + pgvector)]
-        Blob[(MinIO Object Storage)]
-    end
-
-    subgraph External Dependencies
-        FW[Fireworks AI API]
-    end
-
-    UI --> AuthRouter
-    UI --> InvestRouter
-    UI --> EvidenceRouter
-    UI --> KnowledgeRouter
-    UI --> AIRouter
-
-    AuthRouter --> AuthSvc
-    InvestRouter --> ReasoningSvc
-    EvidenceRouter --> EvidenceSvc
-    KnowledgeRouter --> OrgMemSvc
-    AIRouter --> ReasoningSvc
-
-    AuthSvc --> DB
-    OrgMemSvc --> DB
-    ReasoningSvc --> DB
-    ReasoningSvc --> FW
-    EvidenceSvc --> Blob
-    EvidenceSvc --> DB
+flowchart TD
+    E1[Operational Event] --> E2[Event Parser]
+    E2 --> E3[Entity Extraction]
+    E3 --> E4[Relationship Mapping]
+    E4 --> E5[Organization Memory]
+    E5 --> E6[AI Cross Verification]
+    E6 --> E7[Operational Signal]
+    E7 --> E8[Investigation Context]
+    E8 --> E9[Evidence Correlation]
+    E9 --> E10[Reasoning]
+    E10 --> E11[Assessment]
+    E11 --> E12[CAPA]
+    E12 --> E13[Human Review]
+    E13 --> E14[Historical Learning]
+    E14 -->|Loop Closed| E5
 ```
 
 ---
 
-## 2. The EvidenceOps Pipeline (End-to-End Workflow)
+## 3. Runtime Execution Pipeline
 
-This is the exact operational sequence any frontend MUST follow to execute an investigation from start to finish.
-
-### Workflow Sequence Diagram
+When an operational event breaches safety thresholds, the execution pipeline automatically triggers a deterministic sequence bridging human input, the `pgvector` knowledge graph, and the Fireworks AI inference engine.
 
 ```mermaid
 sequenceDiagram
@@ -71,39 +52,38 @@ sequenceDiagram
     participant Inv as Investigation API
     participant Evid as Evidence API
     participant AI as AI Runtime API
-    participant DB as PostgreSQL
+    participant DB as PostgreSQL / pgvector
     participant S3 as MinIO
 
-    %% Step 1: Auth
+    %% Auth
     UI->>Auth: POST /auth/login (email, password)
     Auth->>DB: Verify credentials
     Auth-->>UI: JWT Bearer Token
 
-    %% Step 2: Initialization
-    UI->>Inv: POST /api/investigations (title, description, severity)
+    %% Initialization
+    UI->>Inv: POST /api/investigations (Operational Signal triggered)
     Inv->>DB: INSERT INTO investigations
-    DB-->>Inv: investigation_id
     Inv-->>UI: 201 Created (investigation_id)
 
-    %% Step 3: Evidence Ingestion
+    %% Evidence Ingestion
     UI->>Evid: POST /api/evidence/upload (file, investigation_id)
     Evid->>S3: PutObject(file_bytes)
     Evid->>DB: INSERT INTO evidence (storage_key, hash)
     Evid->>DB: INSERT INTO audit_logs (action='upload')
     Evid-->>UI: 201 Created (evidence_id)
 
-    %% Step 4: AI Cross-Verification (Assessment)
+    %% AI Cross-Verification (Assessment)
     UI->>AI: POST /api/investigations/{id}/hypotheses
     AI->>DB: SELECT document_chunks WHERE vector matches query
     AI->>DB: SELECT evidence content
     AI->>AI: Build Context Prompt
-    AI->>Fireworks AI: Execute RAG Inference (Structured JSON)
+    AI->>Fireworks AI: Execute Inference (Structured JSON)
     Fireworks AI-->>AI: Deterministic Root Cause Hypotheses
     AI->>DB: INSERT INTO hypotheses
     AI->>DB: INSERT INTO audit_logs
     AI-->>UI: 201 Created [Hypotheses List]
 
-    %% Step 5: CAPA Generation
+    %% CAPA Generation
     UI->>AI: POST /api/investigations/{id}/capa
     AI->>DB: SELECT accepted hypotheses
     AI->>Fireworks AI: Generate Action Plan (Structured JSON)
@@ -111,7 +91,7 @@ sequenceDiagram
     AI->>DB: INSERT INTO capas (status='draft')
     AI-->>UI: 201 Created (CAPA Object)
 
-    %% Step 6: Human Approval
+    %% Human Approval
     UI->>AI: POST /api/capa/{id}/approve
     AI->>DB: UPDATE capas SET status='approved'
     AI->>DB: UPDATE investigations SET status='closed'
@@ -121,11 +101,28 @@ sequenceDiagram
 
 ---
 
-## 3. Strict Relational Data Pointers
+## 4. AI Agent Execution Flow
 
-To render the architecture seamlessly on the frontend, the UI must respect the backend's strict foreign key relationships and multi-tenant isolation. Every entity relies heavily on UUID pointers.
+To process complex quality investigations autonomously, Helix orchestrates specialized reasoning agents synchronously within the runtime.
 
-### Database Pointer Map
+```mermaid
+flowchart TD
+    A1(Event Received) --> A2[Evidence Agent]
+    A2 --> A3[Knowledge Agent]
+    A3 --> A4[Timeline Agent]
+    A4 --> A5[Root Cause Agent]
+    A5 --> A6[Confidence Agent]
+    A6 --> A7[Risk Agent]
+    A7 --> A8[CAPA Agent]
+    A8 --> A9[Compliance Agent]
+    A9 --> A10(Executive Summary)
+```
+
+---
+
+## 5. Strict Relational Data Pointers
+
+To render the architecture seamlessly on any interface, the UI must respect the backend's strict foreign key relationships and multi-tenant isolation. Every entity relies heavily on UUID pointers.
 
 ```mermaid
 erDiagram
@@ -168,37 +165,50 @@ erDiagram
 
 ---
 
-## 4. API Endpoints & State Mutations
+## 6. Confidence Engine
 
-Any frontend framework mapping this architecture must implement state mutations corresponding strictly to these endpoints.
-
-### Organization Memory (Knowledge Base)
-- **`POST /api/knowledge/documents`**: Uploads raw canonical documents (SOPs, manuals). The backend automatically chunks the document, generates vector embeddings, and stores them in `document_chunks`.
-- **`GET /api/knowledge/search?query=...`**: Performs a cosine similarity search across `pgvector` to return the closest chunks. (Used internally by the AI, but exposed for UI testing).
-
-### Event & Evidence Ingestion
-- **`POST /api/investigations`**: Initializes an event. The UI must transition its state to an "Active Investigation" workspace.
-- **`POST /api/evidence/upload`**: Uploads a file (multipart/form-data). The backend streams it to MinIO. The UI should poll or wait for the 201 response before allowing the user to trigger the AI Assessment.
-
-### AI Runtime (Deterministic Constraints)
-- **`POST /api/investigations/{id}/hypotheses`**: This is the core Reasoning engine. 
-  - **Constraint:** Requires the user's JWT to have the `analyst` or `admin` role (enforced via `Depends(require_analyst)`).
-  - **Logic:** The backend fetches `org_id` context, pulls vector similarities, and forces Fireworks AI to return an array of hypotheses.
-- **`POST /api/investigations/{id}/capa`**: Drafts the CAPA.
-  - **Constraint:** In a strict production environment, this checks if at least one hypothesis in the DB has `status = 'accepted'`. (Note: Bypassed for MVP demo automation).
-- **`POST /api/capa/{id}/approve`**: 
-  - **Constraint:** In production, usually restricted to the `reviewer` role. This is the only endpoint that mutates an Investigation's status to `closed`.
-
-### The Audit Ledger
-- **`GET /api/investigations/{id}/audit`**: Returns a chronologically ordered array of events. 
-  - **Logic:** The backend inserts an audit log for absolutely every mutation (creation, uploads, AI generation, approval). Any UI building a "Traceability Graph" or "Master Record" must map directly to this endpoint.
+Helix does not rely on subjective AI hallucination. The **Confidence Score** is mathematically derived from the following vectors during the runtime execution:
+* **Evidence Coverage:** Percentage of the operational event corroborated by physical data logs.
+* **Historical Similarity:** Proximity vector to historical CAPAs within the Organization Memory.
+* **Cross Verification Success:** Validation against active SOP thresholds.
+* **Regulatory Alignment:** Verification against relevant regulatory citations (e.g., 21 CFR 211).
+* **Missing Evidence Penalty:** Deductions applied if chronological links in the chain-of-custody are absent.
+* **Contradiction Penalty:** Deductions applied if raw evidence conflicts with stated human hypotheses.
 
 ---
 
-## 5. Security & Isolation Constraints for Frontend Implementation
+## 7. Explainability Contract
 
-If you are building a new UI (React, Vue, Svelte, iOS) on top of this backend, you MUST adhere to the following constraints established by the FastAPI routers:
+To maintain 21 CFR Part 11 and general regulatory compliance, every AI inference passed through the Helix engine is bound by an Explainability Contract. Every structured JSON output from the Fireworks API MUST include:
 
-1. **JWT Propagation:** Every request to `/api/*` requires the `Authorization: Bearer <token>` header. A `401 Unauthorized` response indicates token expiration; the UI must wipe state and redirect to `/login`.
-2. **Tenant Transparency:** The frontend NEVER needs to send an `org_id` in API payloads. The backend extracts the `org_id` directly from the JWT. The UI only operates within the bounds of the authenticated tenant.
-3. **Immutability:** There are no `DELETE` or `PUT` endpoints exposed for Audit Logs or finalized CAPAs. The frontend should never present a "delete" button for finalized evidence or CAPAs, as the backend will reject it to maintain 21 CFR Part 11 compliance.
+```json
+{
+  "evidence_used": ["..."],
+  "knowledge_referenced": ["..."],
+  "reasoning_steps": ["..."],
+  "confidence": 0.88,
+  "evidence_gaps": ["..."],
+  "alternative_hypotheses": ["..."],
+  "recommended_actions": ["..."]
+}
+```
+
+---
+
+## 8. Enterprise Runtime Guarantees
+
+Any UI framework connecting to the Helix backend must adhere to the following guarantees established by the FastAPI routing layer:
+
+* **Tenant Isolation:** The frontend NEVER transmits an `org_id`. The backend infers isolation directly from the cryptographic JWT, guaranteeing zero data bleed between tenants.
+* **Immutable Audit Trail:** There are no `DELETE` or `PUT` endpoints exposed for Audit Logs or finalized evidence. The runtime strictly rejects mutations to historical facts.
+* **Explainability:** All AI assertions maintain a foreign-key pointer back to the raw `document_chunk_id` that inspired them.
+* **Human Approval:** The runtime structurally prevents an Investigation status from changing to `closed` without a `POST /approve` call bound to a human actor's UUID.
+* **Role-Based Access Control (RBAC):** Inference generation requires `analyst` privileges; CAPA approvals require `reviewer` privileges. 
+* **Traceability:** Every mutation is chronologically written to the `audit_logs` relation before 201 responses are sent.
+* **Event Sourcing:** The current state of an investigation is inherently reproducible by re-running its audit log from inception.
+
+---
+
+## 9. The Behavioral Contract
+
+Helix does not automate regulated decisions. It automates evidence collection, verification, correlation, and reasoning while ensuring every conclusion remains transparent, traceable, and evidence-backed. Human users remain accountable for approvals, while every completed investigation enriches Organization Memory and improves future investigations.
