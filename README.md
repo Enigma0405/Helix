@@ -372,7 +372,7 @@ Email:
 demo@helix.ai
 
 Password:
-********
+Password123
 ```
 
 ---

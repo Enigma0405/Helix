@@ -29,8 +29,8 @@ export const LoginPage: React.FC = () => {
   const { register, handleSubmit, formState: { errors } } = useForm<LoginFields>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      email: "sarah.chen@apex.com",
-      password: "password123",
+      email: "demo@helix.ai",
+      password: "Password123",
     }
   });
 
@@ -119,7 +119,7 @@ export const LoginPage: React.FC = () => {
                 placeholder="name@company.com"
                 autoComplete="email"
                 {...register("email")}
-                className="w-full bg-input/60 hairline rounded-md px-3.5 py-2.5 text-[13.5px] text-black placeholder:text-muted-foreground/60 outline-none focus:border-signal/60 focus:ring-2 focus:ring-signal/20 transition"
+                className="w-full bg-input/60 hairline rounded-md px-3.5 py-2.5 text-[13.5px] text-foreground placeholder:text-muted-foreground/60 outline-none focus:border-signal/60 focus:ring-2 focus:ring-signal/20 transition"
               />
               {errors.email && <p className="mt-1 text-[11px] text-red-500">{errors.email.message}</p>}
             </div>
@@ -139,7 +139,7 @@ export const LoginPage: React.FC = () => {
                 placeholder="••••••••••••"
                 autoComplete="current-password"
                 {...register("password")}
-                className="w-full bg-input/60 hairline rounded-md px-3.5 py-2.5 text-[13.5px] text-black placeholder:text-muted-foreground/60 outline-none focus:border-signal/60 focus:ring-2 focus:ring-signal/20 transition"
+                className="w-full bg-input/60 hairline rounded-md px-3.5 py-2.5 text-[13.5px] text-foreground placeholder:text-muted-foreground/60 outline-none focus:border-signal/60 focus:ring-2 focus:ring-signal/20 transition"
               />
               {errors.password && <p className="mt-1 text-[11px] text-red-500">{errors.password.message}</p>}
             </div>
