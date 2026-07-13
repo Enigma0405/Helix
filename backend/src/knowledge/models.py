@@ -105,3 +105,46 @@ class Embedding(Base):
     created_at: Mapped[datetime] = mapped_column(server_default=func.now())
 
     chunk: Mapped[Chunk] = relationship("Chunk", back_populates="embedding")
+
+
+class Equipment(Base):
+    """Canonical Equipment entity derived from the Knowledge Graph."""
+    __tablename__ = "equipment"
+
+    id: Mapped[uuid.UUID] = mapped_column(PG_UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    org_id: Mapped[uuid.UUID] = mapped_column(PG_UUID(as_uuid=True), ForeignKey("organizations.id", ondelete="CASCADE"), index=True, nullable=False)
+    entity_id: Mapped[str] = mapped_column(String(100), nullable=False) # e.g. EQ-FIL-008
+    name: Mapped[str] = mapped_column(String(500), nullable=False)
+    type: Mapped[str] = mapped_column(String(100), nullable=False)
+    manufacturer: Mapped[str] = mapped_column(String(100), nullable=True)
+    calibration_due: Mapped[datetime | None] = mapped_column(nullable=True)
+    status: Mapped[str] = mapped_column(String(50), nullable=False, default="Active")
+    department: Mapped[str] = mapped_column(String(100), nullable=True)
+
+
+class SOP(Base):
+    """Canonical SOP entity derived from the Knowledge Graph."""
+    __tablename__ = "sops"
+
+    id: Mapped[uuid.UUID] = mapped_column(PG_UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    org_id: Mapped[uuid.UUID] = mapped_column(PG_UUID(as_uuid=True), ForeignKey("organizations.id", ondelete="CASCADE"), index=True, nullable=False)
+    entity_id: Mapped[str] = mapped_column(String(100), nullable=False) # e.g. SOP-STER-014
+    title: Mapped[str] = mapped_column(String(500), nullable=False)
+    version: Mapped[str] = mapped_column(String(50), nullable=False)
+    effective_date: Mapped[datetime | None] = mapped_column(nullable=True)
+    department: Mapped[str] = mapped_column(String(100), nullable=True)
+    thresholds: Mapped[list[dict] | None] = mapped_column(JSON, nullable=True)
+
+
+class KnowledgeRelationship(Base):
+    """Relationships mapped between canonical entities in the Organization Memory."""
+    __tablename__ = "knowledge_relationships"
+
+    id: Mapped[uuid.UUID] = mapped_column(PG_UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    org_id: Mapped[uuid.UUID] = mapped_column(PG_UUID(as_uuid=True), ForeignKey("organizations.id", ondelete="CASCADE"), index=True, nullable=False)
+    source_entity: Mapped[str] = mapped_column(String(100), nullable=False) # e.g. SOP-STER-014
+    relationship: Mapped[str] = mapped_column(String(100), nullable=False) # e.g. governs
+    target_entity: Mapped[str] = mapped_column(String(100), nullable=False) # e.g. EQ-FIL-008
+    confidence: Mapped[float] = mapped_column(nullable=False, default=1.0)
+    origin_document: Mapped[str | None] = mapped_column(String(500), nullable=True)
+    section: Mapped[str | None] = mapped_column(String(500), nullable=True)

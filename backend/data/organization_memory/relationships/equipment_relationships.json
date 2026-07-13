@@ -1,0 +1,10 @@
+[
+  {
+    "source_entity": "SOP-STER-014",
+    "relationship": "governs",
+    "target_entity": "EQ-FIL-008",
+    "confidence": 1.0,
+    "origin_document": "Core SOPs (01\u201320).pdf",
+    "section": "3.1.2 Filtration Constraints"
+  }
+]

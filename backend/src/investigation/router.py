@@ -77,17 +77,55 @@ async def get_investigation(
 async def get_investigation_context(
     investigation_id: uuid.UUID,
     current_user: CurrentUser,
+    db: DbDep,
     equipment_id: str | None = None,
 ):
     """
-    Returns the InvestigationContextV1 read model built by the ContextBuilder.
-    This demonstrates the Helix Platform architecture.
+    Returns Canonical Organization Memory for the investigation context.
     """
-    from src.runtime.context_builder import context_builder
-
-    # Note: `context_builder.build_context` returns a Pydantic model. 
-    # FastAPI natively handles serializing Pydantic models to JSON.
-    return context_builder.build_context(str(investigation_id), equipment_id or "EQ-BIO-014")
+    from sqlalchemy import select
+    from src.knowledge.models import Equipment, SOP, KnowledgeRelationship
+    
+    # 1. Fetch Equipment
+    eq_id = equipment_id or "EQ-FIL-008"
+    eq_res = await db.execute(select(Equipment).where(Equipment.entity_id == eq_id, Equipment.org_id == current_user.org_id))
+    equipment = eq_res.scalar_one_or_none()
+    
+    # 2. Fetch Relationships for this equipment
+    sops = []
+    if equipment:
+        rel_res = await db.execute(
+            select(KnowledgeRelationship)
+            .where(KnowledgeRelationship.target_entity == equipment.entity_id, KnowledgeRelationship.org_id == current_user.org_id)
+        )
+        relationships = rel_res.scalars().all()
+        
+        # 3. Fetch related SOPs
+        for rel in relationships:
+            if rel.relationship == "governs":
+                sop_res = await db.execute(select(SOP).where(SOP.entity_id == rel.source_entity, SOP.org_id == current_user.org_id))
+                sop = sop_res.scalar_one_or_none()
+                if sop:
+                    sops.append({
+                        "entity_id": sop.entity_id,
+                        "title": sop.title,
+                        "version": sop.version,
+                        "effective_date": sop.effective_date.isoformat() if sop.effective_date else None,
+                        "thresholds": sop.thresholds
+                    })
+                    
+    return {
+        "equipment": {
+            "entity_id": equipment.entity_id,
+            "name": equipment.name,
+            "type": equipment.type,
+            "manufacturer": equipment.manufacturer,
+            "calibration_due": equipment.calibration_due.isoformat() if equipment.calibration_due else None,
+            "status": equipment.status,
+            "department": equipment.department
+        } if equipment else None,
+        "governing_sops": sops
+    }
 
 
 @router.patch(

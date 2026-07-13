@@ -50,6 +50,15 @@ export const InvestigationDetailPage: React.FC = () => {
     enabled: !!id,
   });
 
+  const { data: contextData } = useQuery({
+    queryKey: ["investigations", id, "context"],
+    queryFn: async () => {
+      const res = await apiClient.get(`/investigations/${id}/context`);
+      return res.data;
+    },
+    enabled: !!id,
+  });
+
   const { data: evidenceItems = [], isLoading: isEvLoading } = useEvidenceList(id || "");
   const { data: capa } = useCapa(id || "");
   const generateCapa = useGenerateCapa();
@@ -465,14 +474,36 @@ export const InvestigationDetailPage: React.FC = () => {
           <OrgGroup title="Intelligent Tracing">
             <OrgItem icon="DEPT" title="Quality Assurance" meta="Facility: FAC-BOS-01" badges={["Primary Owner"]} onClick={() => setDetail({ type: "department", name: "Quality Assurance" })} />
             <OrgItem icon="EMP" title="EMP-4012 (Sarah Chen)" meta="QA Lead · Extracted from Batch EBR" badges={["Signature mismatch"]} onClick={() => setDetail({ type: "employee", name: "Sarah Chen" })} />
-            <OrgItem icon="EQ" title="EQ-FIL-008 (Sterile Filter)" meta="Failed post-use integrity (3.0 bar)" badges={["Calibration: CAL-2025-108"]} onClick={() => setDetail({ type: "equipment", name: "EQ-FIL-008" })} />
-            <OrgItem icon="SOP" title="SOP-STER-014" meta="Sterilization Procedures · Rev 4" badges={["Violated: 2m wet time"]} onClick={() => setDetail({ type: "sop", id: "SOP-STER-014" })} />
+            {contextData?.equipment ? (
+              <OrgItem 
+                icon="EQ" 
+                title={`${contextData.equipment.entity_id} (${contextData.equipment.name})`} 
+                meta={`Status: ${contextData.equipment.status} · ${contextData.equipment.type}`} 
+                badges={[`Cal Due: ${contextData.equipment.calibration_due || "N/A"}`]} 
+                onClick={() => setDetail({ type: "equipment", name: contextData.equipment.entity_id })} 
+              />
+            ) : (
+              <OrgItem icon="EQ" title="EQ-FIL-008 (Sterile Filter)" meta="Failed post-use integrity (3.0 bar)" badges={["Calibration: CAL-2025-108"]} onClick={() => setDetail({ type: "equipment", name: "EQ-FIL-008" })} />
+            )}
+            
+            {contextData?.governing_sops?.map((sop: any) => (
+              <OrgItem 
+                key={sop.entity_id}
+                icon="SOP" 
+                title={sop.entity_id} 
+                meta={`${sop.title} · ${sop.version}`} 
+                badges={["Violated constraint"]} 
+                onClick={() => setDetail({ type: "sop", id: sop.entity_id })} 
+              />
+            )) || (
+              <OrgItem icon="SOP" title="SOP-STER-014" meta="Sterilization Procedures · Rev 4" badges={["Violated: 2m wet time"]} onClick={() => setDetail({ type: "sop", id: "SOP-STER-014" })} />
+            )}
           </OrgGroup>
         </aside>
       </div>
 
       {/* Detail side panel */}
-      <DetailPanel detail={detail} onClose={() => setDetail(null)} />
+      <DetailPanel detail={detail} contextData={contextData} onClose={() => setDetail(null)} />
     </div>
   );
 };
@@ -673,8 +704,11 @@ function OrgItem({ icon, title, meta, badges, onClick, highlight }: { icon: stri
 }
 
 /* Detail side panel */
-function DetailPanel({ detail, onClose }: { detail: DetailKind; onClose: () => void }) {
+function DetailPanel({ detail, contextData, onClose }: { detail: DetailKind; contextData?: any; onClose: () => void }) {
   const open = detail !== null;
+  const eq = contextData?.equipment;
+  const sop = contextData?.governing_sops?.[0];
+
   return (
     <>
       <div
@@ -739,19 +773,17 @@ function DetailPanel({ detail, onClose }: { detail: DetailKind; onClose: () => v
                 <>
                   <div>
                     <div className="text-muted-foreground uppercase tracking-widest text-[10px] mb-1">Manufacturer</div>
-                    <div>Pall Corporation · Emflon II</div>
+                    <div>{eq?.manufacturer || "Pall Corporation"} · {eq?.name || "Emflon II"}</div>
                   </div>
                   <div>
                     <div className="text-muted-foreground uppercase tracking-widest text-[10px] mb-1">Calibration Status</div>
-                    <div className="text-[var(--signal-major)] font-medium">Overdue (Expired 12 Jul)</div>
+                    <div className={eq?.calibration_due ? "text-[var(--signal-major)] font-medium" : "text-foreground"}>
+                      {eq?.calibration_due ? `Due: ${eq.calibration_due}` : "Unknown"}
+                    </div>
                   </div>
                   <div>
-                    <div className="text-muted-foreground uppercase tracking-widest text-[10px] mb-1">Historical CAPAs</div>
-                    <div><span className="text-mono">CAPA-2023-081</span> (Similar wetting failure)</div>
-                  </div>
-                  <div>
-                    <div className="text-muted-foreground uppercase tracking-widest text-[10px] mb-1">Current Risk</div>
-                    <div className="text-amber-400">Elevated · Integrity test compromised</div>
+                    <div className="text-muted-foreground uppercase tracking-widest text-[10px] mb-1">Department</div>
+                    <div>{eq?.department || "Unknown"}</div>
                   </div>
                 </>
               )}
@@ -759,21 +791,17 @@ function DetailPanel({ detail, onClose }: { detail: DetailKind; onClose: () => v
                 <>
                   <div>
                     <div className="text-muted-foreground uppercase tracking-widest text-[10px] mb-1">Title</div>
-                    <div>Sterilization Procedures for Final Filtration</div>
+                    <div>{sop?.title || "Sterilization Procedures"}</div>
                   </div>
                   <div>
                     <div className="text-muted-foreground uppercase tracking-widest text-[10px] mb-1">Version History</div>
-                    <div>Rev 4 · Approved 14 Jan 2024</div>
+                    <div>{sop?.version || "Rev 4"} · Effective: {sop?.effective_date || "Unknown"}</div>
                   </div>
                   <div>
                     <div className="text-muted-foreground uppercase tracking-widest text-[10px] mb-1">Extracted Rule</div>
                     <div className="p-2 border border-border bg-surface mt-1 rounded font-mono text-[12px]">
-                      "Filters must undergo a minimum of 5 minutes of continuous wetting prior to initiating the forward flow integrity test."
+                      {sop?.thresholds?.[0]?.context || "Filters must undergo a minimum of 5 minutes of continuous wetting."}
                     </div>
-                  </div>
-                  <div>
-                    <div className="text-muted-foreground uppercase tracking-widest text-[10px] mb-1">Training Compliance</div>
-                    <div className="text-[var(--signal-ok)]">98% Operators Certified</div>
                   </div>
                 </>
               )}

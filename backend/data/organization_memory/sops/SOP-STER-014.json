@@ -1,0 +1,15 @@
+{
+  "entity_id": "SOP-STER-014",
+  "title": "Sterilization Procedures for Grade B Corridors",
+  "version": "v2.4",
+  "effective_date": "2025-01-15",
+  "department": "Quality Assurance",
+  "thresholds": [
+    {
+      "parameter": "Wetting Time",
+      "condition": "minimum",
+      "value": "5 minutes",
+      "context": "continuous wetting prior to forward flow integrity test"
+    }
+  ]
+}

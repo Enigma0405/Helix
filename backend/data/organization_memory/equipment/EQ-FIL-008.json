@@ -1,0 +1,9 @@
+{
+  "entity_id": "EQ-FIL-008",
+  "name": "Sterile Filter Emflon II",
+  "type": "Filtration",
+  "manufacturer": "Pall Corporation",
+  "calibration_due": "2026-07-12",
+  "status": "Active",
+  "department": "Manufacturing"
+}
