@@ -1,124 +1,467 @@
 <div align="center">
-  
-# Helix
-### Evidence before AI. Always.
 
-**An EvidenceOps Platform built for highly regulated manufacturing.**
+# Helix
+
+### Enterprise Operational Intelligence for Regulated Manufacturing
+
+## **Evidence before AI. Always.**
+
+Helix introduces **EvidenceOps** — a new category of enterprise software that transforms operational events into explainable, evidence-backed intelligence.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Powered by AMD](https://img.shields.io/badge/Powered_by-AMD_Instinct_MI300X-black?logo=amd)](https://www.amd.com/)
 [![Inference by Fireworks AI](https://img.shields.io/badge/Inference-Fireworks_AI-FF4500)](https://fireworks.ai/)
+[![Frontend](https://img.shields.io/badge/Frontend-React-61DAFB?logo=react)]
+[![Backend](https://img.shields.io/badge/Backend-FastAPI-009688?logo=fastapi)]
+[![Database](https://img.shields.io/badge/Database-PostgreSQL-316192?logo=postgresql)]
+[![Vector Search](https://img.shields.io/badge/Vector-pgvector-blue)]
+[![Docker](https://img.shields.io/badge/Container-Docker-2496ED?logo=docker)]
 
 </div>
 
 ---
 
-## The Problem
-Biopharma manufacturing operates in an environment of zero tolerance for error. When a quality event occurs (a deviation, a sensor drift, an out-of-spec test), Quality Assurance (QA) teams spend weeks manually piecing together evidence from scattered silos—batch records, historian data, calibration logs, and standard operating procedures (SOPs). 
+# What is Helix?
 
-Traditional QMS (Quality Management Systems) are just static forms. AI chatbots are too risky; they hallucinate and cannot be audited.
+Every day, regulated manufacturers generate thousands of operational events:
 
-## The Solution: EvidenceOps
-**Helix introduces a new category: EvidenceOps.**
+- Batch Records
+- Environmental Monitoring Reports
+- Equipment Logs
+- Deviations
+- Audit Findings
+- Calibration Records
+- Supplier Documentation
+- Customer Complaints
 
-Helix does not start with AI. It starts with an **Organization Memory**—a deterministic, canonical graph of the facility's knowledge. 
+These records contain the evidence required to understand quality events—but today they live across disconnected systems and require days or weeks of manual investigation.
 
-When a deviation occurs, operators upload evidence. Helix maps that evidence directly to the Organization Memory, tracing exactly who was involved, which facility it occurred in, what equipment failed, and what SOP was violated. 
+**Helix introduces EvidenceOps.**
 
-Only *after* the evidence is structured and mapped does Helix invoke the AI **Intelligence Layer** to generate an Evidence-Backed Assessment and draft a Corrective and Preventive Action (CAPA). 
+Instead of starting with AI, Helix starts with **Enterprise Knowledge**.
 
-Models observe. Systems decide. Humans remain accountable.
+Every operational event is verified against organizational knowledge before AI reasoning begins.
 
----
+Only then does Helix generate explainable assessments, evidence-backed recommendations, and CAPA drafts while keeping humans accountable for regulated decisions.
 
-## ⚡ Powered by AMD & Fireworks AI
-
-Helix demands instantaneous reasoning over thousands of dense manufacturing parameters. 
-We achieved this using:
-- **Fireworks AI Integration:** Our Intelligence Layer uses `FireworksAdapter` to handle high-throughput structured JSON extraction.
-- **AMD Instinct™ MI300X:** Through Fireworks AI, Helix leverages the massive memory bandwidth of AMD Instinct MI300X accelerators to run `Gemma-4-31b-it` at blistering speeds, ensuring our QA operators get sub-second reasoning even when evaluating dense, multi-page batch records.
-
----
-
-## Key Features
-
-1. **Mission Control Dashboard:** A real-time unified queue of active signals, historical insights, and supplier intelligence.
-2. **Deterministic Evidence Mapping:** Upload raw logs and let the platform trace them back to the exact equipment and personnel in the facility.
-3. **Evidence-Backed Reasoning (RAG):** AI doesn't guess. It extracts facts, identifies gaps, and calculates a confidence score based strictly on the provided evidence.
-4. **Strategic CAPA Workflow:** Auto-drafts a 3-step Corrective and Preventive Action (Containment, Systemic Prevention, Closure) ready for human verification.
-5. **Organization Memory:** A PostgreSQL `pgvector` knowledge graph connecting SOPs, Equipment, Batches, and Personnel.
+> **Models observe. Systems decide. Humans remain accountable.**
 
 ---
 
-## Product Walkthrough
+# Why Existing Systems Fail
 
-### 1. EvidenceOps Architecture
-![Architecture](./docs/assets/architecture.png)
-
-### 2. Mission Control
-![Mission Control Dashboard](./docs/assets/dashboard.png)
-
-### 3. Investigation Workspace (Evidence Mapping)
-![Investigation Workspace](./docs/assets/investigation_blank.png)
-
-### 4. Deterministic AI Reasoning & CAPA Generation
-![AI Assessment](./docs/assets/investigation.png)
+| Traditional QMS | Generic AI Chatbots | Helix EvidenceOps |
+|-----------------|---------------------|-------------------|
+| Static forms | Hallucination risk | Evidence-backed reasoning |
+| Manual investigations | No auditability | Complete traceability |
+| Knowledge silos | No organizational context | Organization Memory |
+| Human document search | Generic responses | Deterministic verification |
+| Reactive | Reactive | Continuous Operational Intelligence |
 
 ---
 
-## Architecture Overview
+# Introducing EvidenceOps
 
-Helix is divided into three core layers:
+EvidenceOps is an operating model where enterprise operations continuously become organizational intelligence.
 
-1. **Organization Memory:** The deterministic foundation (PostgreSQL + pgvector). Stores structured blueprints of the organization (Aetheris BioPharma).
-2. **Knowledge Layer:** The chunking and retrieval engine. Uses `nomic-embed-text-v1.5` to embed documents into the vector store.
-3. **Intelligence Layer:** The reasoning engine. Uses `FireworksAdapter` to invoke LLMs strictly for structured JSON synthesis based on retrieved context.
+Instead of asking users to search for documents, Helix continuously:
 
----
-
-## Technology Stack
-
-- **Frontend:** React, Vite, Tailwind CSS, React Query, Framer Motion
-- **Backend:** Python, FastAPI, Pydantic, SQLAlchemy
-- **Database:** PostgreSQL with `pgvector`
-- **AI / Inference:** Fireworks AI, Nomic Embeddings, Gemma 4
-- **Infrastructure:** Docker, Nginx, Redis, MinIO (S3)
+- Observes operational events
+- Retrieves organizational knowledge
+- Verifies evidence
+- Detects anomalies
+- Creates explainable assessments
+- Drafts CAPAs
+- Preserves historical learning
 
 ---
 
-## Local Development (Docker)
+# Enterprise Runtime
 
-Helix is fully containerized and easy to run locally.
-
-### Prerequisites
-- Docker & Docker Compose
-- A Fireworks AI API Key
-
-### Installation
-
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/your-org/helix.git
-   cd helix
-   ```
-
-2. **Configure Environment Variables**
-   ```bash
-   cp .env.example .env
-   # Edit .env and add your FIREWORKS_API_KEY
-   ```
-
-3. **Start the Platform**
-   ```bash
-   docker-compose up -d --build
-   ```
-
-4. **Access the Application**
-   - Frontend: `http://localhost:80`
-   - Backend API Docs: `http://localhost:8000/docs`
+```text
+Enterprise Knowledge
+        │
+        ▼
+Incoming Operational Event
+        │
+        ▼
+AI Verification & Cross Validation
+        │
+        ▼
+Operational Signal
+        │
+        ▼
+Investigation
+        │
+        ▼
+Evidence Correlation
+        │
+        ▼
+Assessment
+        │
+        ▼
+Evidence Gaps
+        │
+        ▼
+CAPA Recommendation
+        │
+        ▼
+Human Review & Approval
+        │
+        ▼
+Historical Learning
+        │
+        ▼
+Enterprise Knowledge Updated
+```
 
 ---
 
-## License
+# Core Capabilities
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+### Mission Control
+
+A continuously operating enterprise command center that surfaces operational signals, investigations, CAPAs, and organizational intelligence.
+
+---
+
+### Organization Memory
+
+A canonical representation of enterprise knowledge containing:
+
+- SOPs
+- Equipment
+- Departments
+- Validation Documents
+- Historical Investigations
+- Historical CAPAs
+- Regulatory Knowledge
+- Organizational Relationships
+
+---
+
+### Evidence Mapping
+
+Upload operational evidence and automatically correlate it with:
+
+- Equipment
+- SOPs
+- Personnel
+- Facilities
+- Historical Investigations
+- CAPAs
+- Organizational Knowledge
+
+---
+
+### AI Intelligence Layer
+
+Rather than generating free-form responses, the AI layer produces structured, evidence-backed outputs including:
+
+- Assessment Summary
+- Observed Facts
+- Supporting Evidence
+- Evidence Gaps
+- Root Cause Candidates
+- Recommendations
+- Draft CAPA
+
+---
+
+### Explainable Confidence
+
+Every assessment is supported by transparent signals such as:
+
+- Evidence Coverage
+- Historical Similarity
+- Cross Verification
+- Regulatory Alignment
+
+---
+
+### Strategic CAPA Workflow
+
+Generate structured CAPA recommendations while preserving human approval and complete auditability.
+
+---
+
+# Product Walkthrough
+
+## Landing
+
+*Insert Screenshot*
+
+---
+
+## Mission Control
+
+*Insert Screenshot*
+
+---
+
+## Investigation Workspace
+
+*Insert Screenshot*
+
+---
+
+## Evidence Mapping
+
+*Insert Screenshot*
+
+---
+
+## AI Assessment
+
+*Insert Screenshot*
+
+---
+
+## CAPA Workflow
+
+*Insert Screenshot*
+
+---
+
+# Architecture
+
+Helix consists of four logical layers.
+
+## 1. Enterprise Knowledge
+
+Canonical organizational knowledge.
+
+- SOPs
+- Equipment
+- Facilities
+- Departments
+- Validation
+- Historical Learning
+
+---
+
+## 2. Knowledge Layer
+
+Responsible for:
+
+- Document ingestion
+- Canonical extraction
+- Embedding generation
+- Retrieval
+
+---
+
+## 3. Intelligence Layer
+
+Responsible for:
+
+- Evidence retrieval
+- Context assembly
+- Structured reasoning
+- Assessment generation
+- CAPA drafting
+
+---
+
+## 4. Runtime Layer
+
+Coordinates:
+
+- Operational events
+- Investigations
+- Evidence
+- CAPAs
+- Audit trail
+
+---
+
+# Technology Stack
+
+### Frontend
+
+- React
+- TypeScript
+- Vite
+- Tailwind CSS
+- React Query
+- Framer Motion
+
+### Backend
+
+- FastAPI
+- SQLAlchemy
+- Pydantic
+- Alembic
+
+### Database
+
+- PostgreSQL
+- pgvector
+
+### AI
+
+- Fireworks AI
+- Nomic Embeddings
+- Gemma family models (via Fireworks)
+
+### Infrastructure
+
+- Docker
+- Nginx
+- MinIO
+- Redis
+- Render
+- Vercel
+- Neon PostgreSQL
+
+---
+
+# AMD Developer Challenge
+
+Helix uses Fireworks AI to execute structured inference on AMD-powered infrastructure.
+
+Within the MVP:
+
+- Structured JSON reasoning
+- Retrieval-augmented context
+- Enterprise inference abstraction
+- Provider abstraction through the Fireworks adapter
+
+This allows the application to remain model-agnostic while leveraging AMD-backed inference through Fireworks AI.
+
+---
+
+# Demo Scenario
+
+The included demo demonstrates an evidence-backed investigation workflow using a fictional regulated manufacturing organization.
+
+Flow:
+
+1. Login
+2. Mission Control
+3. Open Investigation
+4. Upload Evidence
+5. Run Assessment
+6. Review Findings
+7. Draft CAPA
+8. Human Approval
+
+---
+
+# Demo Credentials
+
+Replace with your seeded demo account if applicable.
+
+```
+Email:
+demo@helix.ai
+
+Password:
+********
+```
+
+---
+
+# Local Development
+
+## Requirements
+
+- Docker
+- Docker Compose
+- Fireworks AI API Key
+
+Clone
+
+```bash
+git clone https://github.com/<your-repo>/Helix.git
+cd Helix
+```
+
+Configure
+
+```bash
+cp .env.example .env
+```
+
+Run
+
+```bash
+docker compose up --build
+```
+
+Frontend
+
+```
+http://localhost
+```
+
+Backend
+
+```
+http://localhost:8000/docs
+```
+
+---
+
+# Repository Structure
+
+```
+frontend/
+backend/
+docs/
+deployment/
+docker/
+knowledge/
+demo-data/
+```
+
+---
+
+# Roadmap
+
+### Current MVP
+
+✅ Organization Memory
+
+✅ Evidence Mapping
+
+✅ Investigation Workflow
+
+✅ AI Assessment
+
+✅ CAPA Drafting
+
+---
+
+### Next
+
+- Continuous Operational Monitoring
+- Automatic Event Detection
+- Organization Knowledge Reconstruction
+- Multi-tenant Enterprise Memory
+- Predictive Operational Intelligence
+- Domain Intelligence Packs
+
+---
+
+# Why Helix?
+
+Helix is designed to reduce the time and effort required to investigate regulated operational events by connecting enterprise knowledge, evidence, and AI reasoning into a single explainable workflow.
+
+Rather than replacing experts, Helix helps them make faster, more informed, and traceable decisions.
+
+---
+
+# License
+
+MIT
+
+---
+
+<div align="center">
+
+**Evidence before AI. Always.**
+
+*Helix introduces EvidenceOps — a new operating model for enterprise intelligence.*
+
+</div>
