@@ -210,7 +210,7 @@ Generate structured CAPA recommendations while preserving human approval and com
 
 ## Mission Control
 
-![Mission Control Dashboard](./docs/assets/Screenshot%202026-07-13%20180600.png)
+![Mission Control Dashboard](https://github.com/Enigma0405/Helix/blob/main/docs/assets/Screenshot%202026-07-13%20180529.png)
 
 ---
 
@@ -220,21 +220,15 @@ Generate structured CAPA recommendations while preserving human approval and com
 
 ---
 
-## Evidence Mapping
+## New Investigation
 
-![Evidence Mapping]
-
----
-
-## AI Assessment(./docs/assets/Screenshot%202026-07-13%20180529.png)
-
-![AI Assessment](./docs/assets/Screenshot%202026-07-13%20180639.png)
+![New Investigation](./docs/assets/Screenshot%202026-07-13%20180639.png)
 
 ---
 
 ## CAPA Workflow
 
-![CAPA Workflow](./docs/assets/media__1783921121411.png)
+![CAPA Workflow](./docs/assets/Screenshot%202026-07-13%20180446.png)
 
 ---
 
